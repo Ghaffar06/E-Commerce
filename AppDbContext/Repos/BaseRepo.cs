@@ -10,10 +10,10 @@ namespace AppDbContext.Repos
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class
     {
-        protected TestDbContext _db;
+        protected EcommerceDbContext _db;
 
         private DbSet<T> _dbSet;
-        public BaseRepo(TestDbContext db)
+        public BaseRepo(EcommerceDbContext db)
         {
             _db = db;
             _dbSet = db.Set<T>();

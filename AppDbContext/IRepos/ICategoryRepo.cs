@@ -5,8 +5,7 @@ using System.Text;
 
 namespace AppDbContext.IRepos
 {
-    public interface IStudentRepo : IBaseRepo<Student>
+    public interface ICategoryRepo : IBaseRepo<Category>
     {
-        //IEnumerable<Student> GetByCourse(int id);
     }
 }

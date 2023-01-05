@@ -11,7 +11,7 @@ namespace ECommerce.Services
         public static IServiceCollection AddDbService(this IServiceCollection services,
             IConfiguration Configuration)
         {
-            services.AddDbContext<TestDbContext>(options =>
+            services.AddDbContext<EcommerceDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });

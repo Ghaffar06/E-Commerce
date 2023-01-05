@@ -9,14 +9,14 @@ namespace AppDbContext.UOW
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public IStudentRepo StudentRepo { get; set; }
+        public ICategoryRepo CategoryRepo { get; set; }
 
-        protected readonly TestDbContext _db;
+        protected readonly EcommerceDbContext _db;
 
-        public UnitOfWork(TestDbContext db)
+        public UnitOfWork(EcommerceDbContext db)
         {
             _db = db;
-            StudentRepo = new StudentRepo(db);
+            CategoryRepo = new CategoryRepo(db);
         }
 
         public void RollBack()

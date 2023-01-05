@@ -7,9 +7,9 @@ using System.Text;
 
 namespace AppDbContext.Repos
 {
-    public class StudentRepo : BaseRepo<Student>, IStudentRepo
+    public class CategoryRepo : BaseRepo<Category>, ICategoryRepo
     {
-        public StudentRepo(TestDbContext db) : base(db) 
+        public CategoryRepo(EcommerceDbContext db) : base(db) 
         {
 
         }

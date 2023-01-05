@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "AppDbContext": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\hp\\source\\repos\\Ghaffar06\\E-Commerce\\E-Commerce",
+      "remoteDebugEnabled": false,
+      "remoteDebugMachine": "E-Commerce"
+    },
+    "Profile 2": {
+      "commandName": "Executable"
+    }
+  }
+}

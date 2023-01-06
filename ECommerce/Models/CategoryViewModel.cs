@@ -5,14 +5,14 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerce.Models
 {
-    public partial class Category
+    public partial class CategoryViewModel
     {
-        public Category()
+        public CategoryViewModel()
         {
-            CategoryAttribute = new HashSet<CategoryAttribute>();
-            CategoryProduct = new HashSet<CategoryProduct>();
+            CategoryAttribute = new HashSet<CategoryAttributeViewModel>();
+            CategoryProduct = new HashSet<CategoryProductViewModel>();
         }
 
         public long Id { get; set; }
@@ -20,7 +20,7 @@ namespace AppDbContext.Models
         public string Description { get; set; }
         public string ImageUrl { get; set; }
 
-        public virtual ICollection<CategoryAttribute> CategoryAttribute { get; set; }
-        public virtual ICollection<CategoryProduct> CategoryProduct { get; set; }
+        public virtual ICollection<CategoryAttributeViewModel> CategoryAttribute { get; set; }
+        public virtual ICollection<CategoryProductViewModel> CategoryProduct { get; set; }
     }
 }

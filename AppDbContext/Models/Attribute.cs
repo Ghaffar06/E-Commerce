@@ -12,6 +12,7 @@ namespace AppDbContext.Models
         public Attribute()
         {
             AttributeProductValue = new HashSet<AttributeProductValue>();
+            CategoryAttribute = new HashSet<CategoryAttribute>();
         }
 
         public long Id { get; set; }
@@ -21,5 +22,6 @@ namespace AppDbContext.Models
 
         public virtual ValueType ValueType { get; set; }
         public virtual ICollection<AttributeProductValue> AttributeProductValue { get; set; }
+        public virtual ICollection<CategoryAttribute> CategoryAttribute { get; set; }
     }
 }

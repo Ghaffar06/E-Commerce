@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AppDbContext.Models
 {
-    public partial class e_commerceContext : DbContext
+    public partial class EcommerceDbContext : DbContext
     {
-        public e_commerceContext()
+        public EcommerceDbContext()
         {
         }
 
-        public e_commerceContext(DbContextOptions<e_commerceContext> options)
+        public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options)
             : base(options)
         {
         }
@@ -31,8 +31,8 @@ namespace AppDbContext.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS2014;Database=e_commerce;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS2014;Initial Catalog=e_commerce;Persist Security Info=True;User ID=sa;Password=123;MultipleActiveResultSets=True");
             }
         }
 
@@ -124,15 +124,15 @@ namespace AppDbContext.Models
 
             modelBuilder.Entity<CategoryAttribute>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("category_attribute");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.AttributeId).HasColumnName("attribute_id");
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
-
-                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Required)
                     .IsRequired()
@@ -141,13 +141,13 @@ namespace AppDbContext.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Attribute)
-                    .WithMany()
+                    .WithMany(p => p.CategoryAttribute)
                     .HasForeignKey(d => d.AttributeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_category_attribute_attribute");
 
                 entity.HasOne(d => d.Category)
-                    .WithMany()
+                    .WithMany(p => p.CategoryAttribute)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_category_attribute_category");

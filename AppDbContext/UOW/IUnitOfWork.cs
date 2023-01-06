@@ -7,6 +7,7 @@ namespace AppDbContext.UOW
 {
     public interface IUnitOfWork
     {
+        public ICategoryRepo CategoryRepo { get; set; }
 
         public void SaveChanges ();
 

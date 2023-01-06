@@ -7,7 +7,6 @@ namespace AppDbContext.UOW
 {
     public interface IUnitOfWork
     {
-        public IStudentRepo StudentRepo { get; set; }
 
         public void SaveChanges ();
 

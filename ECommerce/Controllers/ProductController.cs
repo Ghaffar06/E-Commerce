@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
-    public class CategoryController : BaseController
+    public class ProductController : BaseController
     {
 
-        public CategoryController(IUnitOfWork uow) : base(uow)
+        public ProductController(IUnitOfWork uow) : base(uow)
         {
         }
 

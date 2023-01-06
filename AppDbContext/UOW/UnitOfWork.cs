@@ -10,6 +10,7 @@ namespace AppDbContext.UOW
     public class UnitOfWork : IUnitOfWork
     {
         public ICategoryRepo CategoryRepo { get; set; }
+        public IProductRepo ProductRepo { get; set; }
 
         protected readonly EcommerceDbContext _db;
 
@@ -17,6 +18,7 @@ namespace AppDbContext.UOW
         {
             _db = db;
             CategoryRepo = new CategoryRepo(db);
+            ProductRepo = new ProductRepo(db);
         }
 
         public void RollBack()

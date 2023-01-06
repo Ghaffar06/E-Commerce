@@ -3,7 +3,14 @@
 }
 
 <div class="text-center">
-    <a asp-action="add" asp-controller="category">Add Category</a>
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4 mt-4">Welcome</h1>
+    <div class="m-4">
+        <div class="col-12">
+            <a class="btn btn-primary m-3" style="font-size:16pt" 
+                asp-action="create" asp-controller="category">Add Category</a>
+            <a class="btn btn-primary m-3" style="font-size:16pt" 
+                asp-action="create" asp-controller="product">Add Product</a>
+        </div>
+    </div>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

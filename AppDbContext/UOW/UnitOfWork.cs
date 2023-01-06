@@ -1,9 +1,6 @@
 ﻿using AppDbContext.IRepos;
 using AppDbContext.Models;
 using AppDbContext.Repos;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AppDbContext.UOW
 {

@@ -14,20 +14,20 @@ namespace ECommerce.Services
 
         public SingletonRnd()
         {
-            _randomCode = new Random().Next(1,100).ToString(); 
+            _randomCode = new Random().Next(1, 100).ToString();
         }
 
         public string GetRandom() => _randomCode;
     }
 
-    public interface IScopedRnd: IRndService { }
+    public interface IScopedRnd : IRndService { }
     public class ScopedRnd : IScopedRnd
     {
         private string _randomCode;
 
         public ScopedRnd()
         {
-            _randomCode = new Random().Next(1,100).ToString(); 
+            _randomCode = new Random().Next(1, 100).ToString();
         }
 
         public string GetRandom() => _randomCode;

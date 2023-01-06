@@ -1,5 +1,4 @@
-﻿using AppDbContext.Models;
-using AppDbContext.UOW;
+﻿using AppDbContext.UOW;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Controllers

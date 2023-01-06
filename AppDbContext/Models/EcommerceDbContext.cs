@@ -24,7 +24,12 @@ namespace AppDbContext.Models
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<CategoryAttribute> CategoryAttribute { get; set; }
         public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
+        public virtual DbSet<Delivery> Delivery { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<OrderProduct> OrderProduct { get; set; }
+        public virtual DbSet<OrderState> OrderState { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Rate> Rate { get; set; }
         public virtual DbSet<ValueType> ValueType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,7 +37,8 @@ namespace AppDbContext.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS2014;Initial Catalog=e_commerce;Persist Security Info=True;User ID=sa;Password=123;MultipleActiveResultSets=True");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TestDb;Integrated Security=True;");
+               // optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS2014;Database=e_commerce;Trusted_Connection=True;");
             }
         }
 
@@ -178,6 +184,122 @@ namespace AppDbContext.Models
                     .HasConstraintName("FK_category_product_product");
             });
 
+            modelBuilder.Entity<Delivery>(entity =>
+            {
+                entity.ToTable("delivery");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.DeliveryPrice)
+                    .IsRequired()
+                    .HasColumnName("delivery_price")
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ExpectedTime).HasColumnName("expected_time");
+
+                entity.Property(e => e.SellerAssistantId).HasColumnName("seller_assistant_id");
+
+                entity.Property(e => e.Vehicle)
+                    .IsRequired()
+                    .HasColumnName("vehicle")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("order");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AddressId).HasColumnName("address_id");
+
+                entity.Property(e => e.DeliveryId).HasColumnName("delivery_id");
+
+                entity.Property(e => e.Rate)
+                    .HasColumnName("rate")
+                    .HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.TotalPrice)
+                    .HasColumnName("total_price")
+                    .HasColumnType("numeric(8, 2)");
+
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.HasOne(d => d.Delivery)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.DeliveryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_order_delivery");
+            });
+
+            modelBuilder.Entity<OrderProduct>(entity =>
+            {
+                entity.ToTable("order_product");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Notes)
+                    .HasColumnName("notes")
+                    .HasMaxLength(200)
+                    .IsFixedLength();
+
+                entity.Property(e => e.OrderId).HasColumnName("order_id");
+
+                entity.Property(e => e.ProductId).HasColumnName("product_id");
+
+                entity.Property(e => e.Quantity)
+                    .HasColumnName("quantity")
+                    .HasColumnType("numeric(8, 2)");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderProduct)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_order_product_order");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderProduct)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_order_product_product");
+            });
+
+            modelBuilder.Entity<OrderState>(entity =>
+            {
+                entity.ToTable("order_state");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Note)
+                    .HasColumnName("note")
+                    .HasMaxLength(300)
+                    .IsFixedLength();
+
+                entity.Property(e => e.OrderId).HasColumnName("order_id");
+
+                entity.Property(e => e.State)
+                    .IsRequired()
+                    .HasColumnName("state")
+                    .HasMaxLength(100)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderState)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_order_state_order");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("product");
@@ -219,6 +341,27 @@ namespace AppDbContext.Models
                     .HasColumnName("unit")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Rate>(entity =>
+            {
+                entity.ToTable("rate");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.ProductId).HasColumnName("product_id");
+
+                entity.Property(e => e.Rate1).HasColumnName("rate");
+
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Rate)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_rate_product");
             });
 
             modelBuilder.Entity<ValueType>(entity =>

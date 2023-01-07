@@ -15,4 +15,10 @@ namespace ECommerce.Models
         public string Name { get; set; }
 
     }
+    public enum ValueTypeEnum
+    {
+        Int,
+        Float,
+        String,
+    }
 }

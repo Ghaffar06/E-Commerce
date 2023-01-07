@@ -63,7 +63,7 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
         {
-            return Redirect("index");
+            return Json("catid:"+cat_id+ ",Attribute:"+Attribute.Name);
         }
 
 

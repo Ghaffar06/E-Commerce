@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Edit";
+    AttributeVM a = new AttributeVM();
+    ValueTypeVM vt = new ValueTypeVM();
+    a.ValueType = vt;
+
 }
 
 
@@ -76,21 +80,12 @@
     }
 
 </style>
+       @* $("#image_input")
+                .find("#val")
+                .text("@Html.Raw(Model.ImageUrl)")*@
 <script>
     $(document).ready(function() {
          
-        $('#image_input').find('#image').click(function(){
-            $("#image_input #image_input").trigger('click');
-        })
-
-        $("#image_input").find("#Image_url").change(function(){
-           $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-        }) 
-
-        $("#image_input")
-                .find("#val")
-                .text("@Html.Raw(Model.ImageUrl)")
-
         let index = 0;
 
         $('#image_input').find('#image').click(function(){
@@ -105,30 +100,35 @@
         
         $('#add_atter').click(function(){
             let div = 
-            '<form asp-controller="Category" asp-action="AssignAttribute" method="post" id = "'index'"> ' +
+            `'<form action="/Category/AssignAttribute" method="post" id = "form-` + index+ `">
             
-            '<div class="atter" id="atter-' + index + '">'+
+            <div class="atter" id="atter-` + index + `">
+           
+            <div class="input_text"><label class="col-form-label">attribute name:</label>
+            @Html.TextBoxFor(x => x.Attributes.ElementAt(0).Name, new { @class = "form-control",placeholder="name of the attribute" })</div>
             
-            '<div class="input_text"><label class="col-form-label">attribute name:</label>' +
-            '<input type="text" class="form-control" placeholder="name of the attribute"></div>' + 
+            <div class="input_text"><label class="col-form-label">attribute Type:</label>
+            @Html.DropDownListFor(x => x.Attributes.ElementAt(0).ValueType.Type,
+                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), "Select Type", 
+                new{@class="form-control"}) </div>
+           
+            <div class="input_text"><label class="col-form-label">attribute unit:</label>
+            @Html.TextBoxFor(x => x.Attributes.ElementAt(0).ValueType.Name, 
+                new { @class = "form-control",placeholder="can be empty" })</div>
             
-            '<div class="input_text"><label class="col-form-label">attribute Type:</label>' +
-            '<select class="form-control">'+'<option disabled selected>select a type</option>'+
-            '<option>string</option>'+'<option>int</option>'+'<option>float</option>'+'</select></div>' + 
+            <div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})
+            @Html.CheckBoxFor(x => x.Attributes.ElementAt(0).Required
+                ,new {@class="form-check-input", style="width:42px; "})</div>
+                
+            <div id="del-` + index + `" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
             
-            '<div class="input_text"><label class="col-form-label">attribute unit:</label>' +
-            '<input type="text" class="form-control" placeholder="can be empty"></div>' + 
+            <div id="save-` + index + `" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>
             
-            '<div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})' +
-            '@Html.CheckBox("Required",new {@class="form-check-input", style="width:42px; "})</div>' +
-            
-            '<div id="del-' + index + '" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>'+
-            
-            '<div id="save-' + index + '" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>'+
-            
-            '</form>'
+            </form>`
 
             $('#container').append(div);
+
+            $('#atter-' + index).find('input[type="hidden"]').remove();
 
             $('#del-' + index).click(function() {
                 id = $(this).attr('id');
@@ -138,15 +138,26 @@
             })
 
             $('#save-' + index).click(function() {
-                
-                var formdata = $("#form1").serializeArray();
+                id = $(this).attr('id');
+                id = id.substr(5, id.length - 5);
 
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formdata,
-                    success: function (data) {}
-                })
+                $('#form-'+id).each(function () {
+                    console.log(this)
+                    console.log($(this).serializeArray())
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function(xhr, textStatus, error){
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+                });
             })
             index++;
         })

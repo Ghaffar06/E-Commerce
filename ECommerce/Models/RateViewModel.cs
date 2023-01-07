@@ -4,14 +4,13 @@
 
 namespace AppDbContext.Models
 {
-    public partial class AttributeProductValueViewModel
+    public partial class RateViewModel
     {
         public long Id { get; set; }
-        public long AttributeId { get; set; }
+        public long UserId { get; set; }
         public long ProductId { get; set; }
-        public string Value { get; set; }
+        public int? Rate1 { get; set; }
 
-        public virtual AttributeViewModel Attribute { get; set; }
         public virtual ProductViewModel Product { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 using AppDbContext.UOW;
+using AutoMapper;
+using ECommerce.Automapper;
 using ECommerce.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,6 +27,12 @@ namespace ECommerce
             services.AddSingleton<ISingletonRnd, SingletonRnd>();
             services.AddTransient<ITransientRnd, TransientRnd>();
             services.AddScoped<IScopedRnd, ScopedRnd>();
+
+            services.AddSingleton(new MapperConfiguration(cfg => cfg.AddProfile(new AutomapperProfile()))
+                .CreateMapper()
+                );
+
+
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews();

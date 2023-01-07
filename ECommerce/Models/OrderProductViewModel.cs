@@ -4,14 +4,15 @@
 
 namespace AppDbContext.Models
 {
-    public partial class AttributeProductValueViewModel
+    public partial class OrderProductViewModel
     {
         public long Id { get; set; }
-        public long AttributeId { get; set; }
         public long ProductId { get; set; }
-        public string Value { get; set; }
+        public long OrderId { get; set; }
+        public decimal Quantity { get; set; }
+        public string Notes { get; set; }
 
-        public virtual AttributeViewModel Attribute { get; set; }
+        public virtual OrderViewModel Order { get; set; }
         public virtual ProductViewModel Product { get; set; }
     }
 }

@@ -1,70 +1,78 @@
-﻿
+﻿@model AppDbContext.Models.CategoryViewModel
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Create";
 }
-<style>
-    * {
-        .border-radius(0) !important;
-    }
 
-    #field,.margin_b {
-        margin-bottom: 10px;
-    }
+<h1>Create</h1>
 
-    .submit_btn{
-        width: 150px !important;
-        font-size: 16pt;
-    }
-</style>
-<script>
-    $(document).ready(function() {
-         
-        $('#image_input').find('#image').click(function(){
-            $("#image_input input[type='file']").trigger('click');
-        })
-
-        $("#image_input").find("input[type='file']").change(function(){
-           $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-        })    
-    })    
-
-
-</script>
-
-<div class="container">
-    
-    <div class="row">
-        <input type="hidden" name="count" value="1" />
-        <div class="control-group" id="fields">
-            <div style="font-size:25pt; margin-top:50px">Add new Category</div>
-            <div class="controls" id="profs">
-                @*asp-controller="" asp-action=""
-                    asp-route="" asp-route-returnurl= ""*@
-                <form class="input-append col-6" method="post">
-                    <div id="field" class="d-flex justify-content-center" style="flex-direction:column">
-                        <div class="form-group">
-                            <label class="col-form-label mt-4" for="Name">Category Name:</label>
-                            <input type="text" class="form-control" placeholder="Type something" id="Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="Description" class="form-label mt-4">Category Description:</label>
-                            <textarea class="form-control" id="Description" rows="4"></textarea>
-                        </div>
-                        <div class="form-group" id="image_input">
-                            <label for="Image_url" class="form-label mt-4">Product Image:</label>
-                            <input hidden class="form-control add_file_btn" type="file" id="Image_url">
-                            <div class="d-flex align-items-center">
-                            <div id='image' class="btn btn-outline-primary rounded">Select File</div>
-                            <div id='val' class="ml-4"></div>
-                            </div>
-                        </div>
-                    <div class="d-flex justify-content-center">
-                        <input type="submit" value="submit" class="btn btn-primary rounded submit_btn mt-3"/>
-                    </div>
-                    </div>
-                </form>
-                <br>
+<h4>CategoryViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-        </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">
+                    Add Attr
+                </button>
+            </div>
+            <div id="list-attr">
+                @foreach (var item in Model.CategoryAttribute)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImageUrl)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        </td>
+                    </tr>
+                }
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<script>
+
+</script>

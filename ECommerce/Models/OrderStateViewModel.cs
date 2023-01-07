@@ -4,13 +4,13 @@
 
 namespace AppDbContext.Models
 {
-    public partial class CategoryProductViewModel
+    public partial class OrderStateViewModel
     {
         public long Id { get; set; }
-        public long ProductId { get; set; }
-        public long CategoryId { get; set; }
+        public long OrderId { get; set; }
+        public string State { get; set; }
+        public string Note { get; set; }
 
-        public virtual CategoryViewModel Category { get; set; }
-        public virtual ProductViewModel Product { get; set; }
+        public virtual OrderViewModel Order { get; set; }
     }
 }

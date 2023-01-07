@@ -27,8 +27,7 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View("Create23");
-            //return View();
+            return View();
         }
 
 

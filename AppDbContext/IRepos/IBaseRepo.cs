@@ -8,7 +8,7 @@ namespace AppDbContext.IRepos
 
         // T Get(string id);
 
-         void Add(T item);
+        void Add(T item);
 
         void Update(T item);
 

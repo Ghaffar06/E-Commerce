@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
@@ -32,23 +31,14 @@ namespace ECommerce.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(CategoryVM category, IFormFile uploadFile)
+        public async Task<IActionResult> Create(CategoryVM category, IFormFile uploadFile)
         {
 
             var cat = Mapper.Map<Category>(category);
-            if (uploadFile != null && uploadFile.Length > 0)
-            {
-                var fileName = Path.GetFileName(uploadFile.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/data", fileName);
-                cat.ImageUrl = filePath;
-                using (var fileSrteam = new FileStream(filePath, FileMode.Create))
-                {
-                    await uploadFile.CopyToAsync(fileSrteam);
-                }
-            }
+            cat.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
-            return Redirect("index");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

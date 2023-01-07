@@ -40,7 +40,7 @@
             <div style="font-size:25pt; margin-top:50px">Add new Category</div>
             <div class="controls" id="profs">
                 
-                <form class="input-append col-6" method="post" asp-controller="Category" asp-action="Create">
+                <form class="input-append col-6" method="post" asp-asp-controller="Category" asp-action="Create" enctype="multipart/form-data">
                     <div id="field" class="d-flex justify-content-center" style="flex-direction:column">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -60,8 +60,8 @@
                         
                         <div class="form-group" id="image_input">
                             @Html.Label("ImageUrl","Category Image:", new { @class = "col-form-label mt-4"})  
-                            <input asp-for="ImageUrl" type="file" id="Image_url" 
-                                class="form-control add_file_btn" hidden>
+                            <input name="uploadFile" type="file" id="Image_url"
+                                   class="form-control add_file_btn" hidden>
                             <div class="d-flex align-items-center">
                                 <div id='image' class="btn btn-outline-primary rounded">Select File</div>
                                 <div id='val' class="ml-4"></div>

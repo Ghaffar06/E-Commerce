@@ -6,9 +6,9 @@ namespace AppDbContext.Models
 {
     public partial class Rate
     {
-        public long Id { get; set; }
-        public long UserId { get; set; }
-        public long ProductId { get; set; }
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public int ProductId { get; set; }
         public int? Rate1 { get; set; }
 
         public virtual Product Product { get; set; }

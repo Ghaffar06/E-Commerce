@@ -1,4 +1,5 @@
 ﻿using AppDbContext.UOW;
+using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,7 +9,7 @@ namespace ECommerce.Controllers
     public class ProductController : BaseController
     {
 
-        public ProductController(IUnitOfWork uow) : base(uow)
+        public ProductController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
         }
 

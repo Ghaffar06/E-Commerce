@@ -6,8 +6,8 @@ namespace AppDbContext.Models
 {
     public partial class OrderState
     {
-        public long Id { get; set; }
-        public long OrderId { get; set; }
+        public int Id { get; set; }
+        public int OrderId { get; set; }
         public string State { get; set; }
         public string Note { get; set; }
 

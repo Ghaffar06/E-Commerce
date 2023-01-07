@@ -14,11 +14,11 @@ namespace AppDbContext.Models
             OrderState = new HashSet<OrderState>();
         }
 
-        public long Id { get; set; }
-        public long DeliveryId { get; set; }
-        public long UserId { get; set; }
+        public int Id { get; set; }
+        public int DeliveryId { get; set; }
+        public int UserId { get; set; }
         public decimal TotalPrice { get; set; }
-        public long AddressId { get; set; }
+        public int AddressId { get; set; }
         public decimal? Rate { get; set; }
 
         public virtual Delivery Delivery { get; set; }

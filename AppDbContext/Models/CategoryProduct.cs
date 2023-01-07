@@ -6,9 +6,9 @@ namespace AppDbContext.Models
 {
     public partial class CategoryProduct
     {
-        public long Id { get; set; }
-        public long ProductId { get; set; }
-        public long CategoryId { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual Product Product { get; set; }

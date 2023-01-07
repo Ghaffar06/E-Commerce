@@ -15,15 +15,17 @@ namespace AppDbContext.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.30")
+                .HasAnnotation("ProductVersion", "3.1.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AppDbContext.Models.Attribute", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnName("description")
@@ -38,9 +40,9 @@ namespace AppDbContext.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<long>("ValueTypeId")
+                    b.Property<int>("ValueTypeId")
                         .HasColumnName("value_type_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -51,17 +53,19 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.AttributeProductValue", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("AttributeId")
+                    b.Property<int>("AttributeId")
                         .HasColumnName("attribute_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    b.Property<long>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnName("product_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -81,9 +85,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.Category", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnName("description")
@@ -111,17 +117,19 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.CategoryAttribute", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("AttributeId")
+                    b.Property<int>("AttributeId")
                         .HasColumnName("attribute_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    b.Property<long>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnName("category_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<string>("Required")
                         .IsRequired()
@@ -141,17 +149,19 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.CategoryProduct", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnName("category_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    b.Property<long>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnName("product_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -164,9 +174,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.Delivery", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DeliveryPrice")
                         .IsRequired()
@@ -179,9 +191,9 @@ namespace AppDbContext.Migrations
                         .HasColumnName("expected_time")
                         .HasColumnType("time");
 
-                    b.Property<long>("SellerAssistantId")
+                    b.Property<int>("SellerAssistantId")
                         .HasColumnName("seller_assistant_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<string>("Vehicle")
                         .IsRequired()
@@ -197,17 +209,19 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.Order", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnName("address_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    b.Property<long>("DeliveryId")
+                    b.Property<int>("DeliveryId")
                         .HasColumnName("delivery_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("Rate")
                         .HasColumnName("rate")
@@ -217,9 +231,9 @@ namespace AppDbContext.Migrations
                         .HasColumnName("total_price")
                         .HasColumnType("numeric(8, 2)");
 
-                    b.Property<long>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnName("user_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -230,9 +244,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.OrderProduct", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Notes")
                         .HasColumnName("notes")
@@ -240,13 +256,13 @@ namespace AppDbContext.Migrations
                         .IsFixedLength(true)
                         .HasMaxLength(200);
 
-                    b.Property<long>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnName("order_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    b.Property<long>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnName("product_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnName("quantity")
@@ -263,9 +279,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.OrderState", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Note")
                         .HasColumnName("note")
@@ -273,9 +291,9 @@ namespace AppDbContext.Migrations
                         .IsFixedLength(true)
                         .HasMaxLength(300);
 
-                    b.Property<long>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnName("order_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -293,9 +311,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.Product", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnName("description")
@@ -345,21 +365,23 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.Rate", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnName("product_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.Property<int?>("Rate1")
                         .HasColumnName("rate")
                         .HasColumnType("int");
 
-                    b.Property<long>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnName("user_id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -370,9 +392,11 @@ namespace AppDbContext.Migrations
 
             modelBuilder.Entity("AppDbContext.Models.ValueType", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnName("name")

@@ -24,15 +24,9 @@ namespace ECommerce
         {
             services.AddDbService(Configuration);
 
-            services.AddSingleton<ISingletonRnd, SingletonRnd>();
-            services.AddTransient<ITransientRnd, TransientRnd>();
-            services.AddScoped<IScopedRnd, ScopedRnd>();
-
             services.AddSingleton(new MapperConfiguration(cfg => cfg.AddProfile(new AutomapperProfile()))
                 .CreateMapper()
                 );
-
-
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews();

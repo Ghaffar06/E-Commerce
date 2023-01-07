@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AppDbContext.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,8 @@ namespace AppDbContext.Migrations
                 name: "category",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     description = table.Column<string>(unicode: false, maxLength: 300, nullable: true),
                     image_url = table.Column<string>(unicode: false, maxLength: 100, nullable: true)
@@ -25,8 +26,9 @@ namespace AppDbContext.Migrations
                 name: "delivery",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    seller_assistant_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    seller_assistant_id = table.Column<int>(nullable: false),
                     expected_time = table.Column<TimeSpan>(nullable: false),
                     vehicle = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     delivery_price = table.Column<string>(fixedLength: true, maxLength: 10, nullable: false)
@@ -40,7 +42,8 @@ namespace AppDbContext.Migrations
                 name: "product",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     description = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     price = table.Column<double>(nullable: false),
@@ -58,7 +61,8 @@ namespace AppDbContext.Migrations
                 name: "value_type",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     type = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     name = table.Column<string>(unicode: false, maxLength: 50, nullable: true)
                 },
@@ -71,11 +75,12 @@ namespace AppDbContext.Migrations
                 name: "order",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    delivery_id = table.Column<long>(nullable: false),
-                    user_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    delivery_id = table.Column<int>(nullable: false),
+                    user_id = table.Column<int>(nullable: false),
                     total_price = table.Column<decimal>(type: "numeric(8, 2)", nullable: false),
-                    address_id = table.Column<long>(nullable: false),
+                    address_id = table.Column<int>(nullable: false),
                     rate = table.Column<decimal>(type: "numeric(8, 2)", nullable: true)
                 },
                 constraints: table =>
@@ -93,9 +98,10 @@ namespace AppDbContext.Migrations
                 name: "category_product",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    product_id = table.Column<long>(nullable: false),
-                    category_id = table.Column<long>(nullable: false)
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    product_id = table.Column<int>(nullable: false),
+                    category_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,9 +124,10 @@ namespace AppDbContext.Migrations
                 name: "rate",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    user_id = table.Column<long>(nullable: false),
-                    product_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    user_id = table.Column<int>(nullable: false),
+                    product_id = table.Column<int>(nullable: false),
                     rate = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -138,10 +145,11 @@ namespace AppDbContext.Migrations
                 name: "attribute",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     description = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
-                    value_type_id = table.Column<long>(nullable: false)
+                    value_type_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,9 +166,10 @@ namespace AppDbContext.Migrations
                 name: "order_product",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    product_id = table.Column<long>(nullable: false),
-                    order_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    product_id = table.Column<int>(nullable: false),
+                    order_id = table.Column<int>(nullable: false),
                     quantity = table.Column<decimal>(type: "numeric(8, 2)", nullable: false),
                     notes = table.Column<string>(fixedLength: true, maxLength: 200, nullable: true)
                 },
@@ -185,8 +194,9 @@ namespace AppDbContext.Migrations
                 name: "order_state",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    order_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    order_id = table.Column<int>(nullable: false),
                     state = table.Column<string>(fixedLength: true, maxLength: 100, nullable: false),
                     note = table.Column<string>(fixedLength: true, maxLength: 300, nullable: true)
                 },
@@ -205,9 +215,10 @@ namespace AppDbContext.Migrations
                 name: "attribute_product_value",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    attribute_id = table.Column<long>(nullable: false),
-                    product_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    attribute_id = table.Column<int>(nullable: false),
+                    product_id = table.Column<int>(nullable: false),
                     value = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -231,9 +242,10 @@ namespace AppDbContext.Migrations
                 name: "category_attribute",
                 columns: table => new
                 {
-                    id = table.Column<long>(nullable: false),
-                    category_id = table.Column<long>(nullable: false),
-                    attribute_id = table.Column<long>(nullable: false),
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    category_id = table.Column<int>(nullable: false),
+                    attribute_id = table.Column<int>(nullable: false),
                     required = table.Column<string>(unicode: false, maxLength: 1, nullable: false)
                 },
                 constraints: table =>

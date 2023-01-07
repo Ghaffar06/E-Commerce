@@ -14,8 +14,8 @@ namespace AppDbContext.Models
             Order = new HashSet<Order>();
         }
 
-        public long Id { get; set; }
-        public long SellerAssistantId { get; set; }
+        public int Id { get; set; }
+        public int SellerAssistantId { get; set; }
         public TimeSpan ExpectedTime { get; set; }
         public string Vehicle { get; set; }
         public string DeliveryPrice { get; set; }

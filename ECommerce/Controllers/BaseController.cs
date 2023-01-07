@@ -1,14 +1,18 @@
 ﻿using AppDbContext.UOW;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Controllers
 {
     public class BaseController : Controller
     {
-        protected IUnitOfWork _uow;
-        public BaseController(IUnitOfWork uow)
+        protected IUnitOfWork Uow { get; set; }
+        protected IMapper Mapper { get; set; }
+
+        public BaseController(IUnitOfWork uow, IMapper mapper)
         {
-            _uow = uow;
+            this.Uow = uow;
+            this.Mapper = mapper;
         }
     }
 }

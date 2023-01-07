@@ -1,4 +1,5 @@
-﻿
+﻿@model ECommerce.Models.CategoryVM
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -44,15 +45,15 @@
                     <div id="field" class="d-flex justify-content-center" style="flex-direction:column">
                         <div class="form-group">
                             <label class="col-form-label mt-4" for="Name">Category Name:</label>
-                            <input type="text" class="form-control" placeholder="Type something" id="Name">
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Type something" id="Name">
                         </div>
                         <div class="form-group">
                             <label for="Description" class="form-label mt-4">Category Description:</label>
-                            <textarea class="form-control" id="Description" rows="4"></textarea>
+                            <textarea asp-for="Description" class="form-control" id="Description" rows="4"></textarea>
                         </div>
                         <div class="form-group" id="image_input">
                             <label for="Image_url" class="form-label mt-4">Product Image:</label>
-                            <input hidden class="form-control add_file_btn" type="file" id="Image_url">
+                            <input hidden class="form-control add_file_btn" type="file" id="Image_url" name="uploadFile">
                             <div class="d-flex align-items-center">
                             <div id='image' class="btn btn-outline-primary rounded">Select File</div>
                             <div id='val' class="ml-4"></div>

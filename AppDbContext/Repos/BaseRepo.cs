@@ -17,9 +17,9 @@ namespace AppDbContext.Repos
             _dbSet = db.Set<T>();
         }
 
-        public void Add(T item)
+        public async void Add(T item)
         {
-            _dbSet.Add(item);
+            await _dbSet.AddAsync(item);
         }
 
         public void Delete(long id)

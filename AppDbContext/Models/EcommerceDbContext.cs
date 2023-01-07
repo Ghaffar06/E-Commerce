@@ -47,8 +47,7 @@ namespace AppDbContext.Models
                 entity.ToTable("attribute");
 
                 entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .HasColumnName("id");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("description")
@@ -76,7 +75,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.AttributeId).HasColumnName("attribute_id");
 
@@ -107,7 +106,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.Description)
                     .HasColumnName("description")
@@ -132,7 +131,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.AttributeId).HasColumnName("attribute_id");
 
@@ -163,7 +162,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
 
@@ -188,7 +187,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.DeliveryPrice)
                     .IsRequired()
@@ -213,7 +212,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.AddressId).HasColumnName("address_id");
 
@@ -242,7 +241,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.Notes)
                     .HasColumnName("notes")
@@ -276,7 +275,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.Note)
                     .HasColumnName("note")
@@ -304,7 +303,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.Description)
                     .HasColumnName("description")
@@ -347,7 +346,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.ProductId).HasColumnName("product_id");
 
@@ -368,7 +367,7 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    ;
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")

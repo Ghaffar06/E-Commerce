@@ -6,9 +6,9 @@ namespace AppDbContext.Models
 {
     public partial class CategoryAttribute
     {
-        public long Id { get; set; }
-        public long CategoryId { get; set; }
-        public long AttributeId { get; set; }
+        public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public int AttributeId { get; set; }
         public string Required { get; set; }
 
         public virtual Attribute Attribute { get; set; }

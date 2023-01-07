@@ -2,53 +2,60 @@
 using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
     public class CategoryController : BaseController
     {
-        private IMapper Mapper { get; set; }
 
-        public CategoryController(IUnitOfWork uow, IMapper mapper) : base(uow)
+        public CategoryController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
         {
-            this.Mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View(Mapper.Map<List<CategoryVM>>(_uow.CategoryRepo.GetAll()));
+            return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
         }
-
-        //public IActionResult Create(CategoryViewModel category)
-        //{
-        //    return null;
-        //}
 
         [HttpGet]
         public IActionResult Create()
         {
-            //return View("create - Copy");
-            return View();
+            return View("Create23");
+            //return View();
         }
 
 
         [HttpPost]
-        public IActionResult Create(CategoryVM category)
+        public async Task<IActionResult> CreateAsync(CategoryVM category, IFormFile uploadFile)
         {
+
             var cat = Mapper.Map<Category>(category);
-            _uow.CategoryRepo.Add(cat);
-            _uow.SaveChanges();
+            if (uploadFile != null && uploadFile.Length > 0)
+            {
+                var fileName = Path.GetFileName(uploadFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/data", fileName);
+                cat.ImageUrl = filePath;
+                using (var fileSrteam = new FileStream(filePath, FileMode.Create))
+                {
+                    await uploadFile.CopyToAsync(fileSrteam);
+                }
+            }
+            Uow.CategoryRepo.Add(cat);
+            Uow.SaveChanges();
             return Redirect("index");
         }
 
         [HttpGet]
         public IActionResult Edit(long Id)
         {
-            var c = _uow.CategoryRepo.Get(Id);
+            var c = Uow.CategoryRepo.Get(Id);
             var cat = Mapper.Map<CategoryVM>(c);
 
             return View(cat);
@@ -59,8 +66,8 @@ namespace ECommerce.Controllers
         public IActionResult Edit(CategoryVM category)
         {
             var cat = Mapper.Map<Category>(category);
-            _uow.CategoryRepo.Add(cat);
-            _uow.SaveChanges();
+            Uow.CategoryRepo.Add(cat);
+            Uow.SaveChanges();
             return Redirect("index");
         }
 

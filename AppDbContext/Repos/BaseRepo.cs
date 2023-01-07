@@ -22,13 +22,13 @@ namespace AppDbContext.Repos
             await _dbSet.AddAsync(item);
         }
 
-        public void Delete(long id)
+        public void Delete(int id)
         {
             var entity = _dbSet.Find(id);
             _dbSet.Remove(entity);
         }
 
-        public T Get(long id)
+        public T Get(int id)
         {
             return _dbSet.Find(id);
         }

@@ -4,7 +4,7 @@ namespace AppDbContext.IRepos
 {
     public interface IBaseRepo<T> where T : class
     {
-        T Get(long id);
+        T Get(int id);
 
         // T Get(string id);
 
@@ -12,7 +12,7 @@ namespace AppDbContext.IRepos
 
         void Update(T item);
 
-        void Delete(long id);
+        void Delete(int id);
 
         IEnumerable<T> GetAll();
     }

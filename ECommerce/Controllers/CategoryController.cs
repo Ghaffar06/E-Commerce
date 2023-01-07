@@ -52,7 +52,7 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(long Id)
+        public IActionResult Edit(int Id)
         {
             var c = Uow.CategoryRepo.Get(Id);
             var cat = Mapper.Map<CategoryVM>(c);
@@ -70,6 +70,11 @@ namespace ECommerce.Controllers
             return Redirect("index");
         }
 
+        [HttpPost]
+        public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
+        {
+            return Redirect("index");
+        }
 
 
 

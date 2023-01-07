@@ -104,7 +104,10 @@
         
         
         $('#add_atter').click(function(){
-            let div = '<div class="atter" id="atter-' + index + '">'+
+            let div = 
+            '<form asp-controller="Category" asp-action="AssignAttribute" method="post" id = "'index'"> ' +
+            
+            '<div class="atter" id="atter-' + index + '">'+
             
             '<div class="input_text"><label class="col-form-label">attribute name:</label>' +
             '<input type="text" class="form-control" placeholder="name of the attribute"></div>' + 
@@ -121,7 +124,9 @@
             
             '<div id="del-' + index + '" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>'+
             
-            '<div id="save-' + index + '" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>'
+            '<div id="save-' + index + '" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>'+
+            
+            '</form>'
 
             $('#container').append(div);
 
@@ -133,12 +138,16 @@
             })
 
             $('#save-' + index).click(function() {
-                id = $(this).attr('id');
-                id = id.substr(5, id.length - 5);
-                console.log(id);
-                $('#atter-' + id).remove();
+                
+                var formdata = $("#form1").serializeArray();
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formdata,
+                    success: function (data) {}
+                })
             })
-          
             index++;
         })
     

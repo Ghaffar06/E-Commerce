@@ -2,7 +2,7 @@
 
 namespace AppDbContext.IRepos
 {
-    public interface IProductRepo : IBaseRepo<Product>
+    public interface IAttributeRepo : IBaseRepo<Attribute>
     {
     }
 }

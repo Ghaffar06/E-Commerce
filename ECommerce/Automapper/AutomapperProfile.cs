@@ -9,6 +9,8 @@ namespace ECommerce.Automapper
         public AutomapperProfile()
         {
             CreateMap<Category, CategoryVM>().ReverseMap();
+            CreateMap<Attribute, AttributeVM>().ReverseMap();
+            CreateMap<ValueType, ValueTypeVM>().ReverseMap();
         }
     }
 }

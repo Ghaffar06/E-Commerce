@@ -4,6 +4,7 @@ using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -22,6 +23,28 @@ namespace ECommerce.Controllers
         {
             return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
         }
+        [HttpGet] 
+        public IActionResult IndexAttr()
+        {
+            var attrs = Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType));
+            return View(Mapper.Map<List<AttributeVM>>(attrs));
+        }
+
+        [HttpGet]
+        public IActionResult CreateAttr()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CreateAttr(AttributeVM attribute)
+        {
+            var attr = Mapper.Map<Attribute>(attribute);
+            Uow.AttributeRepo.Add(attr);
+            Uow.SaveChanges();
+            return RedirectToAction("CreateAttr");
+        }
+
+
 
         [HttpGet]
         public IActionResult Create()

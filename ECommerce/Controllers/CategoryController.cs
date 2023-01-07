@@ -23,15 +23,9 @@ namespace ECommerce.Controllers
             return View(Mapper.Map<List<CategoryVM>>(_uow.CategoryRepo.GetAll()));
         }
 
-        //public IActionResult Create(CategoryViewModel category)
-        //{
-        //    return null;
-        //}
-
         [HttpGet]
         public IActionResult Create()
         {
-            //return View("create - Copy");
             return View();
         }
 

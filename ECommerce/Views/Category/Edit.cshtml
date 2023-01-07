@@ -4,40 +4,210 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>CategoryVM</h4>
+
+<style>
+    * {
+        border-radius: 0 !important;
+    }
+
+    #field,.margin_b {
+        margin-bottom: 10px;
+    }
+
+    .submit_btn{
+        width: 150px !important;
+        font-size: 16pt;
+    }
+    
+    .save_btn{
+        width: 30% !important;
+    }
+
+    .add_atter_btn{
+        width: 80%;
+    }
+    
+    .add_atter_btn,.submit_btn{
+        font-size: 16pt !important;
+        user-select: none !important;
+    }
+    
+    .add_file_btn{
+        height:60px !important;
+    }
+
+    .add_file_btn::file-selector-button {
+        font-weight: bold;
+        padding: 0.5em;
+        border: thin solid grey;
+        border-radius: 3px;
+    }
+
+    .atter{
+        position:relative;
+        margin-top: 35px;
+        border: 1px solid purple;
+        border-radius: 25px !important;
+        justify-content: center;
+        align-items:center;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+    }
+
+    .input_text{
+        margin:10px 0;
+        display: flex;
+        justify-content:space-between;
+        align-items:center;
+        width:80%;
+    }
+
+    .delete_btn{
+        position:absolute;
+        right: 30px;
+        top: -25px;
+    }
+
+    .atter input,.atter select{
+        height:40px !important;
+        width: 70%;
+    }
+
+</style>
+<script>
+    $(document).ready(function() {
+         
+        $('#image_input').find('#image').click(function(){
+            $("#image_input #image_input").trigger('click');
+        })
+
+        $("#image_input").find("#Image_url").change(function(){
+           $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+        }) 
+
+        $("#image_input")
+                .find("#val")
+                .text("@Html.Raw(Model.ImageUrl)")
+
+        let index = 0;
+
+        $('#image_input').find('#image').click(function(){
+            $("#image_input input[type='file']").trigger('click');
+        })
+
+        $("#image_input").find("input[type='file']").change(function(){
+            $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+        })    
+        
+        
+        
+        $('#add_atter').click(function(){
+            let div = '<div class="atter" id="atter-' + index + '">'+
+            
+            '<div class="input_text"><label class="col-form-label">attribute name:</label>' +
+            '<input type="text" class="form-control" placeholder="name of the attribute"></div>' + 
+            
+            '<div class="input_text"><label class="col-form-label">attribute Type:</label>' +
+            '<select class="form-control">'+'<option disabled selected>select a type</option>'+
+            '<option>string</option>'+'<option>int</option>'+'<option>float</option>'+'</select></div>' + 
+            
+            '<div class="input_text"><label class="col-form-label">attribute unit:</label>' +
+            '<input type="text" class="form-control" placeholder="can be empty"></div>' + 
+            
+            '<div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})' +
+            '@Html.CheckBox("Required",new {@class="form-check-input", style="width:42px; "})</div>' +
+            
+            '<div id="del-' + index + '" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>'+
+            
+            '<div id="save-' + index + '" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>'
+
+            $('#container').append(div);
+
+            $('#del-' + index).click(function() {
+                id = $(this).attr('id');
+                id = id.substr(4, id.length - 4);
+                console.log(id);
+                $('#atter-' + id).remove();
+            })
+
+            $('#save-' + index).click(function() {
+                id = $(this).attr('id');
+                id = id.substr(5, id.length - 5);
+                console.log(id);
+                $('#atter-' + id).remove();
+            })
+          
+            index++;
+        })
+    
+    })    
+
+        
+
+</script>
+
+<h1 class="mt-3">Edit Category</h1>
+
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+
+<div class="container">
+    
+    <div class="row">
+        <input type="hidden" name="count" value="1" />
+        <div class="control-group" id="fields">
+            <div class="controls" id="profs">
+
+                <form asp-action="Edit" class="input-append col-12 d-flex" style="flex-direction:column">
+
+                    <div class="row d-flex align-items-baseline">
+                        <div id="field" class="d-flex justify-content-center col-6" style="flex-direction:column">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="col-form-label mt-4"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Description" class="col-form-label mt-4"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group" id="image_input">
+                                <label asp-for="ImageUrl" class="col-form-label mt-4"></label>
+                                <input asp-for="ImageUrl" type="file" id="Image_url" 
+                                    class="form-control add_file_btn" hidden>
+                                <div class="d-flex align-items-center">
+                                    <div id='image' class="btn btn-outline-primary rounded">Select File</div>
+                                    <div id='val' style="margin-left:10px"></div>
+                                </div>
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div id="field" class="d-flex justify-content-center align-items-center col-6" style="flex-direction:column">
+                            <div id="add_atter" class="btn btn-primary rounded add_atter_btn">
+                                <i class="bi bi-plus-circle-fill"></i> Add Attribute
+                            </div>
+                            <div id="container" class="container"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="submit" value="Save" class="btn btn-primary rounded submit_btn mt-3" />
+                    </div>
+                </form>
+   
+                <br>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

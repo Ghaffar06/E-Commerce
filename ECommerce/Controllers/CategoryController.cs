@@ -45,6 +45,25 @@ namespace ECommerce.Controllers
             return Redirect("index");
         }
 
+        [HttpGet]
+        public IActionResult Edit(long Id)
+        {
+            var c = _uow.CategoryRepo.Get(Id);
+            var cat = Mapper.Map<CategoryVM>(c);
+
+            return View(cat);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(CategoryVM category)
+        {
+            var cat = Mapper.Map<Category>(category);
+            _uow.CategoryRepo.Add(cat);
+            _uow.SaveChanges();
+            return Redirect("index");
+        }
+
 
 
 

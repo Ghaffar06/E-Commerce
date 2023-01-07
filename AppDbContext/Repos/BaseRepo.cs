@@ -22,13 +22,13 @@ namespace AppDbContext.Repos
             _dbSet.Add(item);
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             var entity = _dbSet.Find(id);
             _dbSet.Remove(entity);
         }
 
-        public T Get(int id)
+        public T Get(long id)
         {
             return _dbSet.Find(id);
         }

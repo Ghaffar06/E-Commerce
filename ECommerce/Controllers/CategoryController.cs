@@ -32,14 +32,15 @@ namespace ECommerce.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(CategoryVM category, IFormFile uploadFile)
+        public async Task<IActionResult> Create(CategoryVM category, IFormFile uploadFile)
         {
 
             var cat = Mapper.Map<Category>(category);
+            //var uploadFile = category.uploadFile;
             if (uploadFile != null && uploadFile.Length > 0)
             {
                 var fileName = Path.GetFileName(uploadFile.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/data", fileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\data", fileName);
                 cat.ImageUrl = filePath;
                 using (var fileSrteam = new FileStream(filePath, FileMode.Create))
                 {

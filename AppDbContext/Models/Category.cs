@@ -15,8 +15,7 @@ namespace AppDbContext.Models
             CategoryProduct = new HashSet<CategoryProduct>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }

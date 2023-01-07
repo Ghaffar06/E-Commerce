@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AppDbContext.IRepos
 {
@@ -14,6 +17,6 @@ namespace AppDbContext.IRepos
 
         void Delete(int id);
 
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> predicate = null);
     }
 }

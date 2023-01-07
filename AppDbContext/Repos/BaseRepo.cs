@@ -1,6 +1,8 @@
 ﻿using AppDbContext.IRepos;
 using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,9 +35,12 @@ namespace AppDbContext.Repos
             return _dbSet.Find(id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(Func<IQueryable<T>, IIncludableQueryable<T, object>> predicate = null)
         {
-            return _dbSet.ToList();
+            IQueryable<T> query = _dbSet;
+            if (predicate != null)
+                query = predicate(query);
+            return query.ToList();
         }
 
         public void Update(T item)

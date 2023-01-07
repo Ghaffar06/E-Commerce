@@ -2,16 +2,15 @@
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerce.Models
 {
-    public partial class AttributeProductValueViewModel
+    public partial class AttributeValuesVM
     {
         public long Id { get; set; }
         public long AttributeId { get; set; }
         public long ProductId { get; set; }
         public string Value { get; set; }
 
-        public virtual AttributeViewModel Attribute { get; set; }
-        public virtual ProductViewModel Product { get; set; }
+        public virtual AttributeVM Attribute { get; set; }
     }
 }

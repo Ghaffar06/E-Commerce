@@ -20,7 +20,7 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(Mapper.Map<List<CategoryViewModel>>(_uow.CategoryRepo.GetAll()));
+            return View(Mapper.Map<List<CategoryVM>>(_uow.CategoryRepo.GetAll()));
         }
 
         //public IActionResult Create(CategoryViewModel category)
@@ -31,12 +31,13 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            //return View("create - Copy");
             return View();
         }
 
 
         [HttpPost]
-        public IActionResult Create(CategoryViewModel category)
+        public IActionResult Create(CategoryVM category)
         {
             var cat = Mapper.Map<Category>(category);
             _uow.CategoryRepo.Add(cat);
@@ -50,7 +51,7 @@ namespace ECommerce.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorVM { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

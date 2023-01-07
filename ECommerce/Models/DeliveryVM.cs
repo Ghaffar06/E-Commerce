@@ -5,13 +5,13 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerce.Models
 {
-    public partial class DeliveryViewModel
+    public partial class DeliveryVM
     {
-        public DeliveryViewModel()
+        public DeliveryVM()
         {
-            Order = new HashSet<OrderViewModel>();
+            Order = new HashSet<OrderVM>();
         }
 
         public long Id { get; set; }
@@ -20,6 +20,6 @@ namespace AppDbContext.Models
         public string Vehicle { get; set; }
         public string DeliveryPrice { get; set; }
 
-        public virtual ICollection<OrderViewModel> Order { get; set; }
+        public virtual ICollection<OrderVM> Order { get; set; }
     }
 }

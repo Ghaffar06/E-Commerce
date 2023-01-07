@@ -4,14 +4,14 @@
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerce.Models
 {
-    public partial class CategoryViewModel
+    public partial class CategoryVM
     {
-        public CategoryViewModel()
+        public CategoryVM()
         {
-            CategoryAttribute = new HashSet<CategoryAttributeViewModel>();
-            CategoryProduct = new HashSet<CategoryProductViewModel>();
+            Attributes = new HashSet<AttributeVM>();
+            Products = new HashSet<ProductVM>();
         }
 
         public long Id { get; set; }
@@ -19,7 +19,7 @@ namespace AppDbContext.Models
         public string Description { get; set; }
         public string ImageUrl { get; set; }
 
-        public virtual ICollection<CategoryAttributeViewModel> CategoryAttribute { get; set; }
-        public virtual ICollection<CategoryProductViewModel> CategoryProduct { get; set; }
+        public virtual ICollection<AttributeVM> Attributes { get; set; }
+        public virtual ICollection<ProductVM> Products { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AppDbContext.Models;
 using AutoMapper;
+using ECommerce.Models;
 
 namespace ECommerce.Automapper
 {
@@ -7,7 +8,7 @@ namespace ECommerce.Automapper
     {
         public AutomapperProfile()
         {
-            CreateMap<Category, CategoryViewModel>().ReverseMap();
+            CreateMap<Category, CategoryVM>().ReverseMap();
         }
     }
 }

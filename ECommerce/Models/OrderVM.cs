@@ -4,14 +4,14 @@
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerce.Models
 {
-    public partial class OrderViewModel
+    public partial class OrderVM
     {
-        public OrderViewModel()
+        public OrderVM()
         {
-            OrderProduct = new HashSet<OrderProductViewModel>();
-            OrderState = new HashSet<OrderStateViewModel>();
+            OrderProduct = new HashSet<OrderProductVM>();
+            OrderState = new HashSet<OrderStateVM>();
         }
 
         public long Id { get; set; }
@@ -21,8 +21,8 @@ namespace AppDbContext.Models
         public long AddressId { get; set; }
         public decimal? Rate { get; set; }
 
-        public virtual DeliveryViewModel Delivery { get; set; }
-        public virtual ICollection<OrderProductViewModel> OrderProduct { get; set; }
-        public virtual ICollection<OrderStateViewModel> OrderState { get; set; }
+        public virtual DeliveryVM Delivery { get; set; }
+        public virtual ICollection<OrderProductVM> OrderProduct { get; set; }
+        public virtual ICollection<OrderStateVM> OrderState { get; set; }
     }
 }

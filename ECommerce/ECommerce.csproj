@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Attribute\" />
     <Folder Include="wwwroot\data\" />
   </ItemGroup>
 

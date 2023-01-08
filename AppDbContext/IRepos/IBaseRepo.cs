@@ -7,9 +7,7 @@ namespace AppDbContext.IRepos
 {
     public interface IBaseRepo<T> where T : class
     {
-        T Get(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> predicate = null);
-
-        // T Get(string id);
+        T Get(int id);
 
         void Add(T item);
 

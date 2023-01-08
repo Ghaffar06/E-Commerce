@@ -23,27 +23,6 @@ namespace ECommerce.Controllers
         {
             return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
         }
-        [HttpGet]
-        public IActionResult IndexAttr()
-        {
-            var attrs = Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType));
-            return View(Mapper.Map<List<AttributeVM>>(attrs));
-        }
-
-        [HttpGet]
-        public IActionResult CreateAttr()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult CreateAttr(AttributeVM attribute)
-        {
-            var attr = Mapper.Map<Attribute>(attribute);
-            Uow.AttributeRepo.Add(attr);
-            Uow.SaveChanges();
-            return RedirectToAction("CreateAttr");
-        }
-
 
 
         [HttpGet]
@@ -56,8 +35,7 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryVM category, IFormFile uploadFile)
         {
-
-            var cat = Mapper.Map<Category>(category);
+            Category cat = Mapper.Map<Category>(category);
             cat.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
@@ -67,16 +45,14 @@ namespace ECommerce.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            var c = await Uow.CategoryRepo.GetAsync(Id);
-            var cat = Mapper.Map<CategoryVM>(c);
-            return View(cat);
+            return View(Mapper.Map<CategoryVM>(await Uow.CategoryRepo.GetAsync(Id)));
         }
 
 
         [HttpPost]
         public IActionResult Edit(CategoryVM category)
         {
-            var cat = Mapper.Map<Category>(category);
+            Category cat = Mapper.Map<Category>(category);
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
             return Redirect("index");
@@ -85,8 +61,8 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
         {
-            var attr = Mapper.Map<Attribute>(Attribute);
-            var cat = Uow.CategoryRepo.Get(cat_id);
+            Attribute attr = Mapper.Map<Attribute>(Attribute);
+            Category cat = Uow.CategoryRepo.Get(cat_id);
             cat.CategoryAttribute.Add(new CategoryAttribute
             {
                 Id = cat_id,

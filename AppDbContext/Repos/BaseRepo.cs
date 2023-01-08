@@ -30,8 +30,12 @@ namespace AppDbContext.Repos
             _dbSet.Remove(entity);
         }
 
-        public T Get(int id)
+        public T Get(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> predicate = null)
         {
+            //IQueryable<T> query = _dbSet;
+            //if (predicate != null)
+            //    query = predicate(query);
+            //query = query.Where(e => e.Id == id);
             return _dbSet.Find(id);
         }
 

@@ -16,6 +16,6 @@ namespace ECommerce.Models
         public long ValueTypeId { get; set; }
         public bool Required { get; set; }
 
-        public virtual ValueTypeVM ValueType { get; set; }
+        public  ValueTypeVM ValueType { get; set; }
     }
 }

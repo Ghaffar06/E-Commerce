@@ -11,8 +11,8 @@ namespace ECommerce.Models
     {
         public CategoryVM()
         {
-            Attributes = new HashSet<AttributeVM>();
-            Products = new HashSet<ProductVM>();
+            Attributes = new List<AttributeVM>();
+            Products = new List<ProductVM>();
         }
 
         public long Id { get; set; }
@@ -20,7 +20,7 @@ namespace ECommerce.Models
         public string Description { get; set; }
         public string ImageUrl { get; set; }
 
-        public virtual ICollection<AttributeVM> Attributes { get; set; }
-        public virtual ICollection<ProductVM> Products { get; set; }
+        public  IList<AttributeVM> Attributes { get; set; }
+        public IList<ProductVM> Products { get; set; }
     }
 }

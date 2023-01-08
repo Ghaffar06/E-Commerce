@@ -23,7 +23,7 @@ namespace ECommerce.Controllers
         {
             return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
         }
-        [HttpGet] 
+        [HttpGet]
         public IActionResult IndexAttr()
         {
             var attrs = Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType));
@@ -86,7 +86,15 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
         {
-            return Json("catid:"+cat_id+ ",Attribute:"+Attribute.Name);
+            var attr = Mapper.Map<Attribute>(Attribute);
+            var cat = Uow.CategoryRepo.Get(cat_id);
+            cat.CategoryAttribute.Add(new CategoryAttribute
+            {
+                Id = cat_id,
+                Attribute = attr
+            });
+            Uow.SaveChanges();
+            return Json("catid:" + cat_id + ",Attribute:" + Attribute.Name);
         }
 
 

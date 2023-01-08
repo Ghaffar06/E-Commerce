@@ -8,11 +8,15 @@ namespace ECommerce.Automapper
     {
         public AutomapperProfile()
         {
-            CreateMap<Category, CategoryVM>().ReverseMap();
-            CreateMap<Attribute, AttributeVM>()
-                .ForMember(attrvm => attrvm.Required , opt => opt.Ignore())
-                .ReverseMap();
+            CreateMap<Category, CategoryVM>()
+                .ForMember(c => c.Attributes, opt => opt.MapFrom(c => c.CategoryAttribute));
 
+            CreateMap<CategoryAttribute, AttributeVM>()
+                .ForMember(cvm => cvm.Required, opt => opt.MapFrom(c => c.Required == "F"))
+                .ForMember(cvm => cvm.ValueType, opt => opt.MapFrom(c => c.Attribute.ValueType))
+                .ForMember(cvm => cvm.Description, opt => opt.MapFrom(c => c.Attribute.Description))
+                .ForMember(cvm => cvm.Name, opt => opt.MapFrom(c => c.Attribute.Name));
+            
             CreateMap<ValueType, ValueTypeVM>().ReverseMap();
         }
     }

@@ -65,11 +65,10 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            var c = Uow.CategoryRepo.Get(Id);
+            var c = await Uow.CategoryRepo.GetAsync(Id);
             var cat = Mapper.Map<CategoryVM>(c);
-
             return View(cat);
         }
 

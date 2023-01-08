@@ -14,6 +14,12 @@ namespace ECommerce.Automapper
                 .ReverseMap();
 
             CreateMap<ValueType, ValueTypeVM>().ReverseMap();
+
+            CreateMap<Product, ProductVM>().ReverseMap();
+
+            CreateMap<Rate, RateVM>().ReverseMap();
+            CreateMap<AttributeProductValue, AttributeValuesVM>().ReverseMap();
+            CreateMap<CategoryProduct, AttributeValuesVM>().ReverseMap();
         }
     }
 }

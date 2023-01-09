@@ -123,12 +123,61 @@ Id = -1
             $(this).find('#save-' + index).click(function() {
                 $('#form-' + index).each(function () {
                     console.log($(this).serializeArray())
+                    var obj = $(this).serialize()
                     $.ajax({
                         url: this.action,
                         type: this.method,
-                        data: $(this).serialize(),
+                        data: obj,
                         success: function (result) {
-                            console.log(result);
+                            console.log("first call:" + result);
+                            var data = {
+                                "attr_id": result,
+                                "cat_id": @Model.Id,
+                                "Requierd": obj["Requierd"]
+                            };
+                            console.log(data);
+                            $.ajax({
+                                url: "/Category/AssignAttribute",
+                                type: "post",
+                                data: data,
+                                success: function (result) {
+                                    console.log(result);
+                                },
+                                error: function (xhr, textStatus, error) {
+                                    console.log(xhr.statusText);
+                                    console.log(textStatus);
+                                    console.log(error);
+                                }
+                            });
+
+
+                        },
+                        error: function (xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+
+            $(this).find('#del-' + index).click(function () {
+                $('#form-' + index).each(function () {
+                    var obj = $(this).serialize()
+                    console.log(obj);
+
+                    id = {
+                        "categoryAttributeId": obj['cat_atr_id']
+                    }
+                    console.log(id);
+                    // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
+
+                    $.ajax({
+                        url: "/Category/ClearAssignmentAttribute",
+                        type: "post",
+                        data: id,
+                        success: function (result) {
+                            console.log("first call:" + result);
                         },
                         error: function (xhr, textStatus, error) {
                             console.log(xhr.statusText);
@@ -162,12 +211,42 @@ Id = -1
             $('#save-' + index).click(function () {
                 $('#form-' + index).each(function () {
                     console.log($(this).serializeArray())
+                    var obj = $(this).serialize()
                     $.ajax({
                         url: this.action,
                         type: this.method,
-                        data: $(this).serialize(),
+                        data: obj,
                         success: function (result) {
-                            console.log(result);
+                            console.log("first call:" + result);
+                            var data = {
+                                "attr_id": result,
+                                "cat_id": @Model.Id,
+                                "Requierd": obj["Requierd"]
+                            };
+                            console.log(data);
+                            data = {
+                                "attr_id": result,
+                                "cat_id": @Model.Id,
+                                "Requierd": obj["Requierd"] ? "T" : "F" // this is wrong.....
+                            };
+                            console.log(data);
+
+                            $.ajax({
+                                url: "/Category/AssignAttribute",
+                                type: "post",
+                                data: data,
+                                success: function (result) {
+                                    console.log(result);
+                                    // save this result in a hidden input with name : 'cat_atr_id'
+                                },
+                                error: function (xhr, textStatus, error) {
+                                    console.log(xhr.statusText);
+                                    console.log(textStatus);
+                                    console.log(error);
+                                }
+                            });
+
+
                         },
                         error: function (xhr, textStatus, error) {
                             console.log(xhr.statusText);
@@ -177,6 +256,32 @@ Id = -1
                     });
                 });
             });
+
+            $('#del-' + index).click(function () {
+                $('#form-' + index).each(function () {
+                    console.log($(this).serializeArray())
+                    var obj = $(this).serialize()
+                    id = {
+                        "categoryAttributeId": obj['cat_atr_id']
+                    }
+                    // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
+
+                    $.ajax({
+                        url: "/Category/ClearAssignmentAttribute",
+                        type: "post",
+                        data: id,
+                        success: function (result) {
+                            console.log("first call:" + result);
+                        },
+                        error: function (xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+
 
             //$('#container').append(div);
 
@@ -269,12 +374,17 @@ Id = -1
                             <div id="container" class="container">
 
                                     @for (var i = 0 ; i <Model.Attributes.Count; i ++){
-                                    <div class="atter atter-temp" id="atter-id" action="/Category/Edit" method="post">
+                                    <div class="atter atter-temp" id="atter-id" action="/Attribute/FindOrCreate" method="post">
                                         <form class="atter atter-temp" id="atter-id">
+                                                <div class="input_text">
+                                                    <label class="col-form-label">CatAttribute Id: (hide it)</label>
+                                                @Html.TextBox("cat_atr_id",Model.Attributes[i].Id, new { @class = "form-control",placeholder="name of the attribute" })
+                                                </div>
                                                 <div class="input_text">
                                                     <label class="col-form-label">attribute name:</label>
                                                 @Html.TextBox("Name",Model.Attributes[i].Name, new { @class = "form-control",placeholder="name of the attribute" })
                                                 </div>
+
                                                 <div class="input_text">
                                                     <label class="col-form-label">attribute description:</label>
                                                 @Html.TextArea("Description",Model.Attributes[i].Description, new { @class = "form-control",placeholder="name of the attribute" })
@@ -304,9 +414,12 @@ Id = -1
                                                 <div id="save-id" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
                                            </form> </div>
                                 }
-                                <form action='/Category/AssignAttribute' method='post' id="form-idBASE">
+                                <form action='/Attribute/FindOrCreate' method='post' id="form-idBASE">
                                     <div class="atter" >
-
+                                        <div class="input_text">
+                                            <label class="col-form-label">CatAttribute Id: (hide it)</label>
+                                            @Html.TextBox("cat_atr_id",a.Id, new { @class = "form-control",placeholder="name of the attribute" })
+                                        </div>
                                         <div class="input_text">
                                             <label class="col-form-label">attribute name:</label>
                                             @Html.TextBox("Name",a.Name, new { @class = "form-control",placeholder="name of the attribute" })

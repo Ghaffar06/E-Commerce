@@ -17,9 +17,15 @@ namespace ECommerce.Automapper
                 .ForMember(cvm => cvm.Required, opt => opt.MapFrom(c => c.Required == "F"))
                 .ForMember(cvm => cvm.ValueType, opt => opt.MapFrom(c => c.Attribute.ValueType))
                 .ForMember(cvm => cvm.Description, opt => opt.MapFrom(c => c.Attribute.Description))
-                .ForMember(cvm => cvm.Name, opt => opt.MapFrom(c => c.Attribute.Name));
-            
-            CreateMap<ValueType, ValueTypeVM>().ReverseMap();
+                .ForMember(cvm => cvm.Name, opt => opt.MapFrom(c => c.Attribute.Name))
+                .ForMember(cvm => cvm.Id, opt => opt.MapFrom(c => c.Id));
+
+            CreateMap<AttributeVM, Attribute>()
+                .ForMember(attr => attr.Name, opt => opt.MapFrom(vm => vm.Name))
+                .ForMember(attr => attr.Description, opt => opt.MapFrom(vm => vm.Description));
+
+            CreateMap<ValueType, ValueTypeVM>()
+                .ReverseMap();
         }
     }
 }

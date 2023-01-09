@@ -5,7 +5,6 @@ using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
@@ -21,35 +20,30 @@ namespace ECommerce.Controllers
             return View(Mapper.Map<List<AttributeVM>>(Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType))));
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
         [HttpPost]
-        public IActionResult Create(AttributeVM attribute)
+        public IActionResult FindOrCreate(AttributeVM attribute)
         {
             var attr = Mapper.Map<Attribute>(attribute);
+            attr.ValueTypeId = FindOrCreate(attr.ValueType);
+            var id = Uow.AttributeRepo.Find(attr);
+            if (id != null)
+                return Json(id);
+
             Uow.AttributeRepo.Add(attr);
             Uow.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public  IActionResult Edit(int Id)
-        {
-            return View();
-            //return View(Mapper.Map<AttributeVM>(await Uow.CategoryRepo.GetAsync(Id)));
+            return Json(Uow.AttributeRepo.Find(attr));
         }
 
 
-        [HttpPost]
-        public IActionResult Edit(AttributeVM attribute)
+        private int FindOrCreate(ValueType vt)
         {
-            Attribute attr = Mapper.Map<Attribute>(attribute);
-            //Uow.CategoryRepo.Add(cat);
+            int? vtypeId = Uow.ValueTypeRepo.Find(vt);
+            if (vtypeId != null)
+                return (int)vtypeId;
+            Uow.ValueTypeRepo.Add(vt);
             Uow.SaveChanges();
-            return Redirect("index");
+            return (int) Uow.ValueTypeRepo.Find(vt);
         }
+
     }
 }

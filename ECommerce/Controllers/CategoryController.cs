@@ -4,7 +4,6 @@ using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -59,16 +58,26 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
+        public IActionResult AssignAttribute(int attr_id, int cat_id, string Requierd)
         {
-            //Attribute attr = Mapper.Map<Attribute>(Attribute);
-            //Category cat = Uow.CategoryRepo.Get(cat_id);
-            //cat.CategoryAttribute.Add(new CategoryAttribute
-            //{
-            //    Id = cat_id,
-            //    Attribute = attr
-            //});
-            //Uow.SaveChanges();
+            var Category = Uow.CategoryRepo.Get(cat_id);
+            var Attribute = Uow.AttributeRepo.Get(attr_id);
+            var categoryAttribute = new CategoryAttribute
+            {
+                Attribute = Attribute,
+                Category = Category,
+                Required = Requierd
+            };
+            Uow.CategoryRepo.AssignAttribute(categoryAttribute);
+            Uow.SaveChanges();
+            return Json("catid: Success");
+        }
+
+        [HttpPost]
+        public IActionResult ClearAssignmentAttribute(int categoryAttributeId)
+        {
+            Uow.CategoryRepo.ClearAssignmentAttribute(categoryAttributeId);
+            Uow.SaveChanges();
             return Json("catid: Success");
         }
 

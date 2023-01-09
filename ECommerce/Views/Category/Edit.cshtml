@@ -94,10 +94,47 @@ Id = -1
                 .find("#val")
                 .text("@Html.Raw(Model.ImageUrl)")*@
 <script>
+    console.log('hrllo');
+
+    let index = 0;
+    let base_form;
     $(document).ready(function() {
          
-        let index = 0;
+        console.log('hrllo');
 
+        base_form = document.getElementById('form-idBASE').outerHTML;
+
+        $('.atter-temp').each(function (idx) {
+            console.log('test :)');
+            $(this).attr('id', 'atter-' + (++index));
+            $(this).find('#del-id').attr('id', 'del-' + index);
+            $(this).find('#save-id').attr('id', 'save-' + index);
+            var t = $(this);
+            $form = $("<form action='/Category/AssignAttribute' method='post' id='form-" + index + "'></form>");
+            $form.append(t) ;
+            $("#container").append($form) ;
+            $(this).find('#save-' + index).click(function() {
+                $('#form-' + index).each(function () {
+                    console.log($(this).serializeArray())
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (result) {
+                            console.log(result);
+                        },
+                        error: function (xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+
+        });
+
+        console.log('ft'+index);
         $('#image_input').find('#image').click(function(){
             $("#image_input input[type='file']").trigger('click');
         })
@@ -109,50 +146,11 @@ Id = -1
 
 
         $('#add_atter').click(function(){
-            let div = 
-            `<form action="/Category/AssignAttribute" method="post" id = "form-` + index+ `">
             
-            <div class="atter" id="atter-` + index + `">
-           
-            <div class="input_text"><label class="col-form-label">attribute name:</label>
-            @Html.TextBoxFor(x => x.Attributes.ElementAt(0).Name, new { @class = "form-control",placeholder="name of the attribute" })</div>
-            
-            <div class="input_text"><label class="col-form-label">attribute Type:</label>
-            @Html.DropDownListFor(x => x.Attributes.ElementAt(0).ValueType.Type,
-                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), "Select Type", 
-                new{@class="form-control"}) </div>
-           
-            <div class="input_text"><label class="col-form-label">attribute unit:</label>
-            @Html.TextBoxFor(x => x.Attributes.ElementAt(0).ValueType.Name, 
-                new { @class = "form-control",placeholder="can be empty" })</div>
-            
-            <div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})
-            @Html.CheckBoxFor(x => x.Attributes.ElementAt(0).Required
-                ,new {@class="form-check-input", style="width:42px; "})</div>
-                
-            <div id="del-` + index + `" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
-            
-            <div id="save-` + index + `" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>
-            
-            </form>`
-
-            $('#container').append(div);
-
-            $('#atter-' + index).find('input[type="hidden"]').remove();
-
-            $('#del-' + index).click(function() {
-                id = $(this).attr('id');
-                id = id.substr(4, id.length - 4);
-                console.log(id);
-                $('#atter-' + id).remove();
-            })
-
-            $('#save-' + index).click(function() {
-                id = $(this).attr('id');
-                id = id.substr(5, id.length - 5);
-
-                $('#form-'+id).each(function () {
-                    console.log(this)
+            let cpy = base_form.replaceAll('idBASE', '' + (++ index));
+            $("#container").append(cpy);
+            $('#save-' + index).click(function () {
+                $('#form-' + index).each(function () {
                     console.log($(this).serializeArray())
                     $.ajax({
                         url: this.action,
@@ -161,15 +159,49 @@ Id = -1
                         success: function (result) {
                             console.log(result);
                         },
-                        error: function(xhr, textStatus, error){
+                        error: function (xhr, textStatus, error) {
                             console.log(xhr.statusText);
                             console.log(textStatus);
                             console.log(error);
                         }
                     });
                 });
-            })
-            index++;
+            });
+
+            //$('#container').append(div);
+
+            //$('#atter-' + index).find('input[type="hidden"]').remove();
+
+            //$('#del-idBASE').click(function () {
+            //    id = $(this).attr('id');
+            //    id = id.substr(4, id.length - 4);
+            //    console.log(id);
+            //    $('#atter-idBASE').remove();
+            //})
+
+            //$('#save-idBAS').click(function() {
+            //    id = $(this).attr('id');
+            //    id = id.substr(5, id.length - 5);
+
+            //    $('#form-idBASE').each(function () {
+            //        console.log(this)
+            //        console.log($(this).serializeArray())
+            //        $.ajax({
+            //            url: this.action,
+            //            type: this.method,
+            //            data: $(this).serialize(),
+            //            success: function (result) {
+            //                console.log(result);
+            //            },
+            //            error: function(xhr, textStatus, error){
+            //                console.log(xhr.statusText);
+            //                console.log(textStatus);
+            //                console.log(error);
+            //            }
+            //        });
+            //    });
+            //})
+            //index++;
         })
     
     })    
@@ -192,7 +224,7 @@ Id = -1
                 <form asp-action="Edit" class="input-append col-12 d-flex" style="flex-direction:column">
 
                     <div class="row d-flex align-items-baseline">
-                        <div id="field" class="d-flex justify-content-center col-6" style="flex-direction:column">
+                        <div id="field11" class="d-flex justify-content-center col-6" style="flex-direction:column">
 
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
@@ -219,58 +251,69 @@ Id = -1
                             </div>
                         </div>
 
-                        <div id="field" class="d-flex justify-content-center align-items-center col-6" style="flex-direction:column">
+                        <div id="field0" class="d-flex justify-content-center align-items-center col-6" style="flex-direction:column">
                             <div id="add_atter" class="btn btn-primary rounded add_atter_btn">
                                 <i class="bi bi-plus-circle-fill"></i> Add Attribute
                             </div>
                             <div id="container" class="container">
 
-                                    @foreach (var attr in Model.Attributes)    {
-            <form action="/Category/AssignAttribute" method="post" id = "'form-' + @attr.Id ">
-            
-            <div class="atter" id="'atter-' + @attr.Id ">
-           
-            <div class="input_text"><label class="col-form-label">attribute name:</label>
-            @Html.Editor(attr.Name,attr.Name, new { @class = "form-control",placeholder="name of the attribute" })</div>
-            
-            <div class="input_text"><label class="col-form-label">attribute Type:</label>
-            @Html.DropDownList(attr.ValueType.Type,
-                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), attr.ValueType.Type == null ? "Select Type" : attr.ValueType.Type, 
-                new{@class="form-control"}) </div>
-           
-            <div class="input_text"><label class="col-form-label">attribute unit:</label>
-            @Html.Editor(attr.ValueType.Name, attr.ValueType.Name,
-                new { @class = "form-control",placeholder="can be empty" })</div>
-            
-            <div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})
-            @Html.CheckBox(attr.Required ? "T" : "F", attr.Required
-                ,new {@class="form-check-input", style="width:42px; "})</div>
-                
-            <div id= "'del-' + @attr.Id " class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
-            
-            <div id= "'save-' + @attr.Id " class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>
-            
-            </form>
-    }
-                                <form action="/Category/AssignAttribute" method="post" id="'form-' + @a.Id ">
+                                    @for (var i = 0 ; i <Model.Attributes.Count; i ++){
+                                    <div class="atter atter-temp" id="atter-id" action="/Category/Edit" method="post">
+                                        <form class="atter atter-temp" id="atter-id">
+                                                <div class="input_text">
+                                                    <label class="col-form-label">attribute name:</label>
+                                                @Html.TextBox("Name",Model.Attributes[i].Name, new { @class = "form-control",placeholder="name of the attribute" })
+                                                </div>
+                                                <div class="input_text">
+                                                    <label class="col-form-label">attribute description:</label>
+                                                @Html.TextArea("Description",Model.Attributes[i].Description, new { @class = "form-control",placeholder="name of the attribute" })
+                                                </div>
 
-                                    <div class="atter" id="'atter-' + @a.Id ">
+                                                <div class="input_text">
+                                                    <label class="col-form-label">attribute Type:</label>
+                                                @Html.DropDownList("ValueType.Type",
+                                                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), Model.Attributes[i].ValueType.Type == null ? "Select Type" : Model.Attributes[i].ValueType.Type,
+                                                new{@class="form-control"})
+                                                </div>
+
+                                                <div class="input_text">
+                                                    <label class="col-form-label">attribute unit:</label>
+                                                @Html.TextBox("ValueType.Name", Model.Attributes[i].ValueType.Name,
+                                                new { @class = "form-control",placeholder="can be empty" })
+                                                </div>
+
+                                                <div class="input_text">
+                                                    @Html.Label("Required","Required:",new {@class="col-form-label"})
+                                                    @Html.CheckBox(Model.Attributes[i].Required ? "T" : "F", Model.Attributes[i].Required
+                                                ,new {@class="form-check-input", style="width:42px; "})
+                                                </div>
+
+                                                <div id="del-id" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
+
+                                                <div id="save-id" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
+                                           </form> </div>
+                                }
+                                <form action='/Category/AssignAttribute' method='post' id="form-idBASE">
+                                    <div class="atter" >
 
                                         <div class="input_text">
                                             <label class="col-form-label">attribute name:</label>
-                                            @Html.TextBox(a.Name,a.Name, new { @class = "form-control",placeholder="name of the attribute" })
+                                            @Html.TextBox("Name",a.Name, new { @class = "form-control",placeholder="name of the attribute" })
                                         </div>
-
+                                          <div class="input_text">
+                                                    <label class="col-form-label">attribute description:</label>
+                                                @Html.TextArea("Description",a.Description, new { @class = "form-control",placeholder="name of the attribute" })
+                                                </div>
                                         <div class="input_text">
                                             <label class="col-form-label">attribute Type:</label>S
-                                            @Html.DropDownList(a.ValueType.Type,
+                                            @Html.DropDownList("ValueType.Type",
                                             new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), a.ValueType.Type == null ? "Select Type" : a.ValueType.Type,
                                             new{@class="form-control"})
                                         </div>
 
                                         <div class="input_text">
                                             <label class="col-form-label">attribute unit:</label>
-                                            @Html.TextBox(a.ValueType.Name, a.ValueType.Name,
+                                            @Html.TextBox("ValueType.Name", a.ValueType.Name,
                                             new { @class = "form-control",placeholder="can be empty" })
                                         </div>
 
@@ -280,12 +323,12 @@ Id = -1
                                             ,new {@class="form-check-input", style="width:42px; "})
                                         </div>
 
-                                        <div id="'del-' + @a.Id " class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
+                                        <div id="del-idBASE" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
 
-                                        <div id="'save-' + @a.Id " class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
+                                        <div id="save-idBASE" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
                                     </div>
+                                    </form>
 
-                                </form>
                             </div>
                         </div>
                     </div>

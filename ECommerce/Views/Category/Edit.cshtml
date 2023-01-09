@@ -108,8 +108,9 @@ Id = -1
     $(document).ready(function() {
          
         console.log('hrllo');
+        $('#restoreform')
+            .wrap('<form action="/Category/AssignAttribute" method="post" id="form-idBASE"></form>')
 
-        base_form = document.getElementById('form-idBASE').outerHTML;
 
         $('.atter-temp').each(function (idx) {
             console.log('test :)');
@@ -140,7 +141,9 @@ Id = -1
             });
 
         });
+        base_form = document.getElementById('form-idBASE').outerHTML;
 
+        
         console.log('ft'+index);
         $('#image_input').find('#image').click(function(){
             $("#image_input input[type='file']").trigger('click');
@@ -232,7 +235,7 @@ Id = -1
         <div class="control-group" id="fields">
             <div class="controls" id="profs">
 
-                <form asp-action="Edit" class="input-append col-12 d-flex" style="flex-direction:column">
+                @*<form asp-action="Edit" class="input-append col-12 d-flex" style="flex-direction:column">*@
 
                     <div class="row d-flex align-items-baseline">
                         <div id="field11" class="d-flex justify-content-center col-6" style="flex-direction:column">
@@ -304,7 +307,8 @@ Id = -1
                                                 <div id="save-id" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
                                            </form> </div>
                                 }
-                                <form action='/Category/AssignAttribute' method='post' id="form-idBASE">
+                                <div id="restoreform" >
+                                    <form action='/Category/AssignAttribute' method='post' id="form-idBASE">
                                     <div class="atter" >
 
                                         <div class="input_text">
@@ -339,6 +343,7 @@ Id = -1
                                         <div id="save-idBASE" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
                                     </div>
                                     </form>
+                                </div>
 
                             </div>
                         </div>
@@ -347,7 +352,7 @@ Id = -1
                     <div class="form-group d-flex justify-content-center">
                         <input type="submit" value="Save" class="btn btn-primary rounded submit_btn mt-3" />
                     </div>
-                </form>
+                @*</form>*@
    
                 <br>
             </div>

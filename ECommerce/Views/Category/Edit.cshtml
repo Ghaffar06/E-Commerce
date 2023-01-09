@@ -2,10 +2,20 @@
 
 @{
     ViewData["Title"] = "Edit";
-    AttributeVM a = new AttributeVM();
-    ValueTypeVM vt = new ValueTypeVM();
+    AttributeVM a = new AttributeVM
+            {
+                Description = "Description-Example",
+                Name = "Name-Example",
+                Required = false,
+                Id = -1
+            };
+    ValueTypeVM vt = new ValueTypeVM
+    {
+Name = "Name-Value-Example" ,
+Type= "Type-Example",
+Id = -1 
+    };
     a.ValueType = vt;
-
 }
 
 
@@ -96,11 +106,11 @@
             $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
         })    
         
-        
-        
+
+
         $('#add_atter').click(function(){
             let div = 
-            `'<form action="/Category/AssignAttribute" method="post" id = "form-` + index+ `">
+            `<form action="/Category/AssignAttribute" method="post" id = "form-` + index+ `">
             
             <div class="atter" id="atter-` + index + `">
            
@@ -213,7 +223,70 @@
                             <div id="add_atter" class="btn btn-primary rounded add_atter_btn">
                                 <i class="bi bi-plus-circle-fill"></i> Add Attribute
                             </div>
-                            <div id="container" class="container"></div>
+                            <div id="container" class="container">
+
+                                    @foreach (var attr in Model.Attributes)    {
+            <form action="/Category/AssignAttribute" method="post" id = "'form-' + @attr.Id ">
+            
+            <div class="atter" id="'atter-' + @attr.Id ">
+           
+            <div class="input_text"><label class="col-form-label">attribute name:</label>
+            @Html.Editor(attr.Name,attr.Name, new { @class = "form-control",placeholder="name of the attribute" })</div>
+            
+            <div class="input_text"><label class="col-form-label">attribute Type:</label>
+            @Html.DropDownList(attr.ValueType.Type,
+                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), attr.ValueType.Type == null ? "Select Type" : attr.ValueType.Type, 
+                new{@class="form-control"}) </div>
+           
+            <div class="input_text"><label class="col-form-label">attribute unit:</label>
+            @Html.Editor(attr.ValueType.Name, attr.ValueType.Name,
+                new { @class = "form-control",placeholder="can be empty" })</div>
+            
+            <div class="input_text">@Html.Label("Required","Required:",new {@class="col-form-label"})
+            @Html.CheckBox(attr.Required ? "T" : "F", attr.Required
+                ,new {@class="form-check-input", style="width:42px; "})</div>
+                
+            <div id= "'del-' + @attr.Id " class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
+            
+            <div id= "'save-' + @attr.Id " class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div></div>
+            
+            </form>
+    }
+                                <form action="/Category/AssignAttribute" method="post" id="'form-' + @a.Id ">
+
+                                    <div class="atter" id="'atter-' + @a.Id ">
+
+                                        <div class="input_text">
+                                            <label class="col-form-label">attribute name:</label>
+                                            @Html.TextBox(a.Name,a.Name, new { @class = "form-control",placeholder="name of the attribute" })
+                                        </div>
+
+                                        <div class="input_text">
+                                            <label class="col-form-label">attribute Type:</label>S
+                                            @Html.DropDownList(a.ValueType.Type,
+                                            new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), a.ValueType.Type == null ? "Select Type" : a.ValueType.Type,
+                                            new{@class="form-control"})
+                                        </div>
+
+                                        <div class="input_text">
+                                            <label class="col-form-label">attribute unit:</label>
+                                            @Html.TextBox(a.ValueType.Name, a.ValueType.Name,
+                                            new { @class = "form-control",placeholder="can be empty" })
+                                        </div>
+
+                                        <div class="input_text">
+                                            @Html.Label("Required","Required:",new {@class="col-form-label"})
+                                            @Html.CheckBox(a.Required ? "T" : "F", a.Required
+                                            ,new {@class="form-check-input", style="width:42px; "})
+                                        </div>
+
+                                        <div id="'del-' + @a.Id " class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
+
+                                        <div id="'save-' + @a.Id " class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
 

@@ -61,15 +61,15 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AssignAttribute(AttributeVM Attribute, int cat_id)
         {
-            Attribute attr = Mapper.Map<Attribute>(Attribute);
-            Category cat = Uow.CategoryRepo.Get(cat_id);
-            cat.CategoryAttribute.Add(new CategoryAttribute
-            {
-                Id = cat_id,
-                Attribute = attr
-            });
-            Uow.SaveChanges();
-            return Json("catid:" + cat_id + ",Attribute:" + Attribute.Name);
+            //Attribute attr = Mapper.Map<Attribute>(Attribute);
+            //Category cat = Uow.CategoryRepo.Get(cat_id);
+            //cat.CategoryAttribute.Add(new CategoryAttribute
+            //{
+            //    Id = cat_id,
+            //    Attribute = attr
+            //});
+            //Uow.SaveChanges();
+            return Json("catid: Success");
         }
 
 

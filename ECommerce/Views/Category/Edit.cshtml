@@ -2,20 +2,20 @@
 
 @{
     ViewData["Title"] = "Edit";
-    //AllAttributes = ViewData["Attributes"];
     AttributeVM a = new AttributeVM
-    {
-        Name = "test name",
-        Description = "test desc",
-        Required = true,
-    };
+            {
+                Description = "Description-Example",
+                Name = "Name-Example",
+                Required = false,
+                Id = -1
+            };
     ValueTypeVM vt = new ValueTypeVM
     {
-        Name = "test vt name",
-        Type = "Int",
+Name = "Name-Value-Example" ,
+Type= "Type-Example",
+Id = -1 
     };
     a.ValueType = vt;
-    Model.Attributes.Add(a);
 }
 
 
@@ -315,13 +315,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-
-                    
-@functions{
-    public void renderAttributes(int i, AttributeVM attr)
-    {
-        
-    }
 }

@@ -20,6 +20,7 @@ Id = -1
 
 
 
+
 <style>
     * {
         border-radius: 0 !important;
@@ -89,10 +90,16 @@ Id = -1
         width: 70%;
     }
 
+    #val{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+    }
+
 </style>
-       @* $("#image_input")
-                .find("#val")
-                .text("@Html.Raw(Model.ImageUrl)")*@
+
+               
 <script>
     console.log('hrllo');
 
@@ -143,8 +150,11 @@ Id = -1
             $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
         })    
         
-
-
+         $("#image_input")
+                .find("#val")
+                .text("@Html.Raw(Model.ImageUrl)")
+        
+        
         $('#add_atter').click(function(){
             
             let cpy = base_form.replaceAll('idBASE', '' + (++ index));
@@ -206,9 +216,10 @@ Id = -1
     
     })    
 
-        
-
 </script>
+
+
+
 
 <h1 class="mt-3">Edit Category</h1>
 

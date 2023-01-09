@@ -6,16 +6,17 @@
             {
                 Description = "Description-Example",
                 Name = "Name-Example",
-                Required = false,
+                Required = true,
                 Id = -1
             };
     ValueTypeVM vt = new ValueTypeVM
     {
 Name = "Name-Value-Example" ,
-Type= "Type-Example",
+Type= "Int",
 Id = -1 
     };
     a.ValueType = vt;
+    Model.Attributes.Add(a);
 }
 
 
@@ -245,7 +246,7 @@ Id = -1
                             <div id="container" class="container">
                                 @for(var i = 0 ;i < Model.Attributes.Count; i++)
                                 {
-                                    <form action="/Category/AssignAttribute" method="post" id="form-@i">
+                                    <div><form action="/Category/AssignAttribute" method="post" id="form-@i">
                                         <div class="atter" id="atter-@i">
                                             <div class="input_text">
                                                 <label class="col-form-label">attribute name:</label>
@@ -290,7 +291,7 @@ Id = -1
                                                 <i class="bi bi-save"></i> Save
                                             </div>
                                         </div>
-                                    </form>
+                                    </form></div>
                                     <script>addFunctionality()</script>
                                 }
                             </div>

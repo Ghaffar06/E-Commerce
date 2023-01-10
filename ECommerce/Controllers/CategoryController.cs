@@ -57,6 +57,25 @@ namespace ECommerce.Controllers
             return Redirect("index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit2(int Id)
+        {
+            var v = Mapper.Map<CategoryVM>(await Uow.CategoryRepo.GetAsync(Id));
+
+            return View(v);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit2(CategoryVM category)
+        {
+            Category cat = Mapper.Map<Category>(category);
+            Uow.CategoryRepo.Add(cat);
+            Uow.SaveChanges();
+            return Redirect("index");
+        }
+
+
         [HttpPost]
         public IActionResult AssignAttribute(int attr_id, int cat_id, string Requierd)
         {

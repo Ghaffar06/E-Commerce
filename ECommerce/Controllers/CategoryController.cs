@@ -38,7 +38,7 @@ namespace ECommerce.Controllers
             cat.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = cat.Id });
         }
 
         [HttpGet]
@@ -54,7 +54,16 @@ namespace ECommerce.Controllers
             Category cat = Mapper.Map<Category>(category);
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
-            return Redirect("index");
+            return Redirect("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+
+            Uow.CategoryRepo.Delete(id);
+            Uow.SaveChanges();
+            return Redirect("Index");
         }
 
         [HttpPost]
@@ -68,7 +77,7 @@ namespace ECommerce.Controllers
                 Category = Category,
                 Required = Requierd
             };
-            Uow.CategoryRepo.AssignAttribute(categoryAttribute);
+            Uow.CategoryAttributeRepo.Add(categoryAttribute);
             Uow.SaveChanges();
             return Json("catid: Success");
         }
@@ -76,11 +85,22 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult ClearAssignmentAttribute(int categoryAttributeId)
         {
-            Uow.CategoryRepo.ClearAssignmentAttribute(categoryAttributeId);
+            Uow.CategoryAttributeRepo.Delete(categoryAttributeId);
             Uow.SaveChanges();
             return Json("catid: Success");
         }
 
+
+        [HttpPost]
+
+        public IActionResult ChangeRequirementAttribute(int attr_cat_id, string Requierd)
+        {
+            var categoryAttribute = Uow.CategoryAttributeRepo.Get(attr_cat_id);
+            categoryAttribute.Required = Requierd;
+            Uow.CategoryAttributeRepo.Update(categoryAttribute);
+            Uow.SaveChanges();
+            return Json("catid: Success");
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

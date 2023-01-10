@@ -8,6 +8,7 @@ namespace AppDbContext.UOW
         public IProductRepo ProductRepo { get; set; }
         public IAttributeRepo AttributeRepo { get; set; }
         public IValueTypeRepo ValueTypeRepo { get; set; }
+        public ICategoryAttributeRepo CategoryAttributeRepo { get; set; }
 
         public void SaveChanges();
 

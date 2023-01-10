@@ -41,7 +41,7 @@ $(document).ready(function () {
                 .parent()
                 .each(function () {
                     console.log($(this).serializeArray())
-                    var obj = $(this).serialize()
+                    var obj = $(this).serializeArray()
                     $.ajax({
                         url: this.action,
                         type: this.method,
@@ -51,7 +51,7 @@ $(document).ready(function () {
                             data = {
                                 "attr_id": result,
                                 "cat_id": @Model.Id,
-                                "Requierd": obj["Requierd"] ? "T" : "F" // this is wrong.....
+                                "Requierd": obj[4]['value']=="true" ? "T" : "F" // this is wrong.....
                             };
                             console.log(data);
                             idx = $('#container').data('selected');
@@ -92,7 +92,7 @@ $(document).ready(function () {
                     return;
                 }
                 id = {
-                    "categoryAttributeId": obj[0]['value']
+                    "categoryAttributeId": $(this).data('id')
                 }
                 console.log(id)
                 $.ajax({
@@ -128,32 +128,18 @@ $(document).ready(function() {
             .click(function() {
                 $(this).parent().each(function() {
                     console.log($(this).serializeArray())
-                    var obj = $(this).serialize()
+                    var obj = $(this).serializeArray()
+                    var data = {
+                                "attr_cat_id": $(this).data('id'),
+                                "Requierd": obj[0]['value']=="true" ? "T" : "F"
+                            };
                     $.ajax({
                         url: this.action,
                         type: this.method,
-                        data: obj,
+                        data: data,
                         success: function(result) {
                             console.log("first call:" + result);
-                            var data = {
-                                "attr_id": result,
-                                "cat_id": @Model.Id,
-                                "Requierd": obj["Requierd"]
-                            };
-                            console.log(data);
-                            $.ajax({
-                                url: "/Category/AssignAttribute",
-                                type: "post",
-                                data: data,
-                                success: function(result) {
-                                    console.log(result);
-                                },
-                                error: function(xhr, textStatus, error) {
-                                    console.log(xhr.statusText);
-                                    console.log(textStatus);
-                                    console.log(error);
-                                }
-                            });
+                                                       
                         },
                         error: function(xhr, textStatus, error) {
                             console.log(xhr.statusText);
@@ -258,7 +244,7 @@ $(document).ready(function() {
                         style="flex-direction:column">
                         <div class="container">
                         @for (var i = 0 ; i <Model.Attributes.Count; i ++){
-                            <form class="atter atter-temp col-12" id="atter-id" action="/Attribute/FindOrCreate" method="post">
+                            <form class="atter atter-temp col-12" id="atter-id" action="/Category/ChangeRequirementAttribute" method="post">
                                 <div class="input_text" hidden>
                                     @Html.TextBox("cat_atr_id",Model.Attributes[i].Id, 
                                         new { @class = "form-control hidden",placeholder="name of the attribute"})
@@ -285,7 +271,7 @@ $(document).ready(function() {
 
                                 <div class="input_text">
                                     @Html.Label("Required","Required:",new {@class="col-form-label"})
-                                    @Html.CheckBox(Model.Attributes[i].Required ? "T" : "F", Model.Attributes[i].Required,
+                                    @Html.CheckBox("Required", Model.Attributes[i].Required,
                                         new {@class="form-check-input", style="width:42px"})
                                 </div>
 
@@ -347,7 +333,7 @@ $(document).ready(function() {
 
     <div class="input_text">
         @Html.Label("Required","Required:",new {@class="col-form-label"})
-        @Html.CheckBox(a.Required ? "T" : "F", a.Required,
+        @Html.CheckBox("Required", a.Required,
             new {@class="form-check-input", style="width:42px"})
     </div>
 

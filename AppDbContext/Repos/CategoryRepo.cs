@@ -26,17 +26,7 @@ namespace AppDbContext.Repos
                 .ThenInclude(c => c.ValueType)
                 .FirstOrDefaultAsync();
         }
-        public void AssignAttribute(CategoryAttribute categoryAttribute)
-        {
-            CategoryAttributes.Add(categoryAttribute);
-        }
-
-        public void ClearAssignmentAttribute(int categoryAttributeId)
-        {
-            var categoryAttribute = CategoryAttributes.Find(categoryAttributeId);
-            CategoryAttributes.Remove(categoryAttribute);
-        }
-
+      
 
     }
 }

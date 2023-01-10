@@ -7,7 +7,6 @@ namespace AppDbContext.IRepos
     {
         Task<Category> GetAsync(int id);
 
-        void AssignAttribute(CategoryAttribute categoryAttribute);
-        void ClearAssignmentAttribute(int categoryAttributeId);
+      
     }
 }

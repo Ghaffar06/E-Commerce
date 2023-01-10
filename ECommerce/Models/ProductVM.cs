@@ -19,7 +19,7 @@ namespace ECommerce.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
-        public string PriceIsInteger { get; set; }
+        public bool PriceIsInteger { get; set; }
         public decimal Quantity { get; set; }
         public string ImageUrl { get; set; }
         public string Unit { get; set; }

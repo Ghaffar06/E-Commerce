@@ -19,7 +19,8 @@ namespace AppDbContext.Repos
         {
             return Products
                 .Where(c => c.Id == id)
-//                .ThenInclude(c => c.ValueType)
+                .Include(c => c.CategoryProduct)
+                .ThenInclude(c => c.Category)
                 .FirstOrDefaultAsync();
         }
     }

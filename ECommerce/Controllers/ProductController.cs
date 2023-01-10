@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
@@ -28,18 +28,8 @@ namespace ECommerce.Controllers
         //{
         //    return null;
         //}
-        [HttpGet]
-        public IActionResult EditCategory(int Id)
-        {
-            return View(Mapper.Map<ProductVM>(Uow.ProductRepo.Get(Id)));
-        }
+        
 
-
-        [HttpPost]
-        public IActionResult EditCategory(ProductVM product)
-        {
-            return Redirect("index");
-        }
 
 
 
@@ -61,11 +51,10 @@ namespace ECommerce.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            var p = Uow.ProductRepo.GetAsync(Id);
+            var p = await Uow.ProductRepo.GetAsync(Id);
             var prod = Mapper.Map<ProductVM>(p);
-
             return View(prod);
         }
 
@@ -95,17 +84,18 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignCategory(CategoryVM category, int prod_id)
+        public IActionResult AssignCategory(List<int> category_ids, int prod_id)
         {
-            var cat = Mapper.Map<Category>(category);
-            var prod = Uow.ProductRepo.Get(prod_id);
-            prod.CategoryProduct.Add(new CategoryProduct
+            foreach(var category in category_ids)
             {
-                Id = prod_id,
-                Category = cat
-            });
+                Uow.CategoryProductRepo.Add(new CategoryProduct
+                {
+                    Product = Uow.ProductRepo.Get(prod_id),
+                    Category = Uow.CategoryRepo.Get(category)
+                });
+            }
             Uow.SaveChanges();
-            return Json("prodid:" + prod_id + ",Category:" + category.Name);
+            return RedirectToAction("Edit", new {id = prod_id});
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

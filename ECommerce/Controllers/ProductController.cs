@@ -55,7 +55,8 @@ namespace ECommerce.Controllers
         {
             var p = await Uow.ProductRepo.GetAsync(Id);
             var prod = Mapper.Map<ProductVM>(p);
-            return View(prod);
+            ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());   
+            return View("EditCategory", prod);
         }
 
 
@@ -84,14 +85,14 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignCategory(List<int> category_ids, int prod_id)
+        public IActionResult AssignCategories(List<int> category, int prod_id)
         {
-            foreach(var category in category_ids)
+            foreach(var cat_id in category)
             {
                 Uow.CategoryProductRepo.Add(new CategoryProduct
                 {
                     Product = Uow.ProductRepo.Get(prod_id),
-                    Category = Uow.CategoryRepo.Get(category)
+                    Category = Uow.CategoryRepo.Get(cat_id)
                 });
             }
             Uow.SaveChanges();

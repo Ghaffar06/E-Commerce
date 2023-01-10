@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
+
+
 namespace ECommerce.Controllers
 {
     public class ProductController : BaseController
@@ -27,6 +28,19 @@ namespace ECommerce.Controllers
         //{
         //    return null;
         //}
+        [HttpGet]
+        public IActionResult EditCategory(int Id)
+        {
+            return View(Mapper.Map<ProductVM>(Uow.ProductRepo.Get(Id)));
+        }
+
+
+        [HttpPost]
+        public IActionResult EditCategory(ProductVM product)
+        {
+            return Redirect("index");
+        }
+
 
 
         public IActionResult Create()

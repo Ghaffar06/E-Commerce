@@ -11,6 +11,8 @@ namespace ECommerce.Automapper
             CreateMap<Category, CategoryVM>()
                 .ForMember(c => c.Attributes, opt => opt.MapFrom(c => c.CategoryAttribute))
                 .ReverseMap();
+             CreateMap<Product, ProductVM>()
+                .ReverseMap();
 
 
             CreateMap<CategoryAttribute, AttributeVM>()

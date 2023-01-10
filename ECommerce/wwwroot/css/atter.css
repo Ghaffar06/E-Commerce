@@ -1,0 +1,72 @@
+﻿
+#field, .margin_b {
+    margin-bottom: 10px;
+}
+
+.submit_btn {
+    width: 150px !important;
+    font-size: 16pt;
+}
+
+.save_btn {
+    width: 30% !important;
+}
+
+.add_atter_btn {
+    width: 80%;
+}
+
+.add_atter_btn, .submit_btn {
+    font-size: 16pt !important;
+    user-select: none !important;
+}
+
+.add_file_btn {
+    height: 60px !important;
+}
+
+    .add_file_btn::file-selector-button {
+        font-weight: bold;
+        padding: 0.5em;
+        border: thin solid grey;
+        border-radius: 3px;
+    }
+
+.atter {
+    position: relative;
+    margin-top: 35px;
+    border: 1px solid purple;
+    border-radius: 25px !important;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+}
+
+.input_text {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.delete_btn {
+    position: absolute;
+    right: 30px;
+    top: -25px;
+}
+
+.atter input, .atter select {
+    height: 40px !important;
+    width: 70%;
+}
+
+#val {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+

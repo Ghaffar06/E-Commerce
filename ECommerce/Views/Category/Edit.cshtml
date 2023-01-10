@@ -109,7 +109,7 @@ Id = -1
          
         console.log('hrllo');
         $('#restoreform')
-            .wrap('<form action="/Category/AssignAttribute" method="post" id="form-idBASE"></form>')
+            .wrap('<form action="/Attribute/FindOrCreate" method="post" id="form-idBASE">')
 
 
         $('.atter-temp').each(function (idx) {
@@ -164,11 +164,11 @@ Id = -1
 
             $(this).find('#del-' + index).click(function () {
                 $('#form-' + index).each(function () {
-                    var obj = $(this).serialize()
+                    var obj = $(this).serializeArray()
                     console.log(obj);
 
                     id = {
-                        "categoryAttributeId": obj['cat_atr_id']
+                        "categoryAttributeId": obj[0]['value']
                     }
                     console.log(id);
                     // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
@@ -204,7 +204,7 @@ Id = -1
                 .find("#val")
                 .text("@Html.Raw(Model.ImageUrl)")
         
-        
+        base_form = document.getElementById('form-idBASE').outerHTML;
         $('#add_atter').click(function(){
             
             let cpy = base_form.replaceAll('idBASE', '' + (++ index));
@@ -261,12 +261,12 @@ Id = -1
             $('#del-' + index).click(function () {
                 $('#form-' + index).each(function () {
                     console.log($(this).serializeArray())
-                    var obj = $(this).serialize()
+                    var obj = $(this).serializeArray()
                     id = {
-                        "categoryAttributeId": obj['cat_atr_id']
+                        "categoryAttributeId": obj[0]['value']
                     }
                     // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
-
+                    console.log(id)
                     $.ajax({
                         url: "/Category/ClearAssignmentAttribute",
                         type: "post",
@@ -416,6 +416,7 @@ Id = -1
                                            </form> </div>
                                 }
                                 <form action='/Attribute/FindOrCreate' method='post' id="form-idBASE">
+                                    <div id="restoreform">
                                     <div class="atter" >
                                         <div class="input_text">
                                             <label class="col-form-label">CatAttribute Id: (hide it)</label>
@@ -452,6 +453,7 @@ Id = -1
 
                                         <div id="save-idBASE" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
                                     </div>
+                                    </div>
                                     </form>
                                 </div>
 
@@ -468,7 +470,6 @@ Id = -1
             </div>
         </div>
     </div>
-</div>
 
 
 <div>

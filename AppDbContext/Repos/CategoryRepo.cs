@@ -9,10 +9,12 @@ namespace AppDbContext.Repos
     public class CategoryRepo : BaseRepo<Category>, ICategoryRepo
     {
         private DbSet<Category> Categories;
+        private DbSet<CategoryAttribute> CategoryAttributes;
 
         public CategoryRepo(EcommerceDbContext db) : base(db)
         {
             Categories = _db.Set<Category>();
+            CategoryAttributes = _db.Set<CategoryAttribute>();
         }
 
         public Task<Category> GetAsync(int id)
@@ -24,5 +26,17 @@ namespace AppDbContext.Repos
                 .ThenInclude(c => c.ValueType)
                 .FirstOrDefaultAsync();
         }
+        public void AssignAttribute(CategoryAttribute categoryAttribute)
+        {
+            CategoryAttributes.Add(categoryAttribute);
+        }
+
+        public void ClearAssignmentAttribute(int categoryAttributeId)
+        {
+            var categoryAttribute = CategoryAttributes.Find(categoryAttributeId);
+            CategoryAttributes.Remove(categoryAttribute);
+        }
+
+
     }
 }

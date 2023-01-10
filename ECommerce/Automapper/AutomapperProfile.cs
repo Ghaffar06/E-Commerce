@@ -9,7 +9,8 @@ namespace ECommerce.Automapper
         public AutomapperProfile()
         {
             CreateMap<Category, CategoryVM>()
-                .ForMember(c => c.Attributes, opt => opt.MapFrom(c => c.CategoryAttribute));
+                .ForMember(c => c.Attributes, opt => opt.MapFrom(c => c.CategoryAttribute))
+                .ReverseMap();
 
             CreateMap<CategoryAttribute, AttributeVM>()
                 .ForMember(cvm => cvm.Required, opt => opt.MapFrom(c => c.Required == "F"))

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
 namespace ECommerce.Controllers
 {
     public class ProductController : BaseController
@@ -23,30 +22,12 @@ namespace ECommerce.Controllers
             return View(Mapper.Map<List<ProductVM>>(Uow.ProductRepo.GetAll()));
         }
 
-        [HttpGet]
-        public IActionResult IndexAttr()
-        {
-            var attrs = Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType));
-            return View(Mapper.Map<List<AttributeVM>>(attrs));
-        }
+       
         //public IActionResult Create(CategoryViewModel category)
         //{
         //    return null;
         //}
 
-        [HttpGet]
-        public IActionResult CreateAttr()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult CreateAttr(AttributeVM attribute)
-        {
-            var attr = Mapper.Map<Attribute>(attribute);
-            Uow.AttributeRepo.Add(attr);
-            Uow.SaveChanges();
-            return RedirectToAction("CreateAttr");
-        }
 
         public IActionResult Create()
         {
@@ -68,7 +49,7 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Edit(int Id)
         {
-            var p = Uow.ProductRepo.Get(Id);
+            var p = Uow.ProductRepo.GetAsync(Id);
             var prod = Mapper.Map<ProductVM>(p);
 
             return View(prod);

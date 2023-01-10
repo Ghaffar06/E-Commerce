@@ -4,6 +4,7 @@ using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
+
 namespace ECommerce.Controllers
 {
     public class ProductController : BaseController
@@ -22,6 +23,19 @@ namespace ECommerce.Controllers
         //{
         //    return null;
         //}
+        [HttpGet]
+        public IActionResult EditCategory(int Id)
+        {
+            return View(Mapper.Map<ProductVM>(Uow.ProductRepo.Get(Id)));
+        }
+
+
+        [HttpPost]
+        public IActionResult EditCategory(ProductVM product)
+        {
+            return Redirect("index");
+        }
+
 
         public IActionResult Create()
         {

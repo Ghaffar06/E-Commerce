@@ -1,108 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<style>
-    * {
-        border-radius: 0 !important;
-    }
+<link rel="stylesheet" href="~/css/atter.css" />
 
-    .add_atter_btn{
-        width: 80%;
-    }
-    
-    .submit_btn{
-        width: 150px !important;
-    }
-
-    .add_atter_btn,.submit_btn{
-        font-size: 16pt !important;
-        user-select: none !important;
-    }
-    
-    .add_file_btn{
-        height:60px !important;
-    }
-
-    .add_file_btn::file-selector-button {
-        font-weight: bold;
-        padding: 0.5em;
-        border: thin solid grey;
-        border-radius: 3px;
-    }
-
-    .atter{
-        position:relative;
-        margin-top: 35px;
-        border: 1px solid purple;
-        border-radius: 25px !important;
-        justify-content: center;
-        align-items:center;
-        display: flex;
-        flex-direction: column;
-        padding: 40px;
-    }
-
-    .input_text{
-        margin:10px 0;
-        display: flex;
-        justify-content:space-between;
-        align-items:center;
-        width:80%;
-    }
-
-    .delete_btn{
-        position:absolute;
-        right: 30px;
-        top: -25px;
-    }
-
-    .atter input{
-        height:40px !important;
-        width: 70%;
-    }
-
-</style>
-<script>
-    $(document).ready(function() {
-        let index = 0;
-        
-        $('#image_input').find('#image').click(function(){
-            $("#image_input input[type='file']").trigger('click');
-        })
-
-        $("#image_input").find("input[type='file']").change(function(){
-           $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-        })    
-
-        
-        
-        $('#add_atter').click(function(){
-            let div = 
-            '<div class="atter" id="atter-' + index + '">'+
-            '<div class="input_text"><label class="col-form-label" for="at_n-' + index + '">attribute name:</label>' +
-            '<input type="text" class="form-control" placeholder="name of the attribute" id="at_n-' + index + '"></div>' + 
-            '<div class="input_text"><label class="col-form-label" for="at_v-' + index + '">attribute value:</label>' +
-            '<input type="text" class="form-control" placeholder="value of the attribute" id="at_v-' + index + '"></div>' + 
-            '<div class="input_text"><label class="col-form-label" for="at_u-' + index + '">attribute unit:</label>' +
-            '<input type="text" class="form-control" placeholder="can be empty" id="at_u-' + index + '"></div>' + 
-            '<div id="del-' + index + '" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div></div>'
-
-            $('#container').append(div);
-
-            $('#del-' + index).click(function() {
-                id = $(this).attr('id');
-                id = id.substr(4, id.length - 4);
-                console.log(id);
-                $('#atter-' + id).remove();
-            })
-          
-            index++;
-        })
-        
-
-    });
-
-</script>
 
 <div class="container">
     
@@ -122,7 +22,7 @@
 
                             <div class="form-group">
                               <label for="Description" class="form-label mt-4">Product Description:</label>
-                              <textarea class="form-control" id="Description" rows="4"></textarea>
+                              <textarea class="form-control" id="Description" rows="4" placeholder="Type about the product"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -150,18 +50,11 @@
                                 <div id='val' class="ml-4"></div>
                               </div>
                             </div>
-
-                        </div>
-
-                        <div id="field" class="d-flex justify-content-center align-items-center col-6" style="flex-direction:column">
-                            <div id="add_atter" class="btn btn-primary rounded add_atter_btn">
-                                <i class="bi bi-plus-circle-fill"></i> Add Attribute
+                            <div class="d-flex justify-content-center">
+                                <input type="submit" value="submit" class="btn btn-primary rounded submit_btn mt-3"/>
                             </div>
-                            <div id="container" class="container"></div>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <input type="submit" value="submit" class="btn btn-primary rounded submit_btn mt-3"/>
+                        
                     </div>
                 </form>
                 <br>
@@ -169,17 +62,4 @@
         </div>
     </div>
 </div>
-@*
-<form class="input-append">
-                    <div id="field">
-                        <input autocomplete="off" class="input" id="field1" name="prof1" type="text" placeholder="Type something" data-items="8" />
-                        <button id="b1" class="btn add-more" type="button">+</button>
-                    </div>
-                </form>
 
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-*@

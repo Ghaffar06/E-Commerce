@@ -58,9 +58,16 @@
     top: -25px;
 }
 
-.atter input, .atter select {
+.input_text input,.input_text select {
     height: 40px !important;
-    width: 70%;
+    width: 60% !important;
+}
+
+.input_text input[type="checkbox"]{
+    width: 42px !important;
+}
+.input_text textarea {
+    width: 60% !important;
 }
 
 #val {

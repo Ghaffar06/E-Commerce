@@ -85,9 +85,9 @@ Id = -1
         top: -25px;
     }
 
-    .atter input,.atter select{
+    .atter input,.atter select,.atter textarea{
         height:40px !important;
-        width: 70%;
+        width: 400px;
     }
 
     #val{
@@ -98,87 +98,49 @@ Id = -1
     }
 
 </style>
-
-               
 <script>
     console.log('hrllo');
 
-    let index = 0;
-    let base_form;
-    $(document).ready(function() {
-         
-        console.log('hrllo');
-        $('#restoreform')
-            .wrap('<form action="/Attribute/FindOrCreate" method="post" id="form-idBASE">')
+let index = 0;
+let base_form;
+$(document).ready(function () {
+
+    console.log('hrllo');
+    $('#restoreform')
+        .wrap('<form action="/Attribute/FindOrCreate" method="post" id="form-idBASE">')
 
 
-        $('.atter-temp').each(function (idx) {
-            console.log('test :)');
-            $(this).attr('id', 'atter-' + (++index));
-            $(this).find('#del-id').attr('id', 'del-' + index);
-            $(this).find('#save-id').attr('id', 'save-' + index);
-            var t = $(this);
-            $form = $("<form action='/Category/AssignAttribute' method='post' id='form-" + index + "'></form>");
-            $form.append(t) ;
-            $("#container").append($form) ;
-            $(this).find('#save-' + index).click(function() {
-                $('#form-' + index).each(function () {
-                    console.log($(this).serializeArray())
-                    var obj = $(this).serialize()
+    $('.atter-temp').each(function (idx) {
+        console.log('test :)');
+        $(this).attr('id', 'atter-' + (++index));
+        $(this).find('#del-id').attr('id', 'del-' + index);
+        $(this).find('#save-id').attr('id', 'save-' + index);
+        var t = $(this);
+        $form = $("<form action='/Category/AssignAttribute' method='post' id='form-" + index + "'></form>");
+        $form.append(t);
+        $("#container").append($form);
+        $(this).find('#save-' + index).click(function () {
+            $('#form-' + index).each(function () {
+                console.log($(this).serializeArray())
+                var obj = $(this).serialize()
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: obj,
+                    success: function (result) {
+                        console.log("first call:" + result);
+                        var data = {
+                            "attr_id": result,
+                            "cat_id": @Model.Id,
+                        "Requierd": obj["Requierd"]
+                    };
+                    console.log(data);
                     $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: obj,
-                        success: function (result) {
-                            console.log("first call:" + result);
-                            var data = {
-                                "attr_id": result,
-                                "cat_id": @Model.Id,
-                                "Requierd": obj["Requierd"]
-                            };
-                            console.log(data);
-                            $.ajax({
-                                url: "/Category/AssignAttribute",
-                                type: "post",
-                                data: data,
-                                success: function (result) {
-                                    console.log(result);
-                                },
-                                error: function (xhr, textStatus, error) {
-                                    console.log(xhr.statusText);
-                                    console.log(textStatus);
-                                    console.log(error);
-                                }
-                            });
-
-
-                        },
-                        error: function (xhr, textStatus, error) {
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
-                        }
-                    });
-                });
-            });
-
-            $(this).find('#del-' + index).click(function () {
-                $('#form-' + index).each(function () {
-                    var obj = $(this).serializeArray()
-                    console.log(obj);
-
-                    id = {
-                        "categoryAttributeId": obj[0]['value']
-                    }
-                    console.log(id);
-                    // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
-
-                    $.ajax({
-                        url: "/Category/ClearAssignmentAttribute",
+                        url: "/Category/AssignAttribute",
                         type: "post",
-                        data: id,
+                        data: data,
                         success: function (result) {
-                            console.log("first call:" + result);
+                            console.log(result);
                         },
                         error: function (xhr, textStatus, error) {
                             console.log(xhr.statusText);
@@ -186,102 +148,138 @@ Id = -1
                             console.log(error);
                         }
                     });
-                });
-            });
 
+
+                },
+                    error: function (xhr, textStatus, error) {
+                        console.log(xhr.statusText);
+                        console.log(textStatus);
+                        console.log(error);
+                    }
+                    });
+        });
+    });
+
+    $(this).find('#del-' + index).click(function () {
+        $('#form-' + index).each(function () {
+            var obj = $(this).serializeArray()
+            console.log(obj);
+
+            id = {
+                "categoryAttributeId": obj[0]['value']
+            }
+            console.log(id);
+            // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
+
+            $.ajax({
+                url: "/Category/ClearAssignmentAttribute",
+                type: "post",
+                data: id,
+                success: function (result) {
+                    console.log("first call:" + result);
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+});
+
+console.log('ft' + index);
+$('#image_input').find('#image').click(function () {
+    $("#image_input input[type='file']").trigger('click');
+})
+
+$("#image_input").find("input[type='file']").change(function () {
+    $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+})
+
+$("#image_input")
+    .find("#val")
+    .text("@Html.Raw(Model.ImageUrl)")
+
+base_form = document.getElementById('form-idBASE').outerHTML;
+$('#add_atter').click(function () {
+
+    let cpy = base_form.replaceAll('idBASE', '' + (++index));
+    $("#container").append(cpy);
+    $('#save-' + index).click(function () {
+        $('#form-' + index).each(function () {
+            console.log($(this).serializeArray())
+            var obj = $(this).serialize()
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: obj,
+                success: function (result) {
+                    console.log("first call:" + result);
+                    var data = {
+                        "attr_id": result,
+                        "cat_id": @Model.Id,
+                    "Requierd": obj["Requierd"]
+                };
+                console.log(data);
+                data = {
+                    "attr_id": result,
+                    "cat_id": @Model.Id,
+            "Requierd": obj["Requierd"] ? "T" : "F" // this is wrong.....
+        };
+        console.log(data);
+
+        $.ajax({
+            url: "/Category/AssignAttribute",
+            type: "post",
+            data: data,
+            success: function (result) {
+                console.log(result);
+                // save this result in a hidden input with name : 'cat_atr_id'
+            },
+            error: function (xhr, textStatus, error) {
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
         });
 
-        console.log('ft'+index);
-        $('#image_input').find('#image').click(function(){
-            $("#image_input input[type='file']").trigger('click');
-        })
 
-        $("#image_input").find("input[type='file']").change(function(){
-            $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-        })    
-        
-         $("#image_input")
-                .find("#val")
-                .text("@Html.Raw(Model.ImageUrl)")
-        
-        base_form = document.getElementById('form-idBASE').outerHTML;
-        $('#add_atter').click(function(){
-            
-            let cpy = base_form.replaceAll('idBASE', '' + (++ index));
-            $("#container").append(cpy);
-            $('#save-' + index).click(function () {
-                $('#form-' + index).each(function () {
-                    console.log($(this).serializeArray())
-                    var obj = $(this).serialize()
-                    $.ajax({
-                        url: this.action,
-                        type: this.method,
-                        data: obj,
-                        success: function (result) {
-                            console.log("first call:" + result);
-                            var data = {
-                                "attr_id": result,
-                                "cat_id": @Model.Id,
-                                "Requierd": obj["Requierd"]
-                            };
-                            console.log(data);
-                            data = {
-                                "attr_id": result,
-                                "cat_id": @Model.Id,
-                                "Requierd": obj["Requierd"] ? "T" : "F" // this is wrong.....
-                            };
-                            console.log(data);
-
-                            $.ajax({
-                                url: "/Category/AssignAttribute",
-                                type: "post",
-                                data: data,
-                                success: function (result) {
-                                    console.log(result);
-                                    // save this result in a hidden input with name : 'cat_atr_id'
-                                },
-                                error: function (xhr, textStatus, error) {
-                                    console.log(xhr.statusText);
-                                    console.log(textStatus);
-                                    console.log(error);
-                                }
-                            });
-
-
-                        },
-                        error: function (xhr, textStatus, error) {
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
-                        }
+    },
+        error: function (xhr, textStatus, error) {
+            console.log(xhr.statusText);
+            console.log(textStatus);
+            console.log(error);
+        }
                     });
                 });
             });
 
-            $('#del-' + index).click(function () {
-                $('#form-' + index).each(function () {
-                    console.log($(this).serializeArray())
-                    var obj = $(this).serializeArray()
-                    id = {
-                        "categoryAttributeId": obj[0]['value']
-                    }
-                    // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
-                    console.log(id)
-                    $.ajax({
-                        url: "/Category/ClearAssignmentAttribute",
-                        type: "post",
-                        data: id,
-                        success: function (result) {
-                            console.log("first call:" + result);
-                        },
-                        error: function (xhr, textStatus, error) {
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
-                        }
-                    });
-                });
-            });
+$('#del-' + index).click(function () {
+    $('#form-' + index).each(function () {
+        console.log($(this).serializeArray())
+        var obj = $(this).serializeArray()
+        id = {
+            "categoryAttributeId": obj[0]['value']
+        }
+        // if obj['cat_atr_id'] is null or undefined => this attribute never saved (add and delete without save)
+        console.log(id)
+        $.ajax({
+            url: "/Category/ClearAssignmentAttribute",
+            type: "post",
+            data: id,
+            success: function (result) {
+                console.log("first call:" + result);
+            },
+            error: function (xhr, textStatus, error) {
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+        });
+    });
+});
 
 
             //$('#container').append(div);
@@ -323,7 +321,6 @@ Id = -1
     })    
 
 </script>
-
 
 
 
@@ -428,7 +425,7 @@ Id = -1
                                         </div>
                                           <div class="input_text">
                                                     <label class="col-form-label">attribute description:</label>
-                                                @Html.TextArea("Description",a.Description, new { @class = "form-control",placeholder="name of the attribute" })
+                                                @Html.TextArea("Description",a.Description, new { @class = "form-control",placeholder="name of the attribute",rows="4"})
                                                 </div>
                                         <div class="input_text">
                                             <label class="col-form-label">attribute Type:</label>S

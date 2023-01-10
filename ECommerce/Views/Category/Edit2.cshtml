@@ -19,22 +19,214 @@
 }
 <link rel="stylesheet" href="~/css/atter.css" />
 
+<script>
+
+let index = 0;
+let base_form;
+$(document).ready(function () {
+    
+    base_form = document.getElementById('form-idBASE').outerHTML;
+
+    $('#add_atter').click(function () {
+
+        let cpy = base_form.replaceAll('idBASE', '' + (++index));
+        $("#container").append(cpy).children().last().removeAttr('hidden').data('id',-1);
+        $('#save-' + index).click(function () {
+            idx = $(this).attr('id').substring(5)
+            console.log('selected ' + idx);
+
+            $('#container')
+                .data('selected', idx);
+            $(this)
+                .parent()
+                .each(function () {
+                    console.log($(this).serializeArray())
+                    var obj = $(this).serialize()
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: obj,
+                        success: function (result) {
+                            console.log("first call:" + result);
+                            data = {
+                                "attr_id": result,
+                                "cat_id": @Model.Id,
+                                "Requierd": obj["Requierd"] ? "T" : "F" // this is wrong.....
+                            };
+                            console.log(data);
+                            idx = $('#container').data('selected');
+                            console.log(idx)
+                            $('#form-' + idx).data('id', result);
+                            $.ajax({
+                                url: "/Category/AssignAttribute",
+                                type: "post",
+                                data: data,
+                                success: function (result) {
+                                    console.log(result);
+                                    // save this result in a hidden input with name : 'cat_atr_id'
+                                },
+                                error: function (xhr, textStatus, error) {
+                                    console.log(xhr.statusText);
+                                    console.log(textStatus);
+                                    console.log(error);
+                                }
+                            });
+                        },
+                        error: function (xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+            })
+        })
+
+        $('#del-' + index).click(function () {
+            $('#form-' + index).each(function () {
+                var obj = $(this).serializeArray()
+                cat_att_id = $(this).data('id');
+                console.log(cat_att_id);
+                console.log(cat_att_id)
+                if (cat_att_id == -1) {
+                    $(this).remove();
+                    return;
+                }
+                id = {
+                    "categoryAttributeId": obj[0]['value']
+                }
+                console.log(id)
+                $.ajax({
+                    url: "/Category/ClearAssignmentAttribute",
+                    type: "post",
+                    data: id,
+                    success: function (result) {
+                        console.log("first call:" + result);
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log(xhr.statusText);
+                        console.log(textStatus);
+                        console.log(error);
+                    }
+                });
+            })
+        });
+    })
+});
+
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.atter-temp').each(function(key) {
+        let re_id = $(this).find('.hidden').val()
+        $(this).find('.hidden').parent().remove()
+        $(this)
+            .data('id', re_id)
+            .attr('id', 'atter-' + (++index))
+            .find('#save-id')
+            .attr('id', 'save-' + index)
+            .click(function() {
+                $(this).parent().each(function() {
+                    console.log($(this).serializeArray())
+                    var obj = $(this).serialize()
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: obj,
+                        success: function(result) {
+                            console.log("first call:" + result);
+                            var data = {
+                                "attr_id": result,
+                                "cat_id": @Model.Id,
+                                "Requierd": obj["Requierd"]
+                            };
+                            console.log(data);
+                            $.ajax({
+                                url: "/Category/AssignAttribute",
+                                type: "post",
+                                data: data,
+                                success: function(result) {
+                                    console.log(result);
+                                },
+                                error: function(xhr, textStatus, error) {
+                                    console.log(xhr.statusText);
+                                    console.log(textStatus);
+                                    console.log(error);
+                                }
+                            });
+                        },
+                        error: function(xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    })
+                })
+            })
+            .parent()
+            .find('#del-id')
+            .attr('id', 'del-' + index)
+            .click(function() {
+                $(this).parent().each(function() {
+                    var obj = $(this).serializeArray()
+                    console.log(obj);
+
+                    id = {
+                        "categoryAttributeId": $(this).data('id')
+                    }
+                    console.log(id);
+                    // if obj['cat_atr_id'] is null or undefined => 
+                    // this attribute never saved (add and delete without save)
+
+                    $.ajax({
+                        url: "/Category/ClearAssignmentAttribute",
+                        type: "post",
+                        data: id,
+                        success: function(result) {
+                            console.log("first call:" + result);
+                        },
+                        error: function(xhr, textStatus, error) {
+                            console.log(xhr.statusText);
+                            console.log(textStatus);
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+    });
+
+
+    console.log('ft' + index);
+    $('#image_input').find('#image').click(function() {
+        $("#image_input input[type='file']").trigger('click');
+    })
+
+    $("#image_input").find("input[type='file']").change(function() {
+        $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+    })
+
+    $("#image_input")
+        .find("#val")
+        .text("@Html.Raw(Model.ImageUrl)")
+});
+</script>
 
 <h1 class="mt-3">Edit Category</h1>
 
 <hr />
 
 <div class="container">
-    
     <div class="row">
         <input type="hidden" name="count" value="1" />
         <div class="control-group" id="fields">
             <div class="controls" id="profs">
-
-                @*<form asp-action="Edit" class="input-append col-12 d-flex" style="flex-direction:column">*@
-
-                    <div class="row d-flex align-items-baseline">
-                        <div id="field11" class="d-flex justify-content-center col-6" style="flex-direction:column">
+                
+                <div class="row d-flex align-items-baseline">
+                
+                    <form asp-action="Edit" class="input-append col-lg-6 col-sm-12 d-flex" 
+                        style="flex-direction:column" id="basic-form">
+                        
+                        <div id="field11" class="d-flex justify-content-center" style="flex-direction:column">
 
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
@@ -60,107 +252,114 @@
                                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
                             </div>
                         </div>
+                    </form>
 
-                        <div id="field0" class="d-flex justify-content-center align-items-center col-6" style="flex-direction:column">
-                            <div id="add_atter" class="btn btn-primary rounded add_atter_btn">
-                                <i class="bi bi-plus-circle-fill"></i> Add Attribute
-                            </div>
-                            <div id="container" class="container">
-
-                                    @for (var i = 0 ; i <Model.Attributes.Count; i ++){
-                                    <div class="atter atter-temp" id="atter-id" action="/Attribute/FindOrCreate" method="post">
-                                        <form class="atter atter-temp" id="atter-id">
-                                                <div class="input_text">
-                                                    <label class="col-form-label">CatAttribute Id: (hide it)</label>
-                                                @Html.TextBox("cat_atr_id",Model.Attributes[i].Id, new { @class = "form-control",placeholder="name of the attribute" })
-                                                </div>
-                                                <div class="input_text">
-                                                    <label class="col-form-label">attribute name:</label>
-                                                @Html.TextBox("Name",Model.Attributes[i].Name, new { @class = "form-control",placeholder="name of the attribute" })
-                                                </div>
-
-                                                <div class="input_text">
-                                                    <label class="col-form-label">attribute description:</label>
-                                                @Html.TextArea("Description",Model.Attributes[i].Description, new { @class = "form-control",placeholder="name of the attribute" })
-                                                </div>
-
-                                                <div class="input_text">
-                                                    <label class="col-form-label">attribute Type:</label>
-                                                @Html.DropDownList("ValueType.Type",
-                                                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), Model.Attributes[i].ValueType.Type == null ? "Select Type" : Model.Attributes[i].ValueType.Type,
-                                                new{@class="form-control"})
-                                                </div>
-
-                                                <div class="input_text">
-                                                    <label class="col-form-label">attribute unit:</label>
-                                                @Html.TextBox("ValueType.Name", Model.Attributes[i].ValueType.Name,
-                                                new { @class = "form-control",placeholder="can be empty" })
-                                                </div>
-
-                                                <div class="input_text">
-                                                    @Html.Label("Required","Required:",new {@class="col-form-label"})
-                                                    @Html.CheckBox(Model.Attributes[i].Required ? "T" : "F", Model.Attributes[i].Required
-                                                ,new {@class="form-check-input", style="width:42px; "})
-                                                </div>
-
-                                                <div id="del-id" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
-
-                                                <div id="save-id" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
-                                           </form> </div>
-                                }
-                                <form action='/Attribute/FindOrCreate' method='post' id="form-idBASE">
-                                    <div id="restoreform">
-                                    <div class="atter" >
-                                        <div class="input_text">
-                                            <label class="col-form-label">CatAttribute Id: (hide it)</label>
-                                            @Html.TextBox("cat_atr_id",a.Id, new { @class = "form-control",placeholder="name of the attribute" })
-                                        </div>
-                                        <div class="input_text">
-                                            <label class="col-form-label">attribute name:</label>
-                                            @Html.TextBox("Name",a.Name, new { @class = "form-control",placeholder="name of the attribute" })
-                                        </div>
-                                          <div class="input_text">
-                                                    <label class="col-form-label">attribute description:</label>
-                                                @Html.TextArea("Description",a.Description, new { @class = "form-control",placeholder="name of the attribute" })
-                                                </div>
-                                        <div class="input_text">
-                                            <label class="col-form-label">attribute Type:</label>S
-                                            @Html.DropDownList("ValueType.Type",
-                                            new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), a.ValueType.Type == null ? "Select Type" : a.ValueType.Type,
-                                            new{@class="form-control"})
-                                        </div>
-
-                                        <div class="input_text">
-                                            <label class="col-form-label">attribute unit:</label>
-                                            @Html.TextBox("ValueType.Name", a.ValueType.Name,
-                                            new { @class = "form-control",placeholder="can be empty" })
-                                        </div>
-
-                                        <div class="input_text">
-                                            @Html.Label("Required","Required:",new {@class="col-form-label"})
-                                            @Html.CheckBox(a.Required ? "T" : "F", a.Required
-                                            ,new {@class="form-check-input", style="width:42px; "})
-                                        </div>
-
-                                        <div id="del-idBASE" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
-
-                                        <div id="save-idBASE" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
-                                    </div>
-                                    </div>
-                                    </form>
+                    <div class="d-flex justify-content-center align-items-center col-lg-6 col-sm-12"
+                        style="flex-direction:column">
+                        <div class="container">
+                        @for (var i = 0 ; i <Model.Attributes.Count; i ++){
+                            <form class="atter atter-temp col-12" id="atter-id" action="/Attribute/FindOrCreate" method="post">
+                                <div class="input_text" hidden>
+                                    @Html.TextBox("cat_atr_id",Model.Attributes[i].Id, 
+                                        new { @class = "form-control hidden",placeholder="name of the attribute"})
+                                </div>
+                                <div class="input_text">
+                                    <label class="col-form-label">Name:</label>
+                                    @Html.Raw(Model.Attributes[i].Name)
                                 </div>
 
-                            </div>
-                        </div>
-                    </div>
+                                <div class="input_text">
+                                    <label class="col-form-label">Description:</label>
+                                    @Html.Raw(Model.Attributes[i].Description)
+                                </div>
 
-                    <div class="form-group d-flex justify-content-center">
-                        <input type="submit" value="Save" class="btn btn-primary rounded submit_btn mt-3" />
+                                <div class="input_text">
+                                    <label class="col-form-label">Type:</label>
+                                    @Html.Raw(Model.Attributes[i].ValueType.Type)
+                                </div>
+
+                                <div class="input_text">
+                                    <label class="col-form-label">Unit:</label>
+                                    @Html.Raw(Model.Attributes[i].ValueType.Name)
+                                </div>
+
+                                <div class="input_text">
+                                    @Html.Label("Required","Required:",new {@class="col-form-label"})
+                                    @Html.CheckBox(Model.Attributes[i].Required ? "T" : "F", Model.Attributes[i].Required,
+                                        new {@class="form-check-input", style="width:42px"})
+                                </div>
+
+                                <div id="del-id" class="fonts delete_btn btn btn-danger rounded"> 
+                                    <i class="bi bi-trash3"></i> delete
+                                </div>
+
+                                <div id="save-id" class="fonts save_btn btn btn-outline-primary rounded"> 
+                                    <i class="bi bi-save"></i> Save
+                                </div>
+                            </form> 
+                        }
+                        </div>
+                        <div id="add_atter" class="btn btn-primary rounded add_atter_btn mt-3">
+                            <i class="bi bi-plus-circle-fill"></i> Add Attribute
+                        </div>
+
+                        <div id="container" class="container"></div>
                     </div>
-                @*</form>*@
-   
-                <br>
+                </div>
             </div>
+
+            <div class="form-group d-flex justify-content-center">
+                <button id="submit-basicForm"class="btn btn-primary rounded submit_btn mt-3">
+                    Save    
+                </button>
+            </div>   
+            <br>
         </div>
     </div>
 </div>
+
+<form hidden class="atter" action='/Attribute/FindOrCreate' method='post' id="form-idBASE">
+    
+    <div class="input_text">
+        <label class="col-form-label">Name:</label>
+        @Html.TextBox("Name",a.Name, new { @class = "form-control",
+            placeholder="name of the attribute" })
+    </div>
+
+    <div class="input_text">
+        <label class="col-form-label">Description:</label>
+        @Html.TextArea("Description",a.Description, 
+            new { @class = "form-control",placeholder="name of the attribute",rows="4"})
+    </div>
+
+    <div class="input_text">
+        <label class="col-form-label">Type:</label>
+            @Html.DropDownList("ValueType.Type",
+                new SelectList(Enum.GetValues(typeof(ValueTypeEnum))), "Select Type",
+                new{@class="form-control"})
+    </div>
+
+    <div class="input_text">
+        <label class="col-form-label">Unit:</label>
+        @Html.TextBox("ValueType.Name", a.ValueType.Name,
+            new { @class = "form-control",placeholder="can be empty" })
+    </div>
+
+    <div class="input_text">
+        @Html.Label("Required","Required:",new {@class="col-form-label"})
+        @Html.CheckBox(a.Required ? "T" : "F", a.Required,
+            new {@class="form-check-input", style="width:42px"})
+    </div>
+
+    <div id="del-idBASE" class="fonts delete_btn btn btn-danger rounded"> <i class="bi bi-trash3"></i> delete</div>
+
+    <div id="save-idBASE" class="fonts save_btn btn btn-outline-primary rounded"> <i class="bi bi-save"></i> Save</div>
+</form>
+
+<script>
+$(document).ready(function() {
+    $('#submit-basicForm').click(function() {
+        $('#basic-form').submit();
+    })
+})
+</script>

@@ -2,79 +2,114 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var categories = (ViewData["categories"]) as List<CategoryVM>; 
 }
 <link rel="stylesheet" href="~/css/atter.css" />
 
-
 <script>
-    
+    $(document).ready(function() {
+        $('#image_input').find('#image').click(function() {
+            $("#image_input input[type='file']").trigger('click');
+        })
 
-function reassignment() {
-            selected_categories = []
-            let all_category_selector = $('#all_category_selector');
-            all_category_selector.find('select option:selected').each(
-                function () {
-                    if ($(this).val() != '0')
-                        selected_categories.push({'id': $(this).val(), 'name': $(this).text()})
-                }
-            )
+        $("#image_input").find("input[type='file']").change(function() {
+            $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
+        })
 
-            all_category_selector.find('select').each(
-                function () {
-                    let id = $(this).find('option:selected').val();
-                    $(this).children().remove();
-                    $(this).append(
-                        $('<option/>', {
-                            'value': '0',
-                        }).text('Select a category')
-                    );
-                    for (let c of categories) {
-                        let ok = true;
-                        for (let sc of selected_categories) {
-                            if (sc['id'] == c['id']) {
-                                ok = false;
-                            }
-                        }
-                        if (id == c['id'])
-                            ok = true;
-                        if (ok) {
-                            $(this).append(
-                                $('<option/>', {
-                                    'value': c['id'],
-                                    'selected': (id == c['id'])
-                                }).text(c['name'])
-                            );
+        $("#image_input")
+            .find("#val")
+            .text("@Html.Raw(Model.ImageUrl)")
+    })
+    function reassignment() {
+        selected_categories = []
+        let all_category_selector = $('#all_category_selector');
+        all_category_selector.find('select option:selected').each(
+            function () {
+                if ($(this).val() != '0')
+                    selected_categories.push({'id': $(this).val(), 'name': $(this).text()})
+            }
+        )
+
+        all_category_selector.find('select').each(
+            function () {
+                let id = $(this).find('option:selected').val();
+                $(this).children().remove();
+                $(this).append(
+                    $('<option/>', {
+                        'value': '0',
+                    }).text('Select a category')
+                );
+                for (let c of categories) {
+                    let ok = true;
+                    for (let sc of selected_categories) {
+                        if (sc['id'] == c['id']) {
+                            ok = false;
                         }
                     }
+                    if (id == c['id'])
+                        ok = true;
+                    if (ok) {
+                        $(this).append(
+                            $('<option/>', {
+                                'value': c['id'],
+                                'selected': (id == c['id'])
+                            }).text(c['name'])
+                        );
+                    }
                 }
-            )
-        }
+            }
+        )
+    }
 
-        function add_new_category_selector() {
-            $('#all_category_selector').append(
-                $('<div/>', {
-                    'class': "d-flex align-items-center mb--20"
+    function add_new_category_selector() {
+        $('#all_category_selector').append(
+            $('<div/>', {
+                'class': "d-flex align-items-center mb--20"
+            }).append(
+                $('<select />',{
+                    'class':'select_css form-select'
+                }),
+                $('<h2/>', {
+                    'class': 'btn btn-danger'
                 }).append(
-                    $('<select/>'),
-                    $('<h2/>', {
-                        'class': 'dcare__btn'
-                    }).append(
-                        $('<i/>', {
-                            'class': "fa fa-trash",
-                            'aria-hidden': true
-                        })
-                    ).on('click', (e) => {
-                        e.currentTarget.parentNode.remove()
-                        reassignment();
+                    $('<i/>', {
+                        'class': "bi bi-trash",
+                        'aria-hidden': true
                     })
-                )
-            ).on('change', () => reassignment());
-            reassignment();
-        }
+                ).on('click', (e) => {
+                    e.currentTarget.parentNode.remove()
+                    reassignment();
+                })
+            )
+        ).on('change', () => reassignment());
+        reassignment();
+    }
+
+    function submit_form() {
+        let index = 0 
+        $('#all_category_selector')
+            .find('select option:selected')
+            .each(function () {
+                if ($(this).val() !== '0') {
+                    console.log($(this).val())
+                    $(this).parent().attr('name', 'category[]')
+                }
+            });
+        $('#form_cat').submit()
+    }
 
     let categories = []
     let selected_categories = []
-    //    categories.push({'name': "{{$cate->title}}", 'id': {{$cate->id}}});
+    @foreach(var c in categories){
+        @:categories.push({ 'name': "@c.Name", 'id': @c.Id});
+    }
+    @foreach(var c in Model.Categories){
+        @:selected_categories.push({ 'name': "@c.Name", 'id': @c.Id});
+    }
+    for (var i = 0; i < selected_categories.length; i++) {
+        add_new_category_selector();
+    }
+    console.log(categories)
 </script>
 
                             
@@ -145,24 +180,28 @@ function reassignment() {
 
                     <div class="d-flex justify-content-center align-items-center col-lg-6 col-sm-12"
                         style="flex-direction:column">
-                        <div class="container"></div>
                         <div id="add_cat" class="btn btn-primary rounded add_atter_btn mt-3"
                             onclick="add_new_category_selector()">
                             <i class="bi bi-plus-circle-fill"></i> Add Category
                         </div>
-                        <div class="col-6 mb--20" id="all_category_selector">
-                            <div class="d-flex justify-content-between align-items-center mb--20">
+                        <form id="form_cat" asp-action="AssignCategories" method="post">
+                            <div class="col-6 mb--20" id="all_category_selector">
                             </div>
-                        </div>              
+                        </form>
+                        <button class="btn btn-outline-primary rounded submit_btn mt-3" 
+                                style="width:200px!important" onclick="submit_form()">
+                            Save Categories
+                        </button>
                     </div>
-            </div>
+                </div>
 
-            <div class="form-group d-flex justify-content-center">
-                <button id="submit-basicForm"class="btn btn-primary rounded submit_btn mt-3">
-                    Save    
-                </button>
-            </div>   
-            <br>
+                <div class="form-group d-flex justify-content-center">
+                    <button id="submit-basicForm"class="btn btn-primary rounded submit_btn mt-3">
+                        Save    
+                    </button>
+                </div>   
+                <br>
+            </div>
         </div>
     </div>
 </div>

@@ -2,6 +2,7 @@
 using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 
@@ -26,6 +27,7 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult EditCategory(int Id)
         {
+            ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());
             return View(Mapper.Map<ProductVM>(Uow.ProductRepo.Get(Id)));
         }
 

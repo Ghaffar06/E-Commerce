@@ -3,8 +3,12 @@
 @{
     ViewData["Title"] = "Edit";
     var categories = (ViewData["categories"]) as List<CategoryVM>;
-    var sel_categories = Model.Categories as List<CategoryVM>;
+    var sel_categories = new List<CategoryVM>();
+    if(Model.Categories != null){
+        sel_categories = Model.Categories as List<CategoryVM>;
+    }
 }
+ 
 <link rel="stylesheet" href="~/css/atter.css" />
 
 <script>
@@ -30,7 +34,6 @@
                     selected_categories.push({'id': $(this).val(), 'name': $(this).text()})
             }
         )
-
         all_category_selector.find('select').each(
             function () {
                 let id = $(this).find('option:selected').val();
@@ -49,6 +52,7 @@
                     }
                     if (id == c['id'])
                         ok = true;
+                        
                     if (ok) {
                         $(this).append(
                             $('<option/>', {
@@ -86,6 +90,36 @@
         reassignment();
     }
 
+    function add_new_category_init(val) {
+        $('#all_category_selector').append(
+            $('<div/>', {
+                'class': "d-flex align-items-center mb--20"
+            }).append(
+                $('<select />',{
+                    'class':'select_css form-select'
+                })
+                .append(
+                    $('<option/>', {
+                        'value': val['id'],
+                        'selected':true
+                    })
+                    .text(val['name'])
+                ),
+                $('<h2/>', {
+                    'class': 'btn btn-danger'
+                }).append(
+                    $('<i/>', {
+                        'class': "bi bi-trash",
+                        'aria-hidden': true
+                    })
+                ).on('click', (e) => {
+                    e.currentTarget.parentNode.remove()
+                    reassignment();
+                })
+            )
+        ).on('change', () => reassignment());
+    }
+
     function submit_form() {
         let index = 0 
         $('#all_category_selector')
@@ -101,25 +135,23 @@
 
     let categories = []
     let selected_categories = []
-    let selected_categories2 = []
     @foreach(var c in categories){
         @:categories.push({ 'name': "@c.Name", 'id': @c.Id});
     }
-    console.log(@sel_categories.Count)
     @for(int i = 0 ; i < sel_categories.Count ; i ++){
-        @:console.log("@sel_categories[i].Name");
         @:selected_categories.push({ 'name': "@sel_categories[i].Name", 'id': @sel_categories[i].Id});
-        @:selected_categories2.push({ 'name': "@sel_categories[i].Name", 'id': @sel_categories[i].Id});
     }
-    for (var i = 0; i < selected_categories.length; i++) {
-        add_new_category_selector();
-    }
-    console.log(categories)
-    console.log(selected_categories2)
+    
+    $(document).ready(function(){
+        for (var i = 0; i < selected_categories.length; i++) {
+            add_new_category_init(selected_categories[i]);
+        }
+        reassignment()
+    })
 </script>
 
                             
-<h1 class="mt-3">Edit Category</h1>
+<h1 class="mt-3">Edit Product Categories</h1>
 
 <hr />
 
@@ -161,6 +193,12 @@
                                 <input asp-for="Quantity" type="number" class="form-control" min="0"  
                                     placeholder="bigger than 0">
                                 <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group d-flex justify-content-between">
+                                <label asp-for="PriceIsInteger" class="col-form-label mt-4"></label>
+                                <input asp-for="PriceIsInteger" type="checkbox" class="form-check-input"
+                                    style="margin-top:35px;width:30px;height:30px">
                             </div>
 
                             <div class="form-group">

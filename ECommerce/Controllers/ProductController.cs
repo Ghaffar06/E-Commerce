@@ -69,6 +69,16 @@ namespace ECommerce.Controllers
             return Redirect("index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditAttribute(int Id)
+        {
+            var p = await Uow.ProductRepo.GetAsync(Id);
+            var prod = Mapper.Map<ProductVM>(p);
+            ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());
+            return View(prod);
+        }
+
+
         [HttpPost]
         public IActionResult AssignAttributeValue(AttributeVM attribute,string val, int prod_id)
         {

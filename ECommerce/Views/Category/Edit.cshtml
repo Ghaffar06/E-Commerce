@@ -4,18 +4,17 @@
     ViewData["Title"] = "Edit";
     AttributeVM a = new AttributeVM
     {
-        Description = "Description-Example",
-        Name = "Name-Example",
-        Required = true,
-        Id = -1
+        Description = "",
+        Name = "",
+        Required = false,
+        Id = -1,
+        ValueType = new ValueTypeVM
+        {
+            Name = "",
+            Type = "",
+            Id = -1
+        }
     };
-    ValueTypeVM vt = new ValueTypeVM
-    {
-        Name = "Name-Value-Example" ,
-        Type= "Int",
-        Id = -1 
-    };
-    a.ValueType = vt;
 }
 <link rel="stylesheet" href="~/css/atter.css" />
 
@@ -82,7 +81,8 @@ $(document).ready(function () {
         })
 
         $('#del-' + index).click(function () {
-            $('#form-' + index).each(function () {
+            id = $(this).attr('id').substr(4)
+            $('#form-' + id).each(function () {
                 var obj = $(this).serializeArray()
                 cat_att_id = $(this).data('id');
                 console.log(cat_att_id);
@@ -182,7 +182,6 @@ $(document).ready(function() {
     });
 
 
-    console.log('ft' + index);
     $('#image_input').find('#image').click(function() {
         $("#image_input input[type='file']").trigger('click');
     })

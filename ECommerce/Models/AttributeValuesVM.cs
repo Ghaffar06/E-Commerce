@@ -10,6 +10,7 @@ namespace ECommerce.Models
         public long AttributeId { get; set; }
         public long ProductId { get; set; }
         public string Value { get; set; }
+        public bool IsDeletable { get; set; }
 
         public virtual AttributeVM Attribute { get; set; }
     }

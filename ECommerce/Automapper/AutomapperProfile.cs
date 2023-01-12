@@ -18,7 +18,8 @@ namespace ECommerce.Automapper
             CreateMap<CategoryProduct, CategoryVM>()
                 .ForMember(cvm => cvm.Name, opt => opt.MapFrom(cp => cp.Category.Name))
                 .ForMember(cvm => cvm.Description, opt => opt.MapFrom(cp => cp.Category.Description))
-                .ForMember(cvm => cvm.ImageUrl, opt => opt.MapFrom(cp => cp.Category.ImageUrl));
+                .ForMember(cvm => cvm.ImageUrl, opt => opt.MapFrom(cp => cp.Category.ImageUrl))
+                .ForMember(cvm => cvm.Id, opt => opt.MapFrom(cp => cp.Category.Id));
 
             CreateMap<ProductVM, Product>()
                .ForMember(p => p.PriceIsInteger, opt => opt.MapFrom(pvm => pvm.PriceIsInteger ? "T" : "F"));

@@ -1,6 +1,7 @@
 ﻿using AppDbContext.IRepos;
 using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +14,17 @@ namespace AppDbContext.Repos
         public ProductRepo(EcommerceDbContext db) : base(db)
         {
             Products = _db.Set<Product>();
+        }
+
+        public List<Product> GetAllAsync()
+        {
+            return Products
+                .Include(c => c.CategoryProduct)
+                .ThenInclude(c => c.Category)
+                .Include(c => c.AttributeProductValue)
+                .ThenInclude(c => c.Attribute)
+                .ThenInclude(c => c.ValueType)
+                .ToList();
         }
 
         public Task<Product> GetAsync(int id)

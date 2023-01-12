@@ -6,9 +6,9 @@ namespace ECommerce.Models
 {
     public partial class OrderProductVM
     {
-        public long Id { get; set; }
-        public long ProductId { get; set; }
-        public long OrderId { get; set; }
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public int OrderId { get; set; }
         public decimal Quantity { get; set; }
         public string Notes { get; set; }
 

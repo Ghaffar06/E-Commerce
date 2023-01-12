@@ -8,7 +8,11 @@ namespace ECommerce
 {
     public static class Utilities
     {
-        
+        public static string generateID()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
         public static async Task<string> SaveFileAsync(IFormFile uploadFile)
         {
             if (uploadFile == null || uploadFile.Length == 0)

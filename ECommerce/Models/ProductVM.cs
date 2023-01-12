@@ -25,6 +25,7 @@ namespace ECommerce.Models
         public string Unit { get; set; }
         //public double Rating { get; set; }
 
+
         public virtual IList<AttributeValuesVM> AttributeValues { get; set; }
         public virtual IList<CategoryVM> Categories { get; set; }
         public virtual IList<RateVM> Rate { get; set; }

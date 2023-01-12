@@ -41,6 +41,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+    <form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -61,17 +62,51 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                <img src="@item.ImageUrl">
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Unit)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    
+                    
+                    <label for="totalAmt">Total Amount</label>
+                    <input name = "quantity" type="number" step="0.01" id="totalAmount-@item.Id" value ="0" min="0" max="@item.Quantity">
+                    <input name = "prod_id" type="number"  value = "@item.Id" hidden readonly>
+
+                    <button id="add-@item.Id" class="btn btn-primary rounded submit_btn mt-3">
+                        Add    
+                    </button>
             </td>
         </tr>
+        </form>
 }
     </tbody>
 </table>
+<script>
+
+    
+
+$('#add-' + id).click(function () {
+            $('#form-' + id).each(function () {
+                var obj = $(this).serializeArray()
+                console.log(obj)
+                e.preventDefault(); 
+                var form = $(this);
+                var actionUrl = "Cart/AddToCart";
+                $.ajax({
+                    url: actionUrl,
+                    type: "POST",
+                    data: form.serializeArray(),
+                    success: function (result) {
+                        console.log("first call:" + result);
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log(xhr.statusText);
+                        console.log(textStatus);
+                        console.log(error);
+                    }
+                });
+            })
+        });
+</script>

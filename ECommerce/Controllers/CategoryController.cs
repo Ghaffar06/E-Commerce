@@ -70,7 +70,7 @@ namespace ECommerce.Controllers
 
             Uow.CategoryRepo.Update(cat);
             Uow.SaveChanges();
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

@@ -209,7 +209,8 @@ $(document).ready(function() {
                 <div class="row d-flex align-items-baseline">
                 
                     <form asp-action="Edit" class="input-append col-lg-6 col-sm-12 d-flex" 
-                        style="flex-direction:column" id="basic-form">
+                        style="flex-direction:column" id="basic-form" enctype="multipart/form-data">
+                         <input asp-for="ImageUrl" type="text" hidden>
                         
                         <div id="field11" class="d-flex justify-content-center" style="flex-direction:column">
 
@@ -228,7 +229,7 @@ $(document).ready(function() {
 
                             <div class="form-group" id="image_input">
                                 <label asp-for="ImageUrl" class="col-form-label mt-4"></label>
-                                <input asp-for="ImageUrl" type="file" id="Image_url" 
+                                <input name="uploadFile" type="file" id="Image_url" 
                                     class="form-control add_file_btn" hidden>
                                 <div class="d-flex align-items-center">
                                     <div id='image' class="btn btn-outline-primary rounded">Select File</div>

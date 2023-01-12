@@ -45,7 +45,7 @@
             }
         }
     };
-    Model.AttributeValues.Add(avtest);
+    //Model.AttributeValues.Add(avtest);
     AttributeValuesVM avtest2 = new AttributeValuesVM
     {
         Value = "15",
@@ -64,7 +64,7 @@
             }
         }
     };
-    Model.AttributeValues.Add(avtest2);
+    //Model.AttributeValues.Add(avtest2);
 }
  
 <link rel="stylesheet" href="~/css/atter.css" />
@@ -105,8 +105,8 @@ $(document).ready(function() {
                     console.log($(this).serializeArray())
                     var obj = $(this).serializeArray()
                     var data = {
-                        "attr_cat_id": $(this).data('id'),
-                        "Value": obj[0]['value']
+                        "attr_val_id": $(this).data('id'),
+                        "val": obj[0]['value']
                     };
                     console.log(data)
 
@@ -135,13 +135,13 @@ $(document).ready(function() {
                     console.log(obj);
 
                     id = {
-                        "something": $(this).data('id')
+                        "attr_val_id": $(this).data('id')
                     }
                     console.log(id);
 
                     $.ajax({
-                        url: "/Category/ClearAssignmentAttribute",
-                        type: "post",
+                        url: "/Product/DeleteAttribute",
+                        type: "delete",
                         data: id,
                         success: function(result) {
                             console.log("first call:" + result);
@@ -190,15 +190,15 @@ $(document).ready(function () {
                             console.log("first call:" + result);
                             data = {
                                 "attr_id": result,
-                                "product_id": @Model.Id,
-                                "value":obj[4]['value']
+                                "prod_id": @Model.Id,
+                                "val":obj[4]['value']
                             };
                             console.log(data);
                             idx = $('#container').data('selected');
                             console.log(idx)
                             $('#form-' + idx).data('id', result);
                             $.ajax({
-                                url: "/Category/AssignAttribute",
+                                url: "/Product/AssignAttributeValue",
                                 type: "post",
                                 data: data,
                                 success: function (result) {
@@ -231,12 +231,12 @@ $(document).ready(function () {
                     return;
                 }
                 id = {
-                    "categoryAttributeId": $(this).data('id')
+                    "attr_val_id": $(this).data('id')
                 }
                 console.log(id)
                 $.ajax({
-                    url: "/Category/ClearAssignmentAttribute",
-                    type: "post",
+                    url: "/Product/DeleteAttribute",
+                    type: "delete",
                     data: id,
                     success: function (result) {
                         console.log("first call:" + result);
@@ -276,10 +276,23 @@ $(document).ready(function () {
                 
                 <div class="row d-flex align-items-baseline">
                 
-                    <form asp-action="EditCategory" class="input-append col-lg-6 col-sm-12 d-flex" 
-                        style="flex-direction:column" id="basic-form">
+                    <form asp-action="Edit" class="input-append col-lg-6 col-sm-12 d-flex" 
+                        style="flex-direction:column" id="basic-form" enctype="multipart/form-data">
+                         <input asp-for="ImageUrl" type="text" hidden>
                         
                         <div id="field11" class="d-flex justify-content-center" style="flex-direction:column">
+
+                            <div hidden class="form-group">
+                                <label asp-for="Id" class="col-form-label mt-4"></label>
+                                <input asp-for="Id" class="form-control"/>
+                                <span asp-validation-for="Id" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group" hidden>
+                                <label asp-for="Name" class="col-form-label mt-4"></label>
+                                <input asp-for="Name" class="form-control" >
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
 
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
@@ -324,7 +337,7 @@ $(document).ready(function () {
 
                             <div class="form-group" id="image_input">
                                 <label asp-for="ImageUrl" class="col-form-label mt-4"></label>
-                                <input asp-for="ImageUrl" type="file" id="Image_url" 
+                                <input name="uploadFile" type="file" id="Image_url" 
                                     class="form-control add_file_btn" hidden>
                                 <div class="d-flex align-items-center">
                                     <div id='image' class="btn btn-outline-primary rounded">Select File</div>
@@ -339,7 +352,7 @@ $(document).ready(function () {
                         style="flex-direction:column">
                         <div class="container">
                         @for (var i = 0 ; i <Model.AttributeValues.Count; i ++){
-                            <form class="atter atter-temp col-12" id="atter-id" action="/Category/ChangeRequirementAttribute" method="post">
+                            <form class="atter atter-temp col-12" id="atter-id" action="/Product/EditAttributeValue" method="post">
                                 <div class="input_text" hidden>
                                     @Html.TextBox("cat_atr_id",Model.AttributeValues[i].Id, 
                                         new { @class = "form-control hidden",placeholder="name of the attribute"})

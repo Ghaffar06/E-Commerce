@@ -19,7 +19,7 @@ namespace AppDbContext.Repos
             _dbSet = db.Set<T>();
         }
 
-        public async void Add(T item)
+        public virtual async void Add(T item)
         {
             await _dbSet.AddAsync(item);
         }

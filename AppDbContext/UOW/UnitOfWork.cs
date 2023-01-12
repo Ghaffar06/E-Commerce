@@ -12,6 +12,7 @@ namespace AppDbContext.UOW
         public IValueTypeRepo ValueTypeRepo { get; set; }
         public ICategoryAttributeRepo CategoryAttributeRepo { get; set; }
         public ICategoryProductRepo CategoryProductRepo { get; set; }
+        public IProductAttributeRepo ProductAttributeRepo { get; set; }
 
 
         protected readonly EcommerceDbContext _db;
@@ -25,6 +26,7 @@ namespace AppDbContext.UOW
             ValueTypeRepo = new ValueTypeRepo(db);
             CategoryAttributeRepo = new CategoryAttributeRepo(db);
             CategoryProductRepo = new CategoryProductRepo(db);
+            ProductAttributeRepo = new ProductAttributeRepo(db);
         }
 
         public void RollBack()

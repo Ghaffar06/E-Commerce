@@ -8,6 +8,7 @@ namespace ECommerce
 {
     public static class Utilities
     {
+        
         public static async Task<string> SaveFileAsync(IFormFile uploadFile)
         {
             if (uploadFile == null || uploadFile.Length == 0)

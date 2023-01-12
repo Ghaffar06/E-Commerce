@@ -5,24 +5,20 @@
 <div class="text-center">
     <h1 class="display-4 mt-4">Welcome</h1>
     <div class="m-4">
+        Admin
         <div class="col-12">
-            @Html.ActionLink("Add Category","create","category",null,
+            @Html.ActionLink("Categories","index","category",null,
                     new {@class="btn btn-primary m-3", style="font-size:16pt"})
-            @Html.ActionLink("Add Product","create","product",null,
-            new {@class="btn btn-primary m-3", style="font-size:16pt"})
-            @Html.ActionLink("Add Attribute","createattr","category",null,
+            @Html.ActionLink("Products","index","product",null,
             new {@class="btn btn-primary m-3", style="font-size:16pt"})
         </div>
-        <br />
+        User
         <div class="col-12">
-            @Html.ActionLink("Category","index","category",null,
+            @Html.ActionLink("Categories","index2","category",null,
                     new {@class="btn btn-primary m-3", style="font-size:16pt"})
-            @Html.ActionLink("Product","index","product",null,
-            new {@class="btn btn-primary m-3", style="font-size:16pt"})
-            @Html.ActionLink("Attribute","indexattr","category",null,
+            @Html.ActionLink("Products","index2","product",null,
             new {@class="btn btn-primary m-3", style="font-size:16pt"})
         </div>
-        <br />
 
     </div>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>

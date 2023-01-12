@@ -23,6 +23,11 @@ namespace ECommerce.Controllers
             return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
         }
 
+        [HttpGet]
+        public IActionResult Index2()
+        {
+            return View(Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll()));
+        }
 
         [HttpGet]
         public IActionResult Create()
@@ -47,11 +52,22 @@ namespace ECommerce.Controllers
             return View(Mapper.Map<CategoryVM>(await Uow.CategoryRepo.GetAsync(Id)));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int Id)
+        {
+            var cvv = await Uow.CategoryRepo.GetAsync(Id);
+            var v = Mapper.Map<CategoryVM>(cvv);
+
+            return View(v);
+        }
 
         [HttpPost]
-        public IActionResult Edit(CategoryVM category)
+        public async Task<IActionResult> Edit(CategoryVM category, IFormFile uploadFile)
         {
             Category cat = Mapper.Map<Category>(category);
+            if (uploadFile != null)
+                cat.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
+
             Uow.CategoryRepo.Add(cat);
             Uow.SaveChanges();
             return Redirect("Index");
@@ -60,16 +76,15 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-
             Uow.CategoryRepo.Delete(id);
             Uow.SaveChanges();
             return Redirect("Index");
         }
 
         [HttpPost]
-        public IActionResult AssignAttribute(int attr_id, int cat_id, string Requierd)
+        public async Task<IActionResult> AssignAttribute(int attr_id, int cat_id, string Requierd)
         {
-            var Category = Uow.CategoryRepo.Get(cat_id);
+            var Category = await Uow.CategoryRepo.GetAsync(cat_id);
             var Attribute = Uow.AttributeRepo.Get(attr_id);
             var categoryAttribute = new CategoryAttribute
             {
@@ -78,6 +93,14 @@ namespace ECommerce.Controllers
                 Required = Requierd
             };
             Uow.CategoryAttributeRepo.Add(categoryAttribute);
+            foreach (var CategoryProduct in Category.CategoryProduct)
+                Uow.ProductAttributeRepo.Add(new AttributeProductValue
+                {
+                    AttributeId = attr_id,
+                    ProductId = CategoryProduct.ProductId,
+                    Value = ""
+                });
+
             Uow.SaveChanges();
             return Json("catid: Success");
         }
@@ -92,7 +115,6 @@ namespace ECommerce.Controllers
 
 
         [HttpPost]
-
         public IActionResult ChangeRequirementAttribute(int attr_cat_id, string Requierd)
         {
             var categoryAttribute = Uow.CategoryAttributeRepo.Get(attr_cat_id);

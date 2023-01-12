@@ -26,5 +26,13 @@ namespace AppDbContext.Repos
                 return res.Id;
         }
 
+        public bool IsDeletable(int ProductId, int AttributeId)
+        {
+            return Attributes.Where(attr => attr.Id == AttributeId)
+                .Where(attr => attr.CategoryAttribute
+                    .Any(p => p.Category.CategoryProduct.Any(v => v.ProductId == ProductId))
+                 )
+                .Count() == 0;
+        }
     }
 }

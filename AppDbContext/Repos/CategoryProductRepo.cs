@@ -14,6 +14,16 @@ namespace AppDbContext.Repos
             CategoryProducts = _db.Set<CategoryProduct>();
         }
 
-      
+        public int? Find(CategoryProduct categoryProduct)
+        {
+            var res = CategoryProducts
+                .Where(c => c.CategoryId == categoryProduct.CategoryId)
+                .Where(c => c.ProductId == categoryProduct.ProductId)
+                .FirstOrDefault();
+            if (res == null)
+                return null;
+            else
+                return (int)res.Id;
+        }
     }
 }

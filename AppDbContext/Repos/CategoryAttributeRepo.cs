@@ -14,6 +14,5 @@ namespace AppDbContext.Repos
             CategoryAttributes = _db.Set<CategoryAttribute>();
         }
 
-      
     }
 }

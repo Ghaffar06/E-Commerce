@@ -1,10 +1,9 @@
-﻿using AppDbContext.UOW;
+﻿using AppDbContext.Models;
+using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
-using AppDbContext.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -18,21 +17,20 @@ namespace ECommerce.Controllers
         {
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View(Mapper.Map<List<ProductVM>>(Uow.ProductRepo.GetAll()));
         }
 
-       
-        //public IActionResult Create(CategoryViewModel category)
-        //{
-        //    return null;
-        //}
-        
+        [HttpGet]
+        public IActionResult Index2()
+        {
+            return View(Mapper.Map<List<ProductVM>>(Uow.ProductRepo.GetAll()));
+        }
 
 
-
-
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -55,18 +53,29 @@ namespace ECommerce.Controllers
         {
             var p = await Uow.ProductRepo.GetAsync(Id);
             var prod = Mapper.Map<ProductVM>(p);
-            ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());   
+            ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());
             return View("EditCategory", prod);
         }
 
 
         [HttpPost]
-        public IActionResult Edit(ProductVM product)
+        public async Task<IActionResult> Edit(ProductVM product, IFormFile uploadFile)
         {
             var prod = Mapper.Map<Product>(product);
-            Uow.ProductRepo.Add(prod);
+            if (uploadFile != null)
+                prod.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
+            Uow.ProductRepo.Update(prod);
             Uow.SaveChanges();
-            return Redirect("index");
+            return RedirectToAction("index");
+        }
+
+
+        [HttpDelete]
+        public IActionResult DeleteAttribute(int attr_val_id)
+        {
+            Uow.ProductAttributeRepo.Delete(attr_val_id);
+            Uow.SaveChanges();
+            return Json("FUCK IT!");
         }
 
         [HttpGet]
@@ -74,39 +83,72 @@ namespace ECommerce.Controllers
         {
             var p = await Uow.ProductRepo.GetAsync(Id);
             var prod = Mapper.Map<ProductVM>(p);
+            foreach (var v in prod.AttributeValues)
+                v.IsDeletable = Uow.AttributeRepo.IsDeletable(prod.Id, v.Attribute.Id);
+
             ViewData["categories"] = Mapper.Map<List<CategoryVM>>(Uow.CategoryRepo.GetAll());
             return View(prod);
         }
 
 
         [HttpPost]
-        public IActionResult AssignAttributeValue(AttributeVM attribute,string val, int prod_id)
+        public IActionResult AssignAttributeValue(int attr_id, int prod_id, string val)
         {
-            var attr = Mapper.Map<Attribute>(attribute);
-            var prod = Uow.ProductRepo.Get(prod_id);
-            prod.AttributeProductValue.Add(new AttributeProductValue
+            Uow.ProductAttributeRepo.Add(new AttributeProductValue
             {
-                Id = prod_id,
-                Value = val,
-                Attribute = attr
+                Attribute = Uow.AttributeRepo.Get(attr_id),
+                Product = Uow.ProductRepo.Get(prod_id),
+                Value = val
             });
             Uow.SaveChanges();
-            return Json("prodid:" + prod_id + ",value:" + val + ",Attribute:" + attribute.Name);
+            return Json("Success!!");
         }
 
         [HttpPost]
-        public IActionResult AssignCategories(List<int> category, int prod_id)
+        public IActionResult EditAttributeValue(int attr_val_id, string val)
         {
-            foreach(var cat_id in category)
-            {
-                Uow.CategoryProductRepo.Add(new CategoryProduct
-                {
-                    Product = Uow.ProductRepo.Get(prod_id),
-                    Category = Uow.CategoryRepo.Get(cat_id)
-                });
-            }
+            Uow.ProductAttributeRepo.Get(attr_val_id).Value = val;
             Uow.SaveChanges();
-            return RedirectToAction("Edit", new {id = prod_id});
+            return Json("Success!!");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AssignCategories(List<int> category, int prod_id)
+        {
+            Product product = await Uow.ProductRepo.GetAsync(prod_id);
+
+            List<int> existedCategories = new List<int>();
+            foreach (var cat in product.CategoryProduct)
+                existedCategories.Add(cat.CategoryId);
+
+            foreach (var cat_id in category)
+                if (!existedCategories.Contains(cat_id))
+                {
+                    Category category1 = await Uow.CategoryRepo.GetAsync(cat_id);
+                    Uow.CategoryProductRepo.Add(new CategoryProduct
+                    {
+                        Product = Uow.ProductRepo.Get(prod_id),
+                        Category = category1
+                    });
+                    foreach (var attr in category1.CategoryAttribute)
+                        Uow.ProductAttributeRepo.Add(new AttributeProductValue
+                        {
+                            AttributeId = attr.AttributeId,
+                            ProductId = prod_id,
+                            Value = ""
+                        });
+                }
+            foreach (var cat_id in existedCategories)
+                if (!category.Contains(cat_id))
+                    Uow.CategoryProductRepo.Delete((int)Uow.CategoryProductRepo.Find(new CategoryProduct
+                    {
+                        CategoryId = cat_id,
+                        ProductId = prod_id
+                    }));
+
+            Uow.SaveChanges();
+            return RedirectToAction("Edit", new { id = prod_id });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -24,6 +24,8 @@ namespace AppDbContext.Repos
                 .Include(c => c.CategoryAttribute)
                 .ThenInclude(c => c.Attribute)
                 .ThenInclude(c => c.ValueType)
+                .Include(c => c.CategoryProduct)
+                .ThenInclude(c => c.Product)
                 .FirstOrDefaultAsync();
         }
       

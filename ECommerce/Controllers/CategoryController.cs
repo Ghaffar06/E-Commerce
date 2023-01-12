@@ -68,7 +68,7 @@ namespace ECommerce.Controllers
             if (uploadFile != null)
                 cat.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
 
-            Uow.CategoryRepo.Add(cat);
+            Uow.CategoryRepo.Update(cat);
             Uow.SaveChanges();
             return Redirect("Index");
         }

@@ -3,6 +3,7 @@ using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
@@ -19,8 +20,14 @@ namespace ECommerce.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
+            var Products = Uow.ProductRepo.GetAllAsync();
+            //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
             var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
+            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
+                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+
+            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+            ViewData["OrderProductVM"] = orderProducts;
             return View(ProductsVM);
         }
 
@@ -53,7 +60,7 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult MyCart(int prod_id, decimal quantity)
+        public async Task<IActionResult> MyCart(int prod_id, decimal quantity)
         {
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
@@ -61,7 +68,7 @@ namespace ECommerce.Controllers
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             foreach (var orderProduct in orderProducts)
             {
-                var product = Uow.ProductRepo.GetAsync(orderProduct.ProductId);
+                var product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
                 var productVM = Mapper.Map<ProductVM>(product);
                 orderProduct.Product = productVM;
             }

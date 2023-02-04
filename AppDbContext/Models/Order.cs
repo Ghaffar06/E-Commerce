@@ -18,7 +18,7 @@ namespace AppDbContext.Models
         public int DeliveryId { get; set; }
         public int UserId { get; set; }
         public decimal TotalPrice { get; set; }
-        public int AddressId { get; set; }
+        public string Address { get; set; }
         public decimal? Rate { get; set; }
 
         public virtual Delivery Delivery { get; set; }

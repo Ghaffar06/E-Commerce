@@ -213,7 +213,7 @@ namespace AppDbContext.Models
                     .HasColumnName("id")
                     ;
 
-                entity.Property(e => e.AddressId).HasColumnName("address_id");
+                entity.Property(e => e.Address).HasColumnName("address");
 
                 entity.Property(e => e.DeliveryId).HasColumnName("delivery_id");
 

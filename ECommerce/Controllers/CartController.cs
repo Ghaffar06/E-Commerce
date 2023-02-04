@@ -1,4 +1,5 @@
-﻿using AppDbContext.UOW;
+﻿using AppDbContext.Models;
+using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int prod_id, decimal quantity)
+        public IActionResult AddToCart(int prod_id, double quantity)
         {
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
@@ -60,19 +61,38 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyCart(int prod_id, decimal quantity)
+        public async Task<IActionResult> MyCart()
         {
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+            
+            
+            double totalPrice = 0;
             foreach (var orderProduct in orderProducts)
             {
                 var product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
                 var productVM = Mapper.Map<ProductVM>(product);
                 orderProduct.Product = productVM;
+                totalPrice += product.Price * orderProduct.Quantity;
             }
-            return View(orderProducts);
+            OrderVM orderVM = new OrderVM()
+            {
+                OrderProduct = orderProducts,
+                TotalPrice = totalPrice,
+            };
+            return View(orderVM);
+        }
+
+        [HttpPost]
+        public IActionResult MyCart(OrderVM orderVM)
+        {
+            Order order = Mapper.Map<Order>(orderVM);
+            Uow.OrderRepo.Add(order);
+            Uow.SaveChanges();
+            return Json("Success!!");
+
         }
     }
 }

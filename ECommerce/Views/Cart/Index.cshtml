@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     var orderProducts = ViewData["OrderProductVM"] as List<OrderProductVM>;
-    Dictionary<int, decimal> temp= new Dictionary<int, decimal>();
+    Dictionary<int, double> temp= new Dictionary<int, double>();
     foreach (var prod in orderProducts)
         temp[prod.ProductId] = prod.Quantity;
 }

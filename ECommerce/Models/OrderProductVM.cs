@@ -9,7 +9,7 @@ namespace ECommerce.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int OrderId { get; set; }
-        public decimal Quantity { get; set; }
+        public double Quantity { get; set; }
         public string Notes { get; set; }
 
         public virtual OrderVM Order { get; set; }

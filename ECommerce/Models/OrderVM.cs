@@ -17,8 +17,8 @@ namespace ECommerce.Models
         public long Id { get; set; }
         public long DeliveryId { get; set; }
         public long UserId { get; set; }
-        public decimal TotalPrice { get; set; }
-        public long AddressId { get; set; }
+        public double TotalPrice { get; set; }
+        public string Address { get; set; }
         public decimal? Rate { get; set; }
 
         public virtual DeliveryVM Delivery { get; set; }

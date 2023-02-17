@@ -5,75 +5,105 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<style>
+    td{
+         max-width: 100px;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+    }
+    .actions {
+         max-width: 300px;
+         overflow: initial;
+         text-overflow: initial;
+         white-space: initial;
+    }
+</style>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PriceIsInteger)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Unit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceIsInteger)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Unit)
-            </td>
-            <td>
-                @Html.ActionLink("Edit Categories", "Edit", new {  id=item.Id  }) |
-                @Html.ActionLink("Edit Attributes", "EditAttribute", new {  id=item.Id })
-                @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
-                @Html.ActionLink("Delete", "Delete", new {  id=item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="hide_small">
+				<partial name="_SideBarPartial" />
+			</div>
+            <div class="col-lg-9 col-md-9 col-sm-12">
+                <h1>Products</h1>
+                <p>
+                    <a asp-action="Create" class="btn btn-primary">Create New</a>
+                </p>
+
+				<div class="col-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+						@foreach (var item  in Model)
+						{
+						<div class="col-sm-6 col-md-4 col-lg-3">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="images/home/product1.jpg" alt="" />
+										<h2>$@item.Price</h2>
+										<p>@item.Name</p>
+									</div>
+									<div class="product-overlay">
+                                        <div class="overlay-content">
+											<h2>$@item.Price</h2>
+											<p>@item.Name</p>
+
+											<a id="add-@item.Id" class="btn btn-default add-to-cart">
+                                                <i class="fa fa-shopping-cart"></i>Add to cart
+                                            </a>
+											
+											@Html.ActionLink("Details","details","product",new {  id=item.Id },
+												new {id="details-"+item.Id, @class= "btn btn-default add-to-cart"})
+                                            
+											<form id="form-@item.Id" method="post" style="display:none" hidden>
+                                                <input name="quantity" type="number" value="1">
+									            <input name="prod_id" type="number" value="@item.Id">
+                                            </form>
+											
+									    </div>
+									</div>
+								</div>
+								<div class="choose">
+									<ul class="nav nav-pills nav-justified">
+										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+                        <script>
+                            $('#add-@item.Id').on('click', function(e) {
+                                let id = $(this).attr('id').substr(4)
+                                console.log(id)
+                                var form = $('#form-' + id);
+                                var obj = form.serializeArray()
+                                console.log(obj)
+                                e.preventDefault();
+                                var actionUrl = "Cart/AddToCart";
+                                $.ajax({
+                                    url: actionUrl,
+                                    type: "POST",
+                                    data: {
+                                        'prod_id': obj[1]['value'],
+                                        'quantity': obj[0]['value'],
+                                    },
+                                    success: function(result) {
+                                        console.log("first call:" + result);
+                                    },
+                                    error: function(xhr, textStatus, error) {
+                                        console.log(xhr.statusText);
+                                        console.log(textStatus);
+                                        console.log(error);
+                                    }
+                                });
+                            })
+                        </script>
+						}
+					</div><!--features_items-->
+				</div>
+            </div>
+		</div>
+	</div>
+</section>

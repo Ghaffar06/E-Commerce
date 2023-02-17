@@ -156,5 +156,14 @@ namespace ECommerce.Controllers
         {
             return View(new ErrorVM { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int Id)
+        {
+            var pvv = await Uow.ProductRepo.GetAsync(Id);
+            var v = Mapper.Map<ProductVM>(pvv);
+
+            return View(v);
+        }
     }
 }

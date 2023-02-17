@@ -29,5 +29,10 @@ namespace ECommerce.Controllers
         {
             return View(new ErrorVM { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
+        public IActionResult E404()
+        {
+            return View("E404");
+        }
     }
 }

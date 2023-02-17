@@ -1,0 +1,128 @@
+﻿@model ECommerce.Models.ProductVM
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Details</h1>
+
+<div class="product-details"><!--product-details-->
+	<div class="col-sm-5">
+		<div class="view-product">
+			<img src="images/product-details/1.jpg" alt="" />
+			<h3>ZOOM</h3>
+		</div>
+		<div id="similar-product" class="carousel slide" data-ride="carousel">
+								
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner">
+					<div class="item active">
+						<a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+					</div>
+					<div class="item">
+						<a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+					</div>
+					<div class="item">
+						<a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+						<a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+					</div>
+										
+				</div>
+
+				<!-- Controls -->
+				<a class="left item-control" href="#similar-product" data-slide="prev">
+				<i class="fa fa-angle-left"></i>
+				</a>
+				<a class="right item-control" href="#similar-product" data-slide="next">
+				<i class="fa fa-angle-right"></i>
+				</a>
+		</div>
+
+	</div>
+	<div class="col-sm-7">
+		<div class="product-information"><!--/product-information-->
+			<img src="images/product-details/new.jpg" class="newarrival" alt="" />
+			<h2>Anne Klein Sleeveless Colorblock Scuba</h2>
+			<p>Web ID: 1089772</p>
+			<img src="images/product-details/rating.png" alt="" />
+			<span>
+				<span>US $59</span>
+				<label>Quantity:</label>
+				<input type="text" value="3" />
+				<button type="button" class="btn btn-fefault cart">
+					<i class="fa fa-shopping-cart"></i>
+					Add to cart
+				</button>
+			</span>
+			<p><b>Availability:</b> In Stock</p>
+			<p><b>Condition:</b> New</p>
+			<p><b>Brand:</b> E-SHOPPER</p>
+			<a href=""><img src="images/product-details/share.png" class="share img-responsive"  alt="" /></a>
+		</div><!--/product-information-->
+	</div>
+</div><!--/product-details-->
+					
+
+<div>
+    <h4>ProductVM</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PriceIsInteger)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PriceIsInteger)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ImageUrl)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

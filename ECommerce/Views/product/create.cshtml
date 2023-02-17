@@ -1,34 +1,20 @@
 ﻿@model ECommerce.Models.ProductVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Create New Product";
 }
 <link rel="stylesheet" href="~/css/atter.css" />
-
-<script>
-    $(document).ready(function() {
-         
-        $('#image_input').find('#image').click(function(){
-            $("#image_input input[type='file']").trigger('click');
-        })
-
-        $("#image_input").find("input[type='file']").change(function(){
-           $('#image_input #val').text(this.value.replace(/C:\\fakepath\\/i, ''))
-        })    
-    })    
-
-
-</script>
+<link rel="stylesheet" href="~/css/add-product.css" />
 
 <div class="container">
     
     <div class="row">
         <input type="hidden" name="count" value="1" />
         <div class="control-group" id="fields">
-            <div style="font-size:25pt; margin-top:50px">Add new Product</div>
+            <div class="title-prod">Add new Product</div>
             <div class="controls" id="profs">
-                <form class="input-append col-12 d-flex" style="flex-direction:column" method="post" enctype="multipart/form-data">
+                <form class="input-append flex-dir-col" method="post" enctype="multipart/form-data">
                     <div class="row d-flex align-items-baseline">
-                        <div id="field" class="d-flex justify-content-center col-6" style="flex-direction:column">
+                        <div id="field" class="form-container">
                         
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Name">Product Name:</label>
@@ -51,30 +37,32 @@
                                 <input  asp-for="Quantity" type="number" class="form-control" min="0"  
                                     placeholder="bigger than 0" id="Quantity">
                             </div>
-                             <div class="form-group">
-                                 <label class="col-form-label mt-4" for="PriceIsInteger">Is Price Integer?</label>
-                                   <input  asp-for="PriceIsInteger" type="checkbox"  id="Quantity">
+                             <div class="form-group ">
+                                 <label class="col-form-label mt-4 check-container check-label-form">
+                                    <h5><strong>Is Quantity Integer</strong></h5>
+                                    <input asp-for="PriceIsInteger" type="checkbox" id="PriceIsInteger">
+                                    <span class="checkmark"></span>
+                                 </label>
                                 </div>
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Unit">Product Unit:</label>
                                 <input asp-for="Unit" type="text" class="form-control" placeholder="like item,piece,etc" id="Unit">
                             </div>
                         
-                        <div class="form-group" id="image_input">
-                            @Html.Label("ImageUrl","Category Image:", new { @class = "col-form-label mt-4"})  
-                            <input name="uploadFile" type="file" id="Image_url"
-                                   class="form-control add_file_btn" hidden>
-                            <div class="d-flex align-items-center">
-                                <div id='image' class="btn btn-outline-primary rounded">Select File</div>
-                                <div id='val' class="ml-4"></div>
+                            <div class="form-group" id="image_input">
+                                @Html.Label("ImageUrl","Category Image:", new { @class = "col-form-label mt-4"})  
+                                <input name="uploadFile" type="file" id="Image_url"
+                                       class="form-control add_file_btn" style="display:none">
+                                <div class="d-flex align-items-center">
+                                    <div id='image' class="btn btn-outline-primary mt-2">Select File</div>
+                                    <div id='val' class="ml-4"></div>
+                                </div>
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                        </div>
                             <div class="d-flex justify-content-center">
-                                <input type="submit" value="submit" class="btn btn-primary rounded submit_btn mt-3"/>
+                                <input type="submit" value="Submit" class="btn btn-primary rounded submit_btn mt-3"/>
                             </div>
                         </div>
-                        
                     </div>
                 </form>
                 <br>
@@ -83,3 +71,4 @@
     </div>
 </div>
 
+<script src="~/js/add-product.js"></script>

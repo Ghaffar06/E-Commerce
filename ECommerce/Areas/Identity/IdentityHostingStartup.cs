@@ -18,8 +18,10 @@ namespace ECommerce.Areas.Identity
                 services.AddDbContext<ECommerceContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("ECommerceContextConnection")));
+                
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ECommerceContext>();
             });
         }

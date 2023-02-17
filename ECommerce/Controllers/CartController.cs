@@ -60,6 +60,26 @@ namespace ECommerce.Controllers
             return Json("Success!!");
         }
 
+        [HttpPost]
+        public IActionResult DeleteFromCart(int prod_id)
+        {
+            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
+                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+
+            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+            int Idx = orderProducts.FindIndex(q => q.ProductId == prod_id);
+            if (Idx == -1)
+            {
+                return Json("No Such Product!!");
+            }
+     
+            orderProducts.RemoveAt(Idx);
+
+            HttpContext.Session.Set(SessionKeyProducts, orderProducts);
+
+            return Json("Success!!");
+        }
+
         [HttpGet]
         public async Task<IActionResult> MyCart()
         {

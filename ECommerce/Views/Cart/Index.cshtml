@@ -74,7 +74,7 @@
 							<p class="cart_total_price" id="tot-@item.Id"></p>
 						</td>
 						<td class="cart_delete">
-							<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+							<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
 						</td>
 					</tr>
 						<script>
@@ -141,6 +141,31 @@
 									}, 300);
                                     $('#totalAmount-' + id).data('delay', delay);
 								});
+
+								var actionUrl1 = "Cart/DeleteFromCart";
+								$('#delete-@item.Id').click(function(e) { 
+									let id = $(this).attr('id').substr(7)
+									delay = setTimeout(function(e){
+										$.ajax({
+											url: actionUrl1,
+											type: "POST",
+											data: {
+												'prod_id': id,
+												
+											},
+											success: function (result) {
+												console.log("first call:" + result);
+											},
+											error: function (xhr, textStatus, error) {
+												console.log(xhr.statusText);
+												console.log(textStatus);
+												console.log(error);
+											}
+										});
+									});
+									
+								});
+								$('#totalAmount-@item.Id').trigger('change')
 							})
 
 						</script>

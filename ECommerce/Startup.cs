@@ -36,7 +36,8 @@ namespace ECommerce
             //services.AddDbContext<ECommerceContext>(options =>
             //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentityCore<User>().AddEntityFrameworkStores<EcommerceDbContext>();
+            services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<EcommerceDbContext>();
             //services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AppDbContext.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Data
 {
-    public class ECommerceContext : IdentityDbContext<IdentityUser>
+    public class ECommerceContext : IdentityDbContext<User>
     {
         public ECommerceContext(DbContextOptions<ECommerceContext> options)
             : base(options)

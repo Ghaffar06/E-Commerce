@@ -1,4 +1,5 @@
 ﻿using System;
+using AppDbContext.Models;
 using ECommerce.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ namespace ECommerce.Areas.Identity
                         context.Configuration.GetConnectionString("ECommerceContextConnection")));
                 
 
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ECommerceContext>();
             });

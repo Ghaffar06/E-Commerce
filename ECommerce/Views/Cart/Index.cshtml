@@ -195,10 +195,22 @@
 							<h4>Total <span><i>$</i><span id="total">000</span></span></</h4>
 						</li>
 					</ul>
-					<button class="btn btn-default update">Clear</button>
-					<button class="btn btn-default check_out">Check Out</button>
+					<button class="btn btn-default update" id='clear'>Clear</button>
+					<button class="btn btn-default check_out" id="goToCheckOut">Check Out</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </section><!--/#do_action-->
+
+<script>
+$('#clear').on('click', function(e) {
+	@foreach(var item in temp){
+		@:$('#delete-' + @item.Key).click();
+	}
+});
+
+$('#goToCheckOut').on('click', function(e) {
+    window.location.href = '/cart/MyCart';
+});
+</script>

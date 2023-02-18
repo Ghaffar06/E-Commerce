@@ -1,68 +1,148 @@
 ﻿@model ECommerce.Models.OrderVM
 
 @{
-    ViewData["Title"] = "MyCart";
+    ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyCart</h1>
+<style>
+	#cart_items .cart_info{
+		border: none;
+	}
+	.spacer{
+		height: 10px;
+	}
+	.w80{ 
+		margin-left:125px;
+		width:100px;
+	}
+</style>
+<div class="container">
+	<div class="row">
+		<div class="breadcrumbs" style="margin-bottom: -50px">
+			<ol class="breadcrumb">
+				<li><a asp-controller="home" asp-action="index">Home</a></li>
+				<li class="active">Checkout</li>
+			</ol>
+		</div>
+		<h1>Ckeck Out</h1>
+		<h4><i>My Cart</i></h4>
+		<hr />
+		
+		<div class="spacer"></div>
+		<section id="cart_items">
+			<div class="container">
+				<div class="table-responsive cart_info">
+					<table id="table" class="table table-condensed">
+						<thead>
+							<tr class="cart_menu">
+								<td class="image">Item</td>
+								<td class="description"></td>
+								<td class="price">Price</td>
+								<td class="quantity">Quantity</td>
+								<td class="units">Units</td>
+								<td class="total">Total</td>
+								<td class="notes">Notes</td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model.OrderProduct) {
+								<tr>
+									<td class="cart_product">
+										<a href=""><img src="~/@item.Product.ImageUrl" height="150" width="150" alt=""></a>
+									</td>
 
-<h4>OrderVM</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="MyCart">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TotalPrice" class="control-label"></label>
-                <input asp-for="TotalPrice" class="form-control" />
-                <span asp-validation-for="TotalPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.OrderProduct.First().Quantity)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.OrderProduct.First().Notes)
-                        </th>
-                        <th>
-                           @Html.DisplayNameFor(model => model.OrderProduct.First().Product.Name)
-                        </th>
-                        <th>
-                           @Html.DisplayNameFor(model => model.OrderProduct.First().Product.Id)
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ var i = 0;}
-                    @foreach (var item in Model.OrderProduct)
-                    {
-            
-                        <tr>
-                            <td>@item.Id</td>
-                            <td><input type="text" readonly="readonly" name="OrderProduct[@i].Quantity" asp-for="@item.Quantity" class="form-control" /></td>
-                            <td><input type="text" readonly="readonly" name="OrderProduct[@i].Notes" asp-for="@item.Notes" class="form-control" /></td>
-                            <td><input type="text" readonly="readonly" asp-for="@item.Product.Name" class="form-control" /></td>
-                            <td><input type="text" readonly="readonly" name="OrderProduct[@i].ProductId" asp-for="@item.Product.Id" class="form-control" /></td>
-                        </tr>
-                        i++;
-                    }
-                </tbody>
-            </table>
+									<td class="cart_description">
+										<h4><a href="">@item.Product.Name</a></h4>
+										<p>@item.Product.Description</p>
+									</td>
+									<td class="cart_price">
+										<p>$@item.Product.Price</p>
+									</td>
+									<td class="cart_quantity">
+										<div class="quan">
+											<input name="quantity" autocomplete="off" 
+												style="width:80px;height:33px;margin:0"
+												type="number" step="@(item.Product.PriceIsInteger ? 1 : 0.01)"
+												id="totalAmount-@item.Product.Id" value ="@item.Quantity" 
+												min="0" max="@item.Product.Quantity" disabled>
+											<input name ="prod_id" type="number" value ="@item.Id" style="display:none" hidden readonly>
+										</div>
+									</td>
+									<td class="cart_unit">
+										<p class="cart_units">@item.Product.Unit</p>
+									</td>
+									<td class="cart_total">
+										<p class="cart_total_price" id="tot-@item.Product.Id"></p>
+									</td>
+									<td>
+										<p class="product_notes" id="not-@item.Notes"></p>
+									</td>
+									<td class="cart_delete">
+										<div class="btn btn-primary" style="margin:0" id="delete-@item.Product.Id"> <i class="fa fa-times"></i> </div>
+									</td>
+								</tr>
+								<script>
+									$('#totalAmount-@item.Product.Id').on('change',function(e) {
+										let id = $(this).attr('id').substr(12)
+										let value = parseFloat($(this).val()) * @item.Product.Price
+										value = value.toPrecision(4)
+										$('#tot-' + id).text(value)
+									});
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+									$('#totalAmount-@item.Product.Id').trigger('change')
+
+									var actionUrl1 = "Cart/DeleteFromCart";
+									$('#delete-@item.Product.Id').click(function(e) { 
+										let id = $(this).attr('id').substr(7)
+										delay = setTimeout(function(e){
+											$.ajax({
+												url: actionUrl1,
+												type: "POST",
+												data: {
+													'prod_id': id,
+												},
+												success: function (result) {
+													console.log("first call:" + result);
+												},
+												error: function (xhr, textStatus, error) {
+													console.log(xhr.statusText);
+													console.log(textStatus);
+													console.log(error);
+												}
+											});
+										});
+									});
+									$('#totalAmount-@item.Product.Id').trigger('change')
+								})
+								</script>
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-4">
+					<form asp-action="MyCart">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="form-group">
+							<label class="col-form-label mt-4" for="TotalPrice">Total Price:</label>
+							<input asp-for="TotalPrice" class="form-control" disabled/>
+							<span asp-validation-for="TotalPrice" class="text-danger"></span>
+						</div>
+						<div class="form-group">
+							<label asp-for="Address" class="control-label"></label>
+							<input asp-for="Address" class="form-control" 
+								placeholder="Add your Address here..."/>
+							<span asp-validation-for="Address" class="text-danger"></span>
+						</div>
+					</form>
+					<div class="form-group">
+						<input type="submit" value="Save" class="btn btn-primary w80" />
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
 </div>
 
 <div>

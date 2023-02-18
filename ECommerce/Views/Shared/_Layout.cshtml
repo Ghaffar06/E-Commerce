@@ -95,7 +95,7 @@
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a asp-controller="cart" asp-action="MyCart"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a asp-controller="cart" asp-action="index"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								<partial name="_LoginPartial" />
 							</ul>
@@ -125,8 +125,7 @@
                                     <ul role="menu" class="sub-menu">
                                         <li>@Html.ActionLink("Categories","index","category",null)</li>
 										<li>@Html.ActionLink("Products","index","product",null)</li>
-										<li><a href="product-details.html">Product Details</a></li> 
-										<li><a href="checkout.html">Checkout</a></li> 
+										<li>@Html.ActionLink("Checkout","MyCart","cart",null)</li> 
 										<li>@Html.ActionLink("Cart","index","cart",null)</li>
 										@*<partial name="_LoginPartial" />*@
                                     </ul>

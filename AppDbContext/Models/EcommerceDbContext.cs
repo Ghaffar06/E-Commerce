@@ -42,7 +42,7 @@ namespace AppDbContext.Models
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<Attribute>(entity =>
             {
                 entity.ToTable("attribute");
@@ -215,10 +215,9 @@ namespace AppDbContext.Models
                 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.RequestedOrders)
-                    .HasForeignKey(d => d.DelivererId)
+                    .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_customer");
-
             });
 
             modelBuilder.Entity<OrderProduct>(entity =>
@@ -368,7 +367,7 @@ namespace AppDbContext.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
-            
+            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

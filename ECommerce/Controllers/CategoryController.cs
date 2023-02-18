@@ -3,6 +3,7 @@ using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,10 +14,10 @@ namespace ECommerce.Controllers
     public class CategoryController : BaseController
     {
 
-        public CategoryController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
+        public CategoryController(IUnitOfWork uow, IMapper mapper, UserManager<User> userManager)
+            : base(uow, mapper, userManager)
         {
         }
-
         [HttpGet]
         public IActionResult Index()
         {

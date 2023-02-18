@@ -11,10 +11,16 @@ namespace AppDbContext.Models
 {
     public partial class User  : IdentityUser
     {
+        public User() {
+            RequestedOrders = new HashSet<Order>();
+            DeliveredOrders = new HashSet<Order>();
+        }
         public string Role { get;set; }
 
-        
+        [InverseProperty("Customer")]
         public virtual ICollection<Order> RequestedOrders { get; set; }
+
+        [InverseProperty("Deliverer")]
         public virtual ICollection<Order> DeliveredOrders { get; set; }
     }
 }

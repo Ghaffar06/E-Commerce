@@ -13,12 +13,11 @@ namespace ECommerce.Controllers
     {
 
         const string SessionKeyProducts = "_Products";
-        //private readonly UserManager<Appl> _userManager;
 
-        public CartController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
+        public CartController(IUnitOfWork uow, IMapper mapper, UserManager<User> userManager)
+            : base(uow, mapper, userManager)
         {
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -29,7 +28,7 @@ namespace ECommerce.Controllers
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             ViewData["OrderProductVM"] = orderProducts;
 
-            List < ProductVM > productsVM = new List < ProductVM >(); 
+            List<ProductVM> productsVM = new List<ProductVM>();
 
             foreach (var orderProduct in orderProducts)
             {
@@ -108,7 +107,7 @@ namespace ECommerce.Controllers
             {
                 return Json("No Such Product!!");
             }
-     
+
             orderProducts.RemoveAt(Idx);
 
             HttpContext.Session.Set(SessionKeyProducts, orderProducts);
@@ -123,8 +122,8 @@ namespace ECommerce.Controllers
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
-            
-            
+
+
             double totalPrice = 0;
             foreach (var orderProduct in orderProducts)
             {
@@ -142,29 +141,34 @@ namespace ECommerce.Controllers
         }
 
 
-		[HttpPost]
-		public async Task<IActionResult> CheckOut(OrderVM orderVM)
-		{
-			Order order = Mapper.Map<Order>(orderVM);
-			bool checkQuantity = true;
-			foreach (var orderProduct in order.OrderProduct)
-			{
-				Product product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
-				if (orderProduct.Quantity > product.Quantity)
-					checkQuantity = false;
-			}
+        [HttpPost]
+        public async Task<IActionResult> CheckOut(OrderVM orderVM)
+        {
+            Order order = Mapper.Map<Order>(orderVM);
+            order.CustomerId = (await UserManager.GetUserAsync(HttpContext.User)).Id;
+            order.TotalPrice = 0m;
 
-			if (checkQuantity)
-			{
-				Uow.OrderRepo.Add(order);
-				Uow.SaveChanges();
-				return Json("On the way");
-			} else
+            bool checkQuantity = true;
+            foreach (var orderProduct in order.OrderProduct)
+            {
+                Product product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
+                if (orderProduct.Quantity > product.Quantity)
+                    checkQuantity = false;
+                order.TotalPrice += orderProduct.Quantity * (decimal)product.Price;
+            }
+
+            if (checkQuantity)
+            {
+                Uow.OrderRepo.Add(order);
+                Uow.SaveChanges();
+                return Json("On the way");
+            }
+            else
                 return Json("No enouph quantity!!");
-		}
+        }
 
 
-		/*[HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> MyCartAsync(OrderVM orderVM)
         {
             bool checkQuantity = true;
@@ -188,7 +192,7 @@ namespace ECommerce.Controllers
         }*/
 
 
-		/* [HttpGet]
+        /* [HttpGet]
 		 public IActionResult ViewMyOrders()
 		 {
 			 var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
@@ -202,5 +206,5 @@ namespace ECommerce.Controllers
 			 return View(ProductsVM);
 
 		 }*/
-	}
+    }
 }

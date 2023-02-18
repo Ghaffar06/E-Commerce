@@ -117,7 +117,7 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyCart()
+        public async Task<IActionResult> CheckOut()
         {
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
@@ -141,7 +141,30 @@ namespace ECommerce.Controllers
             return View(orderVM);
         }
 
-        /*[HttpPost]
+
+		[HttpPost]
+		public async Task<IActionResult> CheckOut(OrderVM orderVM)
+		{
+			Order order = Mapper.Map<Order>(orderVM);
+			bool checkQuantity = true;
+			foreach (var orderProduct in order.OrderProduct)
+			{
+				Product product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
+				if (orderProduct.Quantity > product.Quantity)
+					checkQuantity = false;
+			}
+
+			if (checkQuantity)
+			{
+				Uow.OrderRepo.Add(order);
+				Uow.SaveChanges();
+				return Json("On the way");
+			} else
+                return Json("No enouph quantity!!");
+		}
+
+
+		/*[HttpPost]
         public async Task<IActionResult> MyCartAsync(OrderVM orderVM)
         {
             bool checkQuantity = true;
@@ -165,19 +188,19 @@ namespace ECommerce.Controllers
         }*/
 
 
-       /* [HttpGet]
-        public IActionResult ViewMyOrders()
-        {
-            var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
-            //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
-            var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+		/* [HttpGet]
+		 public IActionResult ViewMyOrders()
+		 {
+			 var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
+			 //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
+			 var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
+			 if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
+				 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
-            ViewData["OrderProductVM"] = orderProducts;
-            return View(ProductsVM);
+			 List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+			 ViewData["OrderProductVM"] = orderProducts;
+			 return View(ProductsVM);
 
-        }*/
-    }
+		 }*/
+	}
 }

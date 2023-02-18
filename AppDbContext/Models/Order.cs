@@ -15,13 +15,15 @@ namespace AppDbContext.Models
         }
 
         public int Id { get; set; }
-        public int? DeliveryId { get; set; }
-        public int UserId { get; set; }
+        public string? DelivererId { get; set; }
+        public string CustomerId { get; set; }
         public decimal TotalPrice { get; set; }
         public string Address { get; set; }
         public decimal? Rate { get; set; }
 
-        public virtual Delivery Delivery { get; set; }
+
+		public virtual User Customer { get; set; }
+        public virtual User Deliverer { get; set; }
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
         public virtual ICollection<OrderState> OrderState { get; set; }
     }

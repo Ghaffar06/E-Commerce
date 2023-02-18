@@ -13,5 +13,8 @@ namespace AppDbContext.Models
     {
         public string Role { get;set; }
 
+        
+        public virtual ICollection<Order> RequestedOrders { get; set; }
+        public virtual ICollection<Order> DeliveredOrders { get; set; }
     }
 }

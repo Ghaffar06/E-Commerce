@@ -43,7 +43,6 @@
 								<td class="units">Units</td>
 								<td class="total">Total</td>
 								<td class="notes">Notes</td>
-								<td></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -64,66 +63,49 @@
 										<div class="quan">
 											<input name="quantity" autocomplete="off" 
 												style="width:80px;height:33px;margin:0"
-												type="number" step="@(item.Product.PriceIsInteger ? 1 : 0.01)"
-												id="totalAmount-@item.Product.Id" value ="@item.Quantity" 
-												min="0" max="@item.Product.Quantity" disabled>
-											<input name ="prod_id" type="number" value ="@item.Id" style="display:none" hidden readonly>
+												type="number" value ="@item.Quantity" disabled>
+											<input name="prod_id" type="number" value="@item.ProductId" 
+												style="display:none" hidden readonly>
 										</div>
 									</td>
 									<td class="cart_unit">
 										<p class="cart_units">@item.Product.Unit</p>
 									</td>
 									<td class="cart_total">
-										<p class="cart_total_price" id="tot-@item.Product.Id"></p>
+										<p class="cart_total_price" id="tot-@item.ProductId">
+											@{
+												double result = item.Quantity * item.Product.Price;
+															@:$ @result  
+											}
+										</p>
 									</td>
 									<td>
-										<p class="product_notes" id="not-@item.Notes"></p>
-									</td>
-									<td class="cart_delete">
-										<div class="btn btn-primary" style="margin:0" id="delete-@item.Product.Id"> <i class="fa fa-times"></i> </div>
+										<textarea id="not-@item.ProductId" rows="5"
+											placeholder="Feel free to add some Notes"></textarea>
+										<script>
+											$('#not-@item.ProductId').on('keyup',function(e){
+                                                var id = $(this).attr('id').substr(4);
+												$('#nid-' + id).val($(this).val());
+											});
+										</script>
 									</td>
 								</tr>
-								<script>
-									$('#totalAmount-@item.Product.Id').on('change',function(e) {
-										let id = $(this).attr('id').substr(12)
-										let value = parseFloat($(this).val()) * @item.Product.Price
-										value = value.toPrecision(4)
-										$('#tot-' + id).text(value)
-									});
-
-									$('#totalAmount-@item.Product.Id').trigger('change')
-
-									var actionUrl1 = "Cart/DeleteFromCart";
-									$('#delete-@item.Product.Id').click(function(e) { 
-										let id = $(this).attr('id').substr(7)
-										delay = setTimeout(function(e){
-											$.ajax({
-												url: actionUrl1,
-												type: "POST",
-												data: {
-													'prod_id': id,
-												},
-												success: function (result) {
-													console.log("first call:" + result);
-												},
-												error: function (xhr, textStatus, error) {
-													console.log(xhr.statusText);
-													console.log(textStatus);
-													console.log(error);
-												}
-											});
-										});
-									});
-									$('#totalAmount-@item.Product.Id').trigger('change')
-								})
-								</script>
 							}
 						</tbody>
 					</table>
 				</div>
 				<div class="col-md-4">
-					<form asp-action="MyCart">
+					<form asp-action="checkout" method="post">
 						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						@for(var i= 0; i < Model.OrderProduct.Count; i++){
+							@Html.EditorFor(model => model.OrderProduct[i].ProductId , 
+								new { htmlAttributes = new { @class = "form-control", style="display:none;" }})
+							@Html.EditorFor(model => model.OrderProduct[i].Quantity , 
+								new { htmlAttributes = new { @class = "form-control", style="display:none;" }})
+							@Html.EditorFor(model => model.OrderProduct[i].Notes , 
+								new { htmlAttributes = new { @class = "form-control", 
+									@id="nid-" + @Model.OrderProduct[i].ProductId, style="display:none;" } })
+						}
 						<div class="form-group">
 							<label class="col-form-label mt-4" for="TotalPrice">Total Price:</label>
 							<input asp-for="TotalPrice" class="form-control" disabled/>
@@ -135,16 +117,15 @@
 								placeholder="Add your Address here..."/>
 							<span asp-validation-for="Address" class="text-danger"></span>
 						</div>
-					</form>
-					<div class="form-group">
+						<div class="form-group">
 						<input type="submit" value="Save" class="btn btn-primary w80" />
 					</div>
+					</form>
 				</div>
 			</div>
 		</section>
 	</div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

@@ -10,8 +10,8 @@ namespace ECommerce.Models
     {
         public OrderVM()
         {
-            OrderProduct = new HashSet<OrderProductVM>();
-            OrderState = new HashSet<OrderStateVM>();
+            OrderProduct = new List<OrderProductVM>();
+            OrderState = new List<OrderStateVM>();
         }
 
         public long Id { get; set; }
@@ -22,7 +22,7 @@ namespace ECommerce.Models
         public decimal? Rate { get; set; }
 
         public virtual DeliveryVM Delivery { get; set; }
-        public virtual ICollection<OrderProductVM> OrderProduct { get; set; }
-        public virtual ICollection<OrderStateVM> OrderState { get; set; }
+        public virtual IList<OrderProductVM> OrderProduct { get; set; }
+        public virtual IList<OrderStateVM> OrderState { get; set; }
     }
 }

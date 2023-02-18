@@ -1,19 +1,16 @@
-﻿using ECommerce.Models;
+﻿using AppDbContext.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public AccountController(UserManager<IdentityUser> userManager,
+        public AccountController(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -35,6 +32,14 @@ namespace ECommerce.Controllers
         {
             return Redirect(url: "https://localhost:44344/");
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> TESTing()
+        {
+            User user = await _userManager.GetUserAsync(HttpContext.User);
+            return Redirect(url: "https://localhost:44344/");
+        }
+
 
 
         public async Task CreateRolesandUsers()
@@ -50,9 +55,10 @@ namespace ECommerce.Controllers
 
             //Here we create a Admin super user who will maintain the website                   
 
-            var user = new IdentityUser();
+            var user = new User();
             user.UserName = "admin";
             user.Email = "admin@admin.com";
+            user.Role = "Admin";
             string userPWD = "Admin1234!@#";
 
             IdentityResult chkUser = await _userManager.CreateAsync(user, userPWD);

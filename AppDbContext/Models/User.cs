@@ -11,11 +11,7 @@ namespace AppDbContext.Models
 {
     public partial class User  : IdentityUser
     {
-        public User()
-            { }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public override string Id { get; set; }
+        public string Role { get;set; }
 
     }
 }

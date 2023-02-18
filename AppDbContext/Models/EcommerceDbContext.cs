@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppDbContext.Models
 {
-    public partial class EcommerceDbContext : IdentityDbContext<User,IdentityRole, string>
+    public partial class EcommerceDbContext : IdentityDbContext<User>
     {
         public EcommerceDbContext()
         {
@@ -43,7 +43,7 @@ namespace AppDbContext.Models
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Attribute>(entity =>
             {
                 entity.ToTable("attribute");
@@ -384,7 +384,7 @@ namespace AppDbContext.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
-            base.OnModelCreating(modelBuilder);
+            
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

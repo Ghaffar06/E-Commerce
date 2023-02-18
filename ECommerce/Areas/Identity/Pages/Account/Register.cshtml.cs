@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -62,12 +63,19 @@ namespace ECommerce.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+            [Required]
+            [Display(Name = "Role")]
+            public string Role { get; set; }
+            public SelectList RoleList { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -80,12 +88,9 @@ namespace ECommerce.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var defaultrole = _roleManager.FindByNameAsync("Default").Result;
+                    var role = _roleManager.FindByNameAsync(Input.Role).Result;
 
-                    if (defaultrole != null)
-                    {
-                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
-                    }
+                    IdentityResult roleresult = await _userManager.AddToRoleAsync(user, role.Name);
 
                     _logger.LogInformation("User created a new account with password.");
 

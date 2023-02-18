@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AppDbContext.Migrations
+namespace ECommerceDbContext.Migrations
 {
     public partial class address : Migration
     {

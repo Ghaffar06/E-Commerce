@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerceDbContext.Models
 {
-    public partial class EcommerceDbContext : DbContext
+    public partial class EcommerceDbContext : IdentityDbContext<User,IdentityRole, string>
     {
         public EcommerceDbContext()
         {
@@ -38,9 +40,10 @@ namespace AppDbContext.Models
                 optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Ecommerce;Integrated Security=True;");
             }
         }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<Attribute>(entity =>
             {
                 entity.ToTable("attribute");
@@ -381,6 +384,7 @@ namespace AppDbContext.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

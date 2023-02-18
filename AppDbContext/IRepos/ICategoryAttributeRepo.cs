@@ -1,6 +1,6 @@
-﻿using AppDbContext.Models;
+﻿using ECommerceDbContext.Models;
 
-namespace AppDbContext.IRepos
+namespace ECommerceDbContext.IRepos
 {
     public interface ICategoryAttributeRepo : IBaseRepo<CategoryAttribute>
     {

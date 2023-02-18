@@ -1,7 +1,7 @@
-﻿using AppDbContext.Models;
+﻿using ECommerceDbContext.Models;
 using System.Threading.Tasks;
 
-namespace AppDbContext.IRepos
+namespace ECommerceDbContext.IRepos
 {
     public interface IOrderRepo : IBaseRepo<Order>
     {

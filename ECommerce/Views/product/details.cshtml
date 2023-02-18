@@ -120,9 +120,22 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Unit)
         </dd>
-    </dl>
+		@for(var i = 0; i < Model.AttributeValues.Count; i++)
+		{
+			if(Model.AttributeValues[i].Value == ""){
+				continue;
+			}
+			<dt class = "col-sm-2">
+				@Html.DisplayFor(x => x.AttributeValues[i].Attribute.Name)
+			</dt>
+			<dd class = "col-sm-10">
+				@Html.DisplayFor(x => x.AttributeValues[i].Value)
+			</dd>
+		}
+	</dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit Category", "Edit", new {  id = Model.Id  }) |
+    @Html.ActionLink("Edit Attibute", "EditAttribute", new {  id = Model.Id  }) |
     <a asp-action="Index">Back to List</a>
 </div>

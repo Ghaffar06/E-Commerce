@@ -24,7 +24,7 @@ namespace ECommerce
             {
                 await uploadFile.CopyToAsync(fileSrteam);
             }
-            return filePath;
+            return "data\\" + fileName;
         }
 
         public static string SaveFile(IFormFile uploadFile)
@@ -38,7 +38,7 @@ namespace ECommerce
             {
                 uploadFile.CopyToAsync(fileSrteam);
             }
-            return filePath;
+            return "data\\" + fileName;
         }
     }
 }

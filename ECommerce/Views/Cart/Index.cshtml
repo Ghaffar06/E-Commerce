@@ -16,6 +16,16 @@
 	}
 </style>
 
+<script>
+	function updateTotal(){
+		let sum = 0;
+		$('.cart_total_price').each(function(index) {
+			sum += parseFloat($(this).text());
+		});
+		$('#total').text(sum);
+	}
+</script>
+
 <section id="cart_items">
 	<div class="container">
 		<div class="breadcrumbs">
@@ -39,90 +49,90 @@
 				</thead>
 				<tbody>
 					@foreach (var item in Model) {
-					<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
+							<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
+								<tr>
+									<td class="cart_product">
+										<a href=""><img src="@item.ImageUrl" alt=""></a>
+									</td>
 
-					<tr>
-						<td class="cart_product">
-							<a href=""><img src="@item.ImageUrl" alt=""></a>
-						</td>
-
-						<td class="cart_description">
-							<h4><a href="">@item.Name</a></h4>
-							<p>@item.Description</p>
-						</td>
-						<td class="cart_price">
-							<p>$@item.Price</p>
-						</td>
-						<td class="cart_quantity">
-							<div class="quan">
-								<div class="btn btn-primary" style="margin:0" id="up-@item.Id"> + </div>
-								<div>
-									<input name="quantity" autocomplete="off" 
+									<td class="cart_description">
+										<h4><a href="">@item.Name</a></h4>
+										<p>@item.Description</p>
+									</td>
+									<td class="cart_price">
+										<p>$@item.Price</p>
+									</td>
+									<td class="cart_quantity">
+										<div class="quan">
+											<div class="btn btn-primary" style="margin:0" id="up-@item.Id"> + </div>
+											<div>
+												<input name="quantity" autocomplete="off" 
 										style="width:80px;height:33px;margin:0"
 										type="number" step="@(item.PriceIsInteger ? 1 : 0.01)"
 										id="totalAmount-@item.Id" value ="@temp.GetValueOrDefault(item.Id)" 
 										min="0" max="@item.Quantity">
-									<input name = "prod_id" type="number"  value = "@item.Id" style="display:none" hidden readonly>
-								</div>
-								<div class="btn btn-primary" style="margin:0" id="down-@item.Id"> - </div>
-							</div>
-						</td>
-						<td class="cart_unit">
-							<p class="cart_units">@item.Unit</p>
-						</td>
-						<td class="cart_total">
-							<p class="cart_total_price" id="tot-@item.Id"></p>
-						</td>
-						<td class="cart_delete">
-							<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
-						</td>
-					</tr>
-						<script>
-							$(document).ready(function() {
-                                $('#up-@item.Id').click(function(e) { 
-									let id = $(this).attr('id').substr(3)
-									let value = parseFloat($('#totalAmount-'+id).val())
-									value += @(item.PriceIsInteger ? 1 : 0.01)
-									value = Math.min(value,@item.Quantity)
-									value = value.toPrecision(4)
-									$('#totalAmount-'+id).val(value)
+												<input name ="prod_id" type="number" value ="@item.Id" style="display:none" hidden readonly>
+											</div>
+											<div class="btn btn-primary" style="margin:0" id="down-@item.Id"> - </div>
+										</div>
+									</td>
+									<td class="cart_unit">
+										<p class="cart_units">@item.Unit</p>
+									</td>
+									<td class="cart_total">
+										<p class="cart_total_price" id="tot-@item.Id"></p>
+									</td>
+									<td class="cart_delete">
+										<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
+									</td>
+								</tr>
+								<script>
+									$(document).ready(function() {
+										$('#up-@item.Id').click(function(e) { 
+										let id = $(this).attr('id').substr(3)
+										let value = parseFloat($('#totalAmount-'+id).val())
+										value += @(item.PriceIsInteger ? 1 : 0.01)
+										value = Math.min(value,@item.Quantity)
+										value = value.toPrecision(4)
+										$('#totalAmount-'+id).val(value)
+										$('#totalAmount-@item.Id').trigger('change')
+									});
+
+									$('#down-@item.Id').click(function(e) { 
+										let id = $(this).attr('id').substr(5)
+										let value = parseFloat($('#totalAmount-'+id).val())
+										value -= @(item.PriceIsInteger ? 1 : 0.01)
+										value = Math.max(value,0)
+										value = value.toPrecision(4)
+										$('#totalAmount-'+id).val(value)
+										$('#totalAmount-@item.Id').trigger('change')
+									});
+
+									$('#totalAmount-@item.Id').on('change',function(e) {
+										let id = $(this).attr('id').substr(12)
+										let value = parseFloat($(this).val()) * @item.Price
+										value = value.toPrecision(4)
+										$('#tot-' + id).text(value)
+										updateTotal();
+									});
+
 									$('#totalAmount-@item.Id').trigger('change')
-								});
 
-								$('#down-@item.Id').click(function(e) { 
-									let id = $(this).attr('id').substr(5)
-									let value = parseFloat($('#totalAmount-'+id).val())
-									value -= @(item.PriceIsInteger ? 1 : 0.01)
-									value = Math.max(value,0)
-									value = value.toPrecision(4)
-									$('#totalAmount-'+id).val(value)
-									$('#totalAmount-@item.Id').trigger('change')
-								});
-
-                                $('#totalAmount-@item.Id').on('change',function(e) {
-									let id = $(this).attr('id').substr(12)
-                                    let value = parseFloat($(this).val()) * @item.Price
-									value = value.toPrecision(4)
-									$('#tot-' + id).text(value)
-                                });
-
-								$('#totalAmount-@item.Id').trigger('change')
-											
-								$('#totalAmount-@item.Id').on('change',function (e) {
-									id = $(this).attr('id').substr(12)
-									var form = $('#form-'+ id);
-									var obj = form.serializeArray()
-									console.log(obj)
-									e.preventDefault(); 
-									var actionUrl = "Cart/AddToCart";
-									var delay = $('#totalAmount-' + id).data('delay')
-									if(delay != undefined){
-                                        clearTimeout(delay);
+									$('#totalAmount-@item.Id').on('change',function (e) {
+										id = $(this).attr('id').substr(12)
+										var form = $('#form-'+ id);
+										var obj = form.serializeArray()
+										console.log(obj)
+										e.preventDefault(); 
+										var actionUrl = "Cart/AddToCart";
+										var delay = $('#totalAmount-' + id).data('delay')
+										if(delay != undefined){
+											clearTimeout(delay);
 										$('#totalAmount-' + id).data('delay', undefined);
-									}
-									delay = setTimeout(function(e){
-                                        $('#totalAmount-' + id).data('delay', undefined);
-										$.ajax({
+										}
+										delay = setTimeout(function(e){
+											$('#totalAmount-' + id).data('delay', undefined);
+											$.ajax({
 											url: actionUrl,
 											type: "POST",
 											data: {
@@ -139,19 +149,18 @@
 											}
 										});
 									}, 300);
-                                    $('#totalAmount-' + id).data('delay', delay);
-								});
+										$('#totalAmount-' + id).data('delay', delay);
+									});
 
-								var actionUrl1 = "Cart/DeleteFromCart";
-								$('#delete-@item.Id').click(function(e) { 
+									var actionUrl1 = "Cart/DeleteFromCart";
+									$('#delete-@item.Id').click(function(e) { 
 									let id = $(this).attr('id').substr(7)
 									delay = setTimeout(function(e){
-										$.ajax({
-											url: actionUrl1,
-											type: "POST",
+									$.ajax({
+									url: actionUrl1,
+										type: "POST",
 											data: {
 												'prod_id': id,
-												
 											},
 											success: function (result) {
 												console.log("first call:" + result);
@@ -161,15 +170,13 @@
 												console.log(textStatus);
 												console.log(error);
 											}
+											});
 										});
 									});
-									
-								});
-								$('#totalAmount-@item.Id').trigger('change')
-							})
-
-						</script>
-					</form>
+									$('#totalAmount-@item.Id').trigger('change')
+								})
+							</script>
+						</form>
 					}
 				</tbody>
 			</table>
@@ -177,77 +184,19 @@
 	</div>
 </section> <!--/#cart_items-->
 
+
 <section id="do_action">
 	<div class="container">
-		<div class="heading">
-			<h3>What would you like to do next?</h3>
-			<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="chose_area">
-					<ul class="user_option">
-						<li>
-							<input type="checkbox">
-							<label>Use Coupon Code</label>
-						</li>
-						<li>
-							<input type="checkbox">
-							<label>Use Gift Voucher</label>
-						</li>
-						<li>
-							<input type="checkbox">
-							<label>Estimate Shipping & Taxes</label>
-						</li>
-					</ul>
-					<ul class="user_info">
-						<li class="single_field">
-							<label>Country:</label>
-							<select>
-								<option>United States</option>
-								<option>Bangladesh</option>
-								<option>UK</option>
-								<option>India</option>
-								<option>Pakistan</option>
-								<option>Ucrane</option>
-								<option>Canada</option>
-								<option>Dubai</option>
-							</select>
-								
-						</li>
-						<li class="single_field">
-							<label>Region / State:</label>
-							<select>
-								<option>Select</option>
-								<option>Dhaka</option>
-								<option>London</option>
-								<option>Dillih</option>
-								<option>Lahore</option>
-								<option>Alaska</option>
-								<option>Canada</option>
-								<option>Dubai</option>
-							</select>
-							
-						</li>
-						<li class="single_field zip-field">
-							<label>Zip Code:</label>
-							<input type="text">
-						</li>
-					</ul>
-					<a class="btn btn-default update" href="">Get Quotes</a>
-					<a class="btn btn-default check_out" href="">Continue</a>
-				</div>
-			</div>
+		<div class="row" style="display:flex;justify-content:end">
 			<div class="col-sm-6">
 				<div class="total_area">
 					<ul>
-						<li>Cart Sub Total <span>$59</span></li>
-						<li>Eco Tax <span>$2</span></li>
-						<li>Shipping Cost <span>Free</span></li>
-						<li>Total <span>$61</span></li>
+						<li>
+							<h4>Total <span><i>$</i><span id="total">000</span></span></</h4>
+						</li>
 					</ul>
-						<a class="btn btn-default update" href="">Update</a>
-						<a class="btn btn-default check_out" href="">Check Out</a>
+					<button class="btn btn-default update">Clear</button>
+					<button class="btn btn-default check_out">Check Out</button>
 				</div>
 			</div>
 		</div>

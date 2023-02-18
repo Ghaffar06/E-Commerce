@@ -19,17 +19,23 @@ namespace ECommerce.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var Products = Uow.ProductRepo.GetAllAsync();
-            //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
-            var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             ViewData["OrderProductVM"] = orderProducts;
-            return View(ProductsVM);
+
+            List < ProductVM > productsVM = new List < ProductVM >(); 
+
+            foreach (var orderProduct in orderProducts)
+            {
+                var product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
+                productsVM.Add(Mapper.Map<ProductVM>(product));
+            }
+
+            return View(productsVM);
         }
 
         [HttpPost]

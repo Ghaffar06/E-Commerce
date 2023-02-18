@@ -1,12 +1,12 @@
-﻿using ECommerceDbContext.IRepos;
-using ECommerceDbContext.Models;
+﻿using AppDbContext.IRepos;
+using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ECommerceDbContext.Repos
+namespace AppDbContext.Repos
 {
     public class BaseRepo<T> : IBaseRepo<T> where T : class
     {

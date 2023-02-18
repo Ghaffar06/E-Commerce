@@ -1,5 +1,5 @@
-﻿using ECommerceDbContext.Models;
-using ECommerceDbContext.UOW;
+﻿using AppDbContext.Models;
+using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Identity;

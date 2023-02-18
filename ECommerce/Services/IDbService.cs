@@ -1,5 +1,6 @@
-﻿using ECommerceDbContext.Models;
-using ECommerceDbContext.UOW;
+﻿using AppDbContext.Models;
+using AppDbContext.UOW;
+using ECommerce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

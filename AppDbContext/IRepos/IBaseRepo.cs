@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ECommerceDbContext.IRepos
+namespace AppDbContext.IRepos
 {
     public interface IBaseRepo<T> where T : class
     {

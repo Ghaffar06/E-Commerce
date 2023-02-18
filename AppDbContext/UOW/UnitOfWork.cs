@@ -1,8 +1,8 @@
-﻿using ECommerceDbContext.IRepos;
-using ECommerceDbContext.Models;
-using ECommerceDbContext.Repos;
+﻿using AppDbContext.IRepos;
+using AppDbContext.Models;
+using AppDbContext.Repos;
 
-namespace ECommerceDbContext.UOW
+namespace AppDbContext.UOW
 {
     public class UnitOfWork : IUnitOfWork
     {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace ECommerceDbContext.Models
+namespace AppDbContext.Models
 {
     public partial class EcommerceDbContext : IdentityDbContext<User,IdentityRole, string>
     {

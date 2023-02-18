@@ -1,9 +1,9 @@
-﻿using ECommerceDbContext.IRepos;
-using ECommerceDbContext.Models;
+﻿using AppDbContext.IRepos;
+using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace ECommerceDbContext.Repos
+namespace AppDbContext.Repos
 {
     public class CategoryProductRepo : BaseRepo<CategoryProduct>, ICategoryProductRepo
     {

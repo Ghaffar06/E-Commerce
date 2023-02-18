@@ -1,4 +1,4 @@
-﻿using ECommerceDbContext.Models;
+﻿using AppDbContext.Models;
 using AutoMapper;
 using ECommerce.Models;
 

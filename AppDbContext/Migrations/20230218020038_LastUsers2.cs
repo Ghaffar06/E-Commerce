@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ECommerceDbContext.Migrations
+namespace AppDbContext.Migrations
 {
     public partial class LastUsers2 : Migration
     {

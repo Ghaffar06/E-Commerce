@@ -1,6 +1,6 @@
-﻿using ECommerceDbContext.Models;
+﻿using AppDbContext.Models;
 
-namespace ECommerceDbContext.IRepos
+namespace AppDbContext.IRepos
 {
     public interface IProductAttributeRepo : IBaseRepo<AttributeProductValue>
     {

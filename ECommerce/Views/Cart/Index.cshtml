@@ -49,132 +49,132 @@
 				</thead>
 				<tbody>
 					@foreach (var item in Model) {
-							<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
-								<tr>
-									<td class="cart_product">
-										<a href=""><img src="@item.ImageUrl" alt=""></a>
-									</td>
+						<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
+							<tr>
+								<td class="cart_product">
+									<a href=""><img src="@item.ImageUrl" height="200" width="200" alt=""></a>
+								</td>
 
-									<td class="cart_description">
-										<h4><a href="">@item.Name</a></h4>
-										<p>@item.Description</p>
-									</td>
-									<td class="cart_price">
-										<p>$@item.Price</p>
-									</td>
-									<td class="cart_quantity">
-										<div class="quan">
-											<div class="btn btn-primary" style="margin:0" id="up-@item.Id"> + </div>
-											<div>
-												<input name="quantity" autocomplete="off" 
-										style="width:80px;height:33px;margin:0"
-										type="number" step="@(item.PriceIsInteger ? 1 : 0.01)"
-										id="totalAmount-@item.Id" value ="@temp.GetValueOrDefault(item.Id)" 
-										min="0" max="@item.Quantity">
-												<input name ="prod_id" type="number" value ="@item.Id" style="display:none" hidden readonly>
-											</div>
-											<div class="btn btn-primary" style="margin:0" id="down-@item.Id"> - </div>
+								<td class="cart_description">
+									<h4><a href="">@item.Name</a></h4>
+									<p>@item.Description</p>
+								</td>
+								<td class="cart_price">
+									<p>$@item.Price</p>
+								</td>
+								<td class="cart_quantity">
+									<div class="quan">
+										<div class="btn btn-primary" style="margin:0" id="up-@item.Id"> + </div>
+										<div>
+											<input name="quantity" autocomplete="off" 
+												style="width:80px;height:33px;margin:0"
+												type="number" step="@(item.PriceIsInteger ? 1 : 0.01)"
+												id="totalAmount-@item.Id" value ="@temp.GetValueOrDefault(item.Id)" 
+												min="0" max="@item.Quantity">
+											<input name ="prod_id" type="number" value ="@item.Id" style="display:none" hidden readonly>
 										</div>
-									</td>
-									<td class="cart_unit">
-										<p class="cart_units">@item.Unit</p>
-									</td>
-									<td class="cart_total">
-										<p class="cart_total_price" id="tot-@item.Id"></p>
-									</td>
-									<td class="cart_delete">
-										<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
-									</td>
-								</tr>
-								<script>
-									$(document).ready(function() {
-										$('#up-@item.Id').click(function(e) { 
-										let id = $(this).attr('id').substr(3)
-										let value = parseFloat($('#totalAmount-'+id).val())
-										value += @(item.PriceIsInteger ? 1 : 0.01)
-										value = Math.min(value,@item.Quantity)
-										value = value.toPrecision(4)
-										$('#totalAmount-'+id).val(value)
-										$('#totalAmount-@item.Id').trigger('change')
-									});
-
-									$('#down-@item.Id').click(function(e) { 
-										let id = $(this).attr('id').substr(5)
-										let value = parseFloat($('#totalAmount-'+id).val())
-										value -= @(item.PriceIsInteger ? 1 : 0.01)
-										value = Math.max(value,0)
-										value = value.toPrecision(4)
-										$('#totalAmount-'+id).val(value)
-										$('#totalAmount-@item.Id').trigger('change')
-									});
-
-									$('#totalAmount-@item.Id').on('change',function(e) {
-										let id = $(this).attr('id').substr(12)
-										let value = parseFloat($(this).val()) * @item.Price
-										value = value.toPrecision(4)
-										$('#tot-' + id).text(value)
-										updateTotal();
-									});
-
+										<div class="btn btn-primary" style="margin:0" id="down-@item.Id"> - </div>
+									</div>
+								</td>
+								<td class="cart_unit">
+									<p class="cart_units">@item.Unit</p>
+								</td>
+								<td class="cart_total">
+									<p class="cart_total_price" id="tot-@item.Id"></p>
+								</td>
+								<td class="cart_delete">
+									<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
+								</td>
+							</tr>
+							<script>
+								$(document).ready(function() {
+									$('#up-@item.Id').click(function(e) { 
+									let id = $(this).attr('id').substr(3)
+									let value = parseFloat($('#totalAmount-'+id).val())
+									value += @(item.PriceIsInteger ? 1 : 0.01)
+									value = Math.min(value,@item.Quantity)
+									value = value.toPrecision(4)
+									$('#totalAmount-'+id).val(value)
 									$('#totalAmount-@item.Id').trigger('change')
+								});
 
-									$('#totalAmount-@item.Id').on('change',function (e) {
-										id = $(this).attr('id').substr(12)
-										var form = $('#form-'+ id);
-										var obj = form.serializeArray()
-										console.log(obj)
-										e.preventDefault(); 
-										var actionUrl = "Cart/AddToCart";
-										var delay = $('#totalAmount-' + id).data('delay')
-										if(delay != undefined){
-											clearTimeout(delay);
-										$('#totalAmount-' + id).data('delay', undefined);
-										}
-										delay = setTimeout(function(e){
-											$('#totalAmount-' + id).data('delay', undefined);
-											$.ajax({
-											url: actionUrl,
-											type: "POST",
-											data: {
-												'prod_id': obj[1]['value'],
-												'quantity':obj[0]['value'], 
-											},
-											success: function (result) {
-												console.log("first call:" + result);
-											},
-											error: function (xhr, textStatus, error) {
-												console.log(xhr.statusText);
-												console.log(textStatus);
-												console.log(error);
-											}
-										});
-									}, 300);
-										$('#totalAmount-' + id).data('delay', delay);
-									});
+								$('#down-@item.Id').click(function(e) { 
+									let id = $(this).attr('id').substr(5)
+									let value = parseFloat($('#totalAmount-'+id).val())
+									value -= @(item.PriceIsInteger ? 1 : 0.01)
+									value = Math.max(value,0)
+									value = value.toPrecision(4)
+									$('#totalAmount-'+id).val(value)
+									$('#totalAmount-@item.Id').trigger('change')
+								});
 
-									var actionUrl1 = "Cart/DeleteFromCart";
-									$('#delete-@item.Id').click(function(e) { 
-									let id = $(this).attr('id').substr(7)
+								$('#totalAmount-@item.Id').on('change',function(e) {
+									let id = $(this).attr('id').substr(12)
+									let value = parseFloat($(this).val()) * @item.Price
+									value = value.toPrecision(4)
+									$('#tot-' + id).text(value)
+									updateTotal();
+								});
+
+								$('#totalAmount-@item.Id').trigger('change')
+
+								$('#totalAmount-@item.Id').on('change',function (e) {
+									id = $(this).attr('id').substr(12)
+									var form = $('#form-'+ id);
+									var obj = form.serializeArray()
+									console.log(obj)
+									e.preventDefault(); 
+									var actionUrl = "Cart/AddToCart";
+									var delay = $('#totalAmount-' + id).data('delay')
+									if(delay != undefined){
+										clearTimeout(delay);
+									$('#totalAmount-' + id).data('delay', undefined);
+									}
 									delay = setTimeout(function(e){
-									$.ajax({
-									url: actionUrl1,
+										$('#totalAmount-' + id).data('delay', undefined);
+										$.ajax({
+										url: actionUrl,
 										type: "POST",
-											data: {
-												'prod_id': id,
-											},
-											success: function (result) {
-												console.log("first call:" + result);
-											},
-											error: function (xhr, textStatus, error) {
-												console.log(xhr.statusText);
-												console.log(textStatus);
-												console.log(error);
-											}
-											});
+										data: {
+											'prod_id': obj[1]['value'],
+											'quantity':obj[0]['value'], 
+										},
+										success: function (result) {
+											console.log("first call:" + result);
+										},
+										error: function (xhr, textStatus, error) {
+											console.log(xhr.statusText);
+											console.log(textStatus);
+											console.log(error);
+										}
+									});
+								}, 300);
+									$('#totalAmount-' + id).data('delay', delay);
+								});
+
+								var actionUrl1 = "Cart/DeleteFromCart";
+								$('#delete-@item.Id').click(function(e) { 
+								let id = $(this).attr('id').substr(7)
+								delay = setTimeout(function(e){
+								$.ajax({
+								url: actionUrl1,
+									type: "POST",
+										data: {
+											'prod_id': id,
+										},
+										success: function (result) {
+											console.log("first call:" + result);
+										},
+										error: function (xhr, textStatus, error) {
+											console.log(xhr.statusText);
+											console.log(textStatus);
+											console.log(error);
+										}
 										});
 									});
-									$('#totalAmount-@item.Id').trigger('change')
-								})
+								});
+								$('#totalAmount-@item.Id').trigger('change')
+							})
 							</script>
 						</form>
 					}

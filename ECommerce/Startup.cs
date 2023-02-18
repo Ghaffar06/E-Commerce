@@ -1,13 +1,16 @@
-using AppDbContext.UOW;
+using ECommerceDbContext.UOW;
+using ECommerceDbContext.Models;
 using AutoMapper;
 using ECommerce.Automapper;
 using ECommerce.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce
 {
@@ -23,12 +26,15 @@ namespace ECommerce
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbService(Configuration);
+            //services.AddDbService(Configuration);
 
             services.AddSingleton(new MapperConfiguration(cfg => cfg.AddProfile(new AutomapperProfile()))
                 .CreateMapper()
                 );
+            services.AddDbContext<EcommerceDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDefaultIdentity<User>().AddEntityFrameworkStores<EcommerceDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews();
             services.AddRazorPages();

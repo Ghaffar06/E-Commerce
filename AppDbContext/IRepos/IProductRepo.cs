@@ -1,10 +1,10 @@
-﻿using AppDbContext.Models;
+﻿using ECommerceDbContext.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace AppDbContext.IRepos
+namespace ECommerceDbContext.IRepos
 {
     public interface IProductRepo : IBaseRepo<Product>
     {

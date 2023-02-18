@@ -1,6 +1,6 @@
-﻿using AppDbContext.IRepos;
+﻿using ECommerceDbContext.IRepos;
 
-namespace AppDbContext.UOW
+namespace ECommerceDbContext.UOW
 {
     public interface IUnitOfWork
     {

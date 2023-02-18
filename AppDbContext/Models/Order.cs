@@ -4,7 +4,7 @@
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace AppDbContext.Models
+namespace ECommerceDbContext.Models
 {
     public partial class Order
     {
@@ -15,7 +15,7 @@ namespace AppDbContext.Models
         }
 
         public int Id { get; set; }
-        public int DeliveryId { get; set; }
+        public int? DeliveryId { get; set; }
         public int UserId { get; set; }
         public decimal TotalPrice { get; set; }
         public string Address { get; set; }

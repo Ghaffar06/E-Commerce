@@ -1,5 +1,5 @@
-﻿using AppDbContext.IRepos;
-using AppDbContext.Models;
+﻿using ECommerceDbContext.IRepos;
+using ECommerceDbContext.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace AppDbContext.Repos
+namespace ECommerceDbContext.Repos
 {
     public class ProductRepo : BaseRepo<Product>, IProductRepo
     {

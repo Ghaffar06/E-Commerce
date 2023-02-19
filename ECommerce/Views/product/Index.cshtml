@@ -83,7 +83,32 @@
 								</div>
 							</div>
 						</div>
+                        <button style="display:none" type="button" class="btn btn-primary" id="toggle-@item.Id"
+                            data-toggle="modal" data-target="#info-@item.Id">Small modal</button>
+
+                        <div class="modal fade bd-example-modal-sm" id="info-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Information Message</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <div aria-hidden="true" style="margin-top:-20px">&times;</div>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Item @item.Name Added to your cart
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" style="margin-top:16px" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="checkCart-@item.Id">Check your Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <script>
+                            $('#checkCart-@item.Id').on('click',function(e){
+                                window.location.href = '/cart/index';
+                            });
                             $('#add-@item.Id').on('click', function(e) {
                                 let id = $(this).attr('id').substr(4)
                                 console.log(id)
@@ -101,6 +126,7 @@
                                     },
                                     success: function(result) {
                                         console.log("first call:" + result);
+                                        $('#toggle-@item.Id').click();
                                     },
                                     error: function(xhr, textStatus, error) {
                                         console.log(xhr.statusText);

@@ -27,11 +27,31 @@ namespace ECommerce.Controllers
             return View(ordersVM);
         }
 
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Details(int orderId)
+        {
+            var order = await Uow.OrderRepo.GetAsync(orderId);
+            var userId = await GetCurrentUserId();
+            if (User.IsInRole("Admin") || order.CustomerId == userId || order.DelivererId == userId)
+            {
+                var ordersVM = Mapper.Map<OrderVM>(order);
+                return View(ordersVM);
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+
         [HttpGet]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> AcceptedOrders()
+        public async Task<IActionResult> AcceptedOrder()
         {
-            var orders = await Uow.OrderRepo.GetWaiting();
+            var DelivererId = await GetCurrentUserId();
+            var orders = await Uow.OrderRepo.GetAccepted(DelivererId);
             var ordersVM = Mapper.Map<List<OrderVM>>(orders);
             return View(ordersVM);
         }
@@ -40,8 +60,65 @@ namespace ECommerce.Controllers
         [Authorize(Roles = "Deliverer")]
         public async Task<IActionResult> Accept(int orderId)
         {
-            return Json(await Uow.OrderRepo.GetWaiting());
+            Order order = Uow.OrderRepo.Get(orderId);
+            if (order.DelivererId == null)
+            {
+                order.DelivererId = await GetCurrentUserId();
+                order.OrderStatus.Add(new OrderStatus()
+                {
+                    State = "On Thw Way",
+                    Note = "The order has been accepted by a deliverer"
+                });
+                Uow.OrderRepo.Update(order);
+                Uow.SaveChanges();
+                ViewData["Message"] = "The order is your responsibility now";
+            }
+            else
+            {
+                ViewData["Message"] = "The order is not available";
+            }
+            return RedirectToAction("Waiting");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Deliverer")]
+        public async Task<IActionResult> Delivered(int orderId)
+        {
+            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            var DelivererId = await GetCurrentUserId();
+            if (order.DelivererId != DelivererId)
+                return Unauthorized();
+            order.OrderStatus.Add(new OrderStatus()
+            {
+                State = "Delivered",
+                Note = "The request has been delivered"
+            });
+            Uow.OrderRepo.Update(order);
+            Uow.SaveChanges();
+            return RedirectToAction("Details", orderId);
+
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Deliverer")]
+        public async Task<IActionResult> AddStatusNote(int orderId, string note)
+        {
+            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            var DelivererId = await GetCurrentUserId();
+            if (order.DelivererId != DelivererId)
+                return Unauthorized();
+
+            order.OrderStatus.Add(new OrderStatus()
+            {
+                State = "On The Way",
+                Note = note
+            });
+            Uow.OrderRepo.Update(order);
+            Uow.SaveChanges();
+            return RedirectToAction("Details", orderId);
+        }
+
 
         [HttpGet]
         [Authorize(Roles = "Customer")]

@@ -149,6 +149,11 @@ namespace ECommerce.Controllers
             order.CustomerId = await GetCurrentUserId();
             order.TotalPrice = 0m;
             order.CreatedAt = DateTime.Now;
+            order.OrderStatus.Add(new OrderStatus()
+            {
+                State = "Waiting",
+                Note = "The order has been submitted"
+            });
 
             bool checkQuantity = true;
             foreach (var orderProduct in order.OrderProduct)

@@ -29,7 +29,7 @@ namespace ECommerce.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Accepted()
+        public async Task<IActionResult> AcceptedOrders()
         {
             return Json(await Uow.OrderRepo.GetWaiting());
         }

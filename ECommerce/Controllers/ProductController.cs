@@ -41,9 +41,13 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductVM product, IFormFile uploadFile)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Create");
+            }
             var prod = Mapper.Map<Product>(product);
             prod.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
+            
             Uow.ProductRepo.Add(prod);
             Uow.SaveChanges();
             return RedirectToAction("Index");
@@ -63,6 +67,10 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductVM product, IFormFile uploadFile)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Edit");
+            }
             var prod = Mapper.Map<Product>(product);
             if (uploadFile != null)
                 prod.ImageUrl = await Utilities.SaveFileAsync(uploadFile);

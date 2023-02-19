@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -17,6 +18,7 @@ namespace ECommerce.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
+        [StringLength(10,ErrorMessage = "Name length can't be more than 8.")]
         public string Description { get; set; }
         public double Price { get; set; }
         public bool PriceIsInteger { get; set; }

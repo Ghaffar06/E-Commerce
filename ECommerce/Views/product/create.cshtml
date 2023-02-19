@@ -36,9 +36,13 @@
                                 <input asp-for="Name" type="text" class="form-control" placeholder="Type something" id="Name">
                             </div>
 
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                
                             <div class="form-group">
                               <label for="Description" class="form-label mt-4">Product Description:</label>
                               <textarea asp-for="Description" class="form-control" id="Description" rows="4" placeholder="Type about the product"></textarea>
+                              <span asp-validation-for="Description" class="text-danger"></span>
+                              
                             </div>
 
                             <div class="form-group">

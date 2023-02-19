@@ -122,8 +122,8 @@
 											var form = $('#form-'+ id);
 											var obj = form.serializeArray()
 											console.log(obj)
-											e.preventDefault(); 
-											var actionUrl = "Cart/AddToCart";
+											e.preventDefault();
+											var actionUrl = "Cart/ChangeQuantityCart";
 											var delay = $('#totalAmount-' + id).data('delay')
 											if(delay != undefined){
 												clearTimeout(delay);

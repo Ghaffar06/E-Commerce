@@ -1,6 +1,7 @@
 ﻿using AppDbContext.IRepos;
 using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,19 @@ namespace AppDbContext.Repos
             return query.ToList();
         }
 
-        public Task<Product> GetAsync(int id)
+		public List<Product> GetAllByCategory(int categoryId)
+		{
+            return Products
+                .Include(c => c.CategoryProduct)
+				.ThenInclude(c => c.Category)
+				.Where(c => c.CategoryProduct.Any(c => c.CategoryId == categoryId))
+				.Include(c => c.AttributeProductValue)
+				.ThenInclude(c => c.Attribute)
+				.ThenInclude(c => c.ValueType)
+                .ToList();
+		}
+
+		public Task<Product> GetAsync(int id)
         {
             return Products
                 .Where(c => c.Id == id)

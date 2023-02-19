@@ -10,6 +10,7 @@ namespace AppDbContext.IRepos
     {
         public Task<Product> GetAsync(int id);
         public List<Product> GetAllAsync(Expression<Func<Product, bool>> filter = null);
-    }
+		public List<Product> GetAllByCategory(int categoryId);
+	}
 
 }

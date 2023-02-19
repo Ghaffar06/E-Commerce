@@ -3,6 +3,7 @@ using AppDbContext.UOW;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
 {
@@ -18,6 +19,10 @@ namespace ECommerce.Controllers
             this.Mapper = mapper;
             this.UserManager = userManager;
         }
+
+        protected async Task<string> GetCurrentUserId()
+            => (await UserManager.GetUserAsync(HttpContext.User)).Id;
+
 
     }
 }

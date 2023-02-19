@@ -26,7 +26,7 @@ namespace AppDbContext.Models
         public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderProduct> OrderProduct { get; set; }
-        public virtual DbSet<OrderState> OrderState { get; set; }
+        public virtual DbSet<OrderStatus> OrderState { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Rate> Rate { get; set; }
         public virtual DbSet<ValueType> ValueType { get; set; }
@@ -254,7 +254,7 @@ namespace AppDbContext.Models
                     .HasConstraintName("FK_order_product_product");
             });
 
-            modelBuilder.Entity<OrderState>(entity =>
+            modelBuilder.Entity<OrderStatus>(entity =>
             {
                 entity.ToTable("order_state");
 
@@ -276,7 +276,7 @@ namespace AppDbContext.Models
                     .IsFixedLength();
 
                 entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderState)
+                    .WithMany(p => p.OrderStatus)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_state_order");

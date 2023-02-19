@@ -4,6 +4,7 @@ using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -145,15 +146,18 @@ namespace ECommerce.Controllers
         public async Task<IActionResult> CheckOut(OrderVM orderVM)
         {
             Order order = Mapper.Map<Order>(orderVM);
-            order.CustomerId = (await UserManager.GetUserAsync(HttpContext.User)).Id;
+            order.CustomerId = await GetCurrentUserId();
             order.TotalPrice = 0m;
+            order.CreatedAt = DateTime.Now;
 
             bool checkQuantity = true;
             foreach (var orderProduct in order.OrderProduct)
             {
-                Product product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
+                Product product = Uow.ProductRepo.Get(orderProduct.ProductId);
                 if (orderProduct.Quantity > product.Quantity)
                     checkQuantity = false;
+                product.Quantity -= orderProduct.Quantity;
+                Uow.ProductRepo.Update(product);
                 order.TotalPrice += orderProduct.Quantity * (decimal)product.Price;
             }
 
@@ -161,11 +165,14 @@ namespace ECommerce.Controllers
             {
                 Uow.OrderRepo.Add(order);
                 Uow.SaveChanges();
+                HttpContext.Session.Remove(SessionKeyProducts);
                 return Json("On the way");
             }
             else
                 return Json("No enouph quantity!!");
         }
+
+
 
 
         /*[HttpPost]

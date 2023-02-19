@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -11,7 +12,7 @@ namespace AppDbContext.Models
         public Order()
         {
             OrderProduct = new HashSet<OrderProduct>();
-            OrderState = new HashSet<OrderState>();
+            OrderStatus = new HashSet<OrderStatus>();
         }
 
         public int Id { get; set; }
@@ -20,11 +21,13 @@ namespace AppDbContext.Models
         public decimal TotalPrice { get; set; }
         public string Address { get; set; }
         public decimal? Rate { get; set; }
+        public DateTime CreatedAt { get; set; }
+
 
 
 		public virtual User Customer { get; set; }
         public virtual User Deliverer { get; set; }
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
-        public virtual ICollection<OrderState> OrderState { get; set; }
+        public virtual ICollection<OrderStatus> OrderStatus { get; set; }
     }
 }

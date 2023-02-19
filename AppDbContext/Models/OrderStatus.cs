@@ -4,7 +4,7 @@
 
 namespace AppDbContext.Models
 {
-    public partial class OrderState
+    public partial class OrderStatus
     {
         public int Id { get; set; }
         public int OrderId { get; set; }

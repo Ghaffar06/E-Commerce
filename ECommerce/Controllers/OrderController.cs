@@ -34,7 +34,10 @@ namespace ECommerce.Controllers
         {
             var order = await Uow.OrderRepo.GetAsync(orderId);
             var userId = await GetCurrentUserId();
-            if (User.IsInRole("Admin") || order.CustomerId == userId || order.DelivererId == userId)
+            if (User.IsInRole("Admin") ||
+                order.CustomerId == userId ||
+                order.DelivererId == userId ||
+                (order.DelivererId == null && User.IsInRole("Deliverer")))
             {
                 var ordersVM = Mapper.Map<OrderVM>(order);
                 return View(ordersVM);

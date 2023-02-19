@@ -23,10 +23,8 @@ namespace ECommerce.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+            List<OrderProductVM> orderProducts = OrderProductSession();
 
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             ViewData["OrderProductVM"] = orderProducts;
 
             List<ProductVM> productsVM = new List<ProductVM>();
@@ -41,12 +39,10 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int prod_id, double quantity)
+        public IActionResult ChangeQuantityCart(int prod_id, double quantity)
         {
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+            List<OrderProductVM> orderProducts = OrderProductSession();
 
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             int Idx = orderProducts.FindIndex(q => q.ProductId == prod_id);
             if (Idx == -1)
             {
@@ -59,6 +55,32 @@ namespace ECommerce.Controllers
             }
             else
                 orderProducts[Idx].Quantity = quantity;
+
+            if (orderProducts[Idx].Quantity <= 0)
+                orderProducts.RemoveAt(Idx);
+
+            HttpContext.Session.Set(SessionKeyProducts, orderProducts);
+
+            return Json("Success!!");
+        }
+
+        [HttpPost]
+        public IActionResult AddToCart(int prod_id, double quantity)
+        {
+            List<OrderProductVM> orderProducts = OrderProductSession();
+
+            int Idx = orderProducts.FindIndex(q => q.ProductId == prod_id);
+            if (Idx == -1)
+            {
+                orderProducts.Add(new OrderProductVM
+                {
+                    ProductId = prod_id,
+                    Quantity = 0
+                });
+                Idx = orderProducts.Count - 1;
+            }
+
+            orderProducts[Idx].Quantity += quantity;
 
             if (orderProducts[Idx].Quantity <= 0)
                 orderProducts.RemoveAt(Idx);
@@ -99,10 +121,8 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult DeleteFromCart(int prod_id)
         {
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+            List<OrderProductVM> orderProducts = OrderProductSession();
 
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             int Idx = orderProducts.FindIndex(q => q.ProductId == prod_id);
             if (Idx == -1)
             {
@@ -119,10 +139,7 @@ namespace ECommerce.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckOut()
         {
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
-
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+            List<OrderProductVM> orderProducts = OrderProductSession();
 
 
             double totalPrice = 0;
@@ -218,5 +235,16 @@ namespace ECommerce.Controllers
 			 return View(ProductsVM);
 
 		 }*/
+
+
+        private List<OrderProductVM> OrderProductSession()
+        {
+            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
+                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+
+            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+
+            return orderProducts;
+        }
     }
 }

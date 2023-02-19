@@ -1,0 +1,145 @@
+﻿@model IEnumerable<ECommerce.Models.ProductVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    td{
+         max-width: 100px;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         white-space: nowrap;
+    }
+    .actions {
+         max-width: 300px;
+         overflow: initial;
+         text-overflow: initial;
+         white-space: initial;
+    }
+    #home_bread:after {
+		left:50px!important;
+	}
+</style>
+
+<section>
+	<div class="container">
+		<div class="row">
+            <div class="breadcrumbs" style="margin-bottom: -50px">
+		        <ol class="breadcrumb">
+			        <li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
+			        <li class="active">All Products</li>
+		        </ol>
+	        </div>
+			<div class="hide_small">
+				<partial name="_SideBarPartial" />
+			</div>
+            <div class="col-lg-9 col-md-9 col-sm-12">
+                <h1>Products</h1>
+                @if(User.IsInRole("Admin")){
+                    <p>
+                        <a asp-action="Create" class="btn btn-primary">Create New</a>
+                    </p>
+                }
+				<div class="col-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+						<h2 class="title text-center">Features Items</h2>
+						@foreach (var item  in Model)
+						{
+						<div class="col-sm-6 col-md-4 col-lg-3">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="~/@item.ImageUrl" alt="" height="200px"  width="100px"/>
+										<h2>$@item.Price</h2>
+										<p>@item.Name</p>
+									</div>
+									<div class="product-overlay">
+                                        <div class="overlay-content">
+											<h2>$@item.Price</h2>
+											<p>@item.Name</p>
+
+											<a id="add-@item.Id" class="btn btn-default add-to-cart">
+                                                <i class="fa fa-shopping-cart"></i>Add to cart
+                                            </a>
+											
+											@Html.ActionLink("Details","details","product",new {  id=item.Id },
+												new {id="details-"+item.Id, @class= "btn btn-default add-to-cart"})
+                                            
+											<form id="form-@item.Id" method="post" style="display:none" hidden>
+                                                <input name="quantity" type="number" value="1">
+									            <input name="prod_id" type="number" value="@item.Id">
+                                            </form>
+											  
+									    </div>
+									</div>
+								</div>
+								<div class="choose">
+									<ul class="nav nav-pills nav-justified">
+										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+                        <button style="display:none" type="button" class="btn btn-primary" id="toggle-@item.Id"
+                            data-toggle="modal" data-target="#info-@item.Id">Small modal</button>
+
+                        <div class="modal fade bd-example-modal-sm" id="info-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel">Information Message</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <div aria-hidden="true" style="margin-top:-20px">&times;</div>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Item @item.Name Added to your cart
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" style="margin-top:16px" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="checkCart-@item.Id">Check your Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $('#checkCart-@item.Id').on('click',function(e){
+                                window.location.href = '/cart/index';
+                            });
+                            $('#add-@item.Id').on('click', function(e) {
+                                let id = $(this).attr('id').substr(4)
+                                console.log(id)
+                                var form = $('#form-' + id);
+                                var obj = form.serializeArray()
+                                console.log(obj)
+                                e.preventDefault();
+                                var actionUrl = "Cart/AddToCart";
+                                $.ajax({
+                                    url: actionUrl,
+                                    type: "POST",
+                                    data: {
+                                        'prod_id': obj[1]['value'],
+                                        'quantity': obj[0]['value'],
+                                    },
+                                    success: function(result) {
+                                        console.log("first call:" + result);
+                                        $('#toggle-@item.Id').click();
+                                    },
+                                    error: function(xhr, textStatus, error) {
+                                        console.log(xhr.statusText);
+                                        console.log(textStatus);
+                                        console.log(error);
+                                    }
+                                });
+                            })
+                        </script>
+						}
+					</div><!--features_items-->
+				</div>
+            </div>
+		</div>
+	</div>
+</section>

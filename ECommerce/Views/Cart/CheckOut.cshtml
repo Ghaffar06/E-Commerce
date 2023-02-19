@@ -59,11 +59,17 @@
 							@foreach (var item in Model.OrderProduct) {
 								<tr>
 									<td class="cart_product">
-										<a href=""><img src="~/@item.Product.ImageUrl" height="150" width="150" alt=""></a>
+										<a asp-controller="product" asp-action="details" asp-route-id="@item.Id">
+											<img src="~/@item.Product.ImageUrl" height="150" width="150" alt="">
+										</a>
 									</td>
 
 									<td class="cart_description">
-										<h4><a href="">@item.Product.Name</a></h4>
+										<h4>
+											<a asp-controller="product" asp-action="details" asp-route-id="@item.Id">
+												@item.Product.Name
+											</a>
+										</h4>
 										<p>@item.Product.Description</p>
 									</td>
 									<td class="cart_price">

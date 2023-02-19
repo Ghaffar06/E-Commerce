@@ -141,7 +141,9 @@
 								}
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li>@Html.ActionLink("Categories","index","category",null)</li>
+                                        @if(User.IsInRole("Admin")){
+											<li>@Html.ActionLink("Categories","index","category",null)</li>
+										}
 										<li>@Html.ActionLink("Products","index","product",null)</li>
 										<li>@Html.ActionLink("Checkout","CheckOut","cart",null)</li>
 										<li>@Html.ActionLink("Cart","index","cart",null)</li>
@@ -201,7 +203,7 @@
 					<div class="col-sm-2">
 						<div class="companyinfo">
 							<h2><span>e</span>-shopper</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,sed do eiusmod tempor</p>
+							<p>A great Ecommerce Web Store that have all that you need in on store</p>
 						</div>
 					</div>
 					<div class="col-sm-7">
@@ -290,18 +292,7 @@
 							</ul>
 						</div>
 					</div>
-					<div class="col-sm-2">
-						<div class="single-widget">
-							<h2>Quock Shop</h2>
-							<ul class="nav nav-pills nav-stacked">
-								<li><a href="#">T-Shirt</a></li>
-								<li><a href="#">Mens</a></li>
-								<li><a href="#">Womens</a></li>
-								<li><a href="#">Gift Cards</a></li>
-								<li><a href="#">Shoes</a></li>
-							</ul>
-						</div>
-					</div>
+					
 					<div class="col-sm-2">
 						<div class="single-widget">
 							<h2>Policies</h2>

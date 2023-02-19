@@ -125,7 +125,15 @@ $('#addToCart').on('click', function(e) {
 </script>
 
 <div>
-    @Html.ActionLink("Edit Category", "Edit", new {  id = Model.Id  }) |
-    @Html.ActionLink("Edit Attibute", "EditAttribute", new {  id = Model.Id  }) |
-    <a asp-action="Index">Back to List</a>
+	<button class="btn btn-primary rounded" style="color:white!important">
+		@Html.ActionLink("Edit Category", "Edit", new {  id = Model.Id  },
+			new{style="color:white!important"})
+    </button>
+    <button class="btn btn-primary rounded" >
+		@Html.ActionLink("Edit Attibute", "EditAttribute", new {  id = Model.Id  },
+			new{style="color:white!important"}) 
+    </button>
+    <button class="btn btn-primary rounded" >
+		<a asp-action="Index" style="color:white!important">Back to List</a>
+    </button>
 </div>

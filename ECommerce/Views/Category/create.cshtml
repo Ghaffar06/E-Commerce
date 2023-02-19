@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="~/css/atter.css" />
+<link rel="stylesheet" href="~/css/add-product.css" />
+
 <style>
     * {
         border-radius: 0 !important;
@@ -61,14 +64,13 @@
                         <div class="form-group" id="image_input">
                             @Html.Label("ImageUrl","Category Image:", new { @class = "col-form-label mt-4"})  
                             <input name="uploadFile" type="file" id="Image_url"
-                                   class="form-control add_file_btn" hidden>
+                                    class="form-control add_file_btn" style="display:none">
                             <div class="d-flex align-items-center">
-                                <div id='image' class="btn btn-outline-primary rounded">Select File</div>
+                                <div id='image' class="btn btn-outline-primary mt-2">Select File</div>
                                 <div id='val' class="ml-4"></div>
                             </div>
                             <span asp-validation-for="ImageUrl" class="text-danger"></span>
                         </div>
-                        
                         <div class="d-flex justify-content-center">
                             <input type="submit" value="Create" class="btn btn-primary rounded submit_btn mt-3"/>
                         </div>

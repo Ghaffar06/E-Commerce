@@ -25,12 +25,14 @@ namespace ECommerce.Controllers
         {
             return View(Mapper.Map<List<ProductVM>>(Uow.ProductRepo.GetAll()));
         }
-        [HttpGet]
-        public IActionResult Categoty(int categoryId)
-        {
-            List<Product> products = Uow.ProductRepo.GetAllByCategory(categoryId);
-            List<ProductVM> productsVM = Mapper.Map<List<ProductVM>>(products);
 
+        [HttpGet]
+        public IActionResult Category(int Id)
+        {
+            List<Product> products = Uow.ProductRepo.GetAllByCategory(Id);
+            List<ProductVM> productsVM = Mapper.Map<List<ProductVM>>(products);
+            ViewData["categoryId"] = Id;
+            ViewData["categoryName"] = Uow.CategoryRepo.Get(Id).Name;
             return View(productsVM);
         }
 

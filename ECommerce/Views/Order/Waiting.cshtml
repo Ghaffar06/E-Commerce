@@ -1,0 +1,183 @@
+﻿@model IEnumerable<ECommerce.Models.OrderVM>
+
+@{
+    ViewData["Title"] = "Waiting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+	.order_ad{
+		width:200px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
+	}
+</style>
+
+<div class="container">
+	<div class="row">
+		<section id="cart_items">
+			<div class="container">
+
+				<div class="table-responsive cart_info">
+					<table class="table table-condensed">
+						<thead>
+							<tr class="cart_menu">
+								<td class="id image">Order ID</td>
+								<td class="date">Date</td>
+								<td class="price">Total Price</td>
+								<td class="state">State</td>
+								<td class="address total">Address</td>
+								<td class="register"></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="order_id cart_product">
+									<h4><a href="">1799472</a></h4>
+								</td>
+								<td class="order_date">
+									<p>12/6/2022</p>
+								</td>
+								<td class="order_total">
+									<p class="order_total_price">$59</p>
+								</td>
+								<td class="order_state">
+									<p class="order_st">Delivered</p>
+								</td>
+								<td class="order_address">
+									<p class="order_ad">fkoasf/fasfas/152</p>
+								</td>
+								<td class="order_register cart_delete">
+									<button disabled class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Taken</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="order_id cart_product">
+									<h4><a href="">1089772</a></h4>
+								</td>
+								<td class="order_date">
+									<p>2/5/2021</p>
+								</td>
+								<td class="order_total">
+									<p class="order_total_price">$9516</p>
+								</td>
+								<td class="order_state">
+									<p class="order_st">On Stock</p>
+								</td>
+								<td class="order_address">
+									<p class="order_ad">r21f2/2ff2fs/sgasdb/2</p>
+								</td>
+								<td class="order_register cart_delete">
+									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="order_id cart_product">
+									<h4><a href="">6236272</a></h4>
+								</td>
+								<td class="order_date">
+									<p>4/8/2022</p>
+								</td>
+								<td class="order_total">
+									<p class="order_total_price">$659</p>
+								</td>
+								<td class="order_state">
+									<p class="order_st">Delivered</p>
+								</td>
+								<td class="order_address">
+									<p class="order_ad">r21d/22t22/1</p>
+								</td>
+								<td class="order_register cart_delete">
+									<button disabled class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Registered</button>
+								</td>
+							</tr>
+							<tr>
+								<td class="order_id cart_product">
+									<h4><a href="">1525772</a></h4>
+								</td>
+								<td class="order_date">
+									<p>6/7/2022</p>
+								</td>
+								<td class="order_total">
+									<p class="order_total_price">$5869</p>
+								</td>
+								<td class="order_state ">
+									<p class="order_st">On Road</p>
+								</td>
+								<td class="order_address">
+									<p class="order_ad">qwd qwdasdasdssddsd  sdsdsdsdas  sd sdsdasd asdasdsd78wdwasd asd asds/wqdqwasdasdasd asd asdasddqw/242</p>
+								</td>
+								<td class="order_register cart_delete">
+									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+
+
+<h1>Waiting</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

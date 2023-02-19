@@ -29,7 +29,7 @@ namespace ECommerce.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> AcceptedOrders()
+        public async Task<IActionResult> AcceptedOrder()
         {
             var orders = await Uow.OrderRepo.GetWaiting();
             var ordersVM = Mapper.Map<List<OrderVM>>(orders);
@@ -40,7 +40,18 @@ namespace ECommerce.Controllers
         [Authorize(Roles = "Deliverer")]
         public async Task<IActionResult> Accept(int orderId)
         {
-            return Json(await Uow.OrderRepo.GetWaiting());
+            Order order = Uow.OrderRepo.Get(orderId);
+            if (order.DelivererId == null)
+            {
+                order.DelivererId = await GetCurrentUserId();
+                Uow.OrderRepo.Update(order);
+                Uow.SaveChanges();
+                ViewData["Message"] = "The order is your responsibility now";
+            } else
+            {
+                ViewData["Message"] = "The order is not available";
+            }
+            return RedirectToAction("Waiting");
         }
 
         [HttpGet]

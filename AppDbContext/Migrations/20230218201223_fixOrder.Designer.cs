@@ -4,14 +4,16 @@ using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppDbContext.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218201223_fixOrder")]
+    partial class fixOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,15 +186,15 @@ namespace AppDbContext.Migrations
                         .HasColumnName("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CustomerId")
                         .HasColumnName("customer_id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DelivererId")
                         .HasColumnName("deliverer_id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DelivererId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal?>("Rate")
@@ -205,9 +207,9 @@ namespace AppDbContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.HasIndex("DelivererId");
+
+                    b.HasIndex("DelivererId1");
 
                     b.ToTable("order");
                 });
@@ -247,7 +249,7 @@ namespace AppDbContext.Migrations
                     b.ToTable("order_product");
                 });
 
-            modelBuilder.Entity("AppDbContext.Models.OrderStatus", b =>
+            modelBuilder.Entity("AppDbContext.Models.OrderState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -647,13 +649,12 @@ namespace AppDbContext.Migrations
                 {
                     b.HasOne("AppDbContext.Models.User", "Customer")
                         .WithMany("RequestedOrders")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("DelivererId")
                         .HasConstraintName("FK_order_customer");
 
                     b.HasOne("AppDbContext.Models.User", "Deliverer")
                         .WithMany("DeliveredOrders")
-                        .HasForeignKey("DelivererId")
-                        .HasConstraintName("FK_order_deliverer");
+                        .HasForeignKey("DelivererId1");
                 });
 
             modelBuilder.Entity("AppDbContext.Models.OrderProduct", b =>
@@ -671,10 +672,10 @@ namespace AppDbContext.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AppDbContext.Models.OrderStatus", b =>
+            modelBuilder.Entity("AppDbContext.Models.OrderState", b =>
                 {
                     b.HasOne("AppDbContext.Models.Order", "Order")
-                        .WithMany("OrderStatus")
+                        .WithMany("OrderState")
                         .HasForeignKey("OrderId")
                         .HasConstraintName("FK_order_state_order")
                         .IsRequired();

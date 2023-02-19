@@ -24,10 +24,9 @@ namespace AppDbContext.Models
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<CategoryAttribute> CategoryAttribute { get; set; }
         public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
-        public virtual DbSet<Delivery> Delivery { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderProduct> OrderProduct { get; set; }
-        public virtual DbSet<OrderState> OrderState { get; set; }
+        public virtual DbSet<OrderStatus> OrderState { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Rate> Rate { get; set; }
         public virtual DbSet<ValueType> ValueType { get; set; }
@@ -43,7 +42,7 @@ namespace AppDbContext.Models
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<Attribute>(entity =>
             {
                 entity.ToTable("attribute");
@@ -183,30 +182,6 @@ namespace AppDbContext.Models
                     .HasConstraintName("FK_category_product_product");
             });
 
-            modelBuilder.Entity<Delivery>(entity =>
-            {
-                entity.ToTable("delivery");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    ;
-
-                entity.Property(e => e.DeliveryPrice)
-                    .IsRequired()
-                    .HasColumnName("delivery_price")
-                    .HasMaxLength(10)
-                    .IsFixedLength();
-
-                entity.Property(e => e.ExpectedTime).HasColumnName("expected_time");
-
-                entity.Property(e => e.SellerAssistantId).HasColumnName("seller_assistant_id");
-
-                entity.Property(e => e.Vehicle)
-                    .IsRequired()
-                    .HasColumnName("vehicle")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
 
             modelBuilder.Entity<Order>(entity =>
             {
@@ -218,7 +193,9 @@ namespace AppDbContext.Models
 
                 entity.Property(e => e.Address).HasColumnName("address");
 
-                entity.Property(e => e.DeliveryId).HasColumnName("delivery_id");
+                entity.Property(e => e.DelivererId)
+                    .HasColumnName("deliverer_id")
+                    ;
 
                 entity.Property(e => e.Rate)
                     .HasColumnName("rate")
@@ -228,13 +205,19 @@ namespace AppDbContext.Models
                     .HasColumnName("total_price")
                     .HasColumnType("numeric(8, 2)");
 
-                entity.Property(e => e.UserId).HasColumnName("user_id");
+                entity.Property(e => e.CustomerId).HasColumnName("customer_id");
 
-                entity.HasOne(d => d.Delivery)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.DeliveryId)
+                entity.HasOne(d => d.Deliverer)
+                    .WithMany(p => p.DeliveredOrders)
+                    .HasForeignKey(d => d.DelivererId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_order_delivery");
+                    .HasConstraintName("FK_order_deliverer");
+                
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.RequestedOrders)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_order_customer");
             });
 
             modelBuilder.Entity<OrderProduct>(entity =>
@@ -271,7 +254,7 @@ namespace AppDbContext.Models
                     .HasConstraintName("FK_order_product_product");
             });
 
-            modelBuilder.Entity<OrderState>(entity =>
+            modelBuilder.Entity<OrderStatus>(entity =>
             {
                 entity.ToTable("order_state");
 
@@ -293,7 +276,7 @@ namespace AppDbContext.Models
                     .IsFixedLength();
 
                 entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderState)
+                    .WithMany(p => p.OrderStatus)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_state_order");
@@ -384,7 +367,7 @@ namespace AppDbContext.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
-            
+            base.OnModelCreating(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

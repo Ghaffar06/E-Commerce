@@ -78,12 +78,12 @@ namespace ECommerce.Controllers
                 await _roleManager.CreateAsync(role);
             }
 
-            // creating Creating DeliveryEmployee role     
-            x = await _roleManager.RoleExistsAsync("DeliveryEmployee");
+			// creating Creating Deliverer role     
+			x = await _roleManager.RoleExistsAsync("Deliverer");
             if (!x)
             {
                 var role = new IdentityRole();
-                role.Name = "DeliveryEmployee";
+                role.Name = "Deliverer";
                 await _roleManager.CreateAsync(role);
             }
         }

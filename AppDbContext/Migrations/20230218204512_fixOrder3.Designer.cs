@@ -4,14 +4,16 @@ using AppDbContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppDbContext.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218204512_fixOrder3")]
+    partial class fixOrder3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,9 +186,6 @@ namespace AppDbContext.Migrations
                         .HasColumnName("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CustomerId")
                         .HasColumnName("customer_id")
                         .HasColumnType("nvarchar(450)");
@@ -247,7 +246,7 @@ namespace AppDbContext.Migrations
                     b.ToTable("order_product");
                 });
 
-            modelBuilder.Entity("AppDbContext.Models.OrderStatus", b =>
+            modelBuilder.Entity("AppDbContext.Models.OrderState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -671,10 +670,10 @@ namespace AppDbContext.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AppDbContext.Models.OrderStatus", b =>
+            modelBuilder.Entity("AppDbContext.Models.OrderState", b =>
                 {
                     b.HasOne("AppDbContext.Models.Order", "Order")
-                        .WithMany("OrderStatus")
+                        .WithMany("OrderState")
                         .HasForeignKey("OrderId")
                         .HasConstraintName("FK_order_state_order")
                         .IsRequired();

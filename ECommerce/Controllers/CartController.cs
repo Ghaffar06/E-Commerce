@@ -4,6 +4,7 @@ using AutoMapper;
 using ECommerce.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,12 +14,11 @@ namespace ECommerce.Controllers
     {
 
         const string SessionKeyProducts = "_Products";
-        //private readonly UserManager<Appl> _userManager;
 
-        public CartController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
+        public CartController(IUnitOfWork uow, IMapper mapper, UserManager<User> userManager)
+            : base(uow, mapper, userManager)
         {
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -29,7 +29,7 @@ namespace ECommerce.Controllers
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
             ViewData["OrderProductVM"] = orderProducts;
 
-            List < ProductVM > productsVM = new List < ProductVM >(); 
+            List<ProductVM> productsVM = new List<ProductVM>();
 
             foreach (var orderProduct in orderProducts)
             {
@@ -108,7 +108,7 @@ namespace ECommerce.Controllers
             {
                 return Json("No Such Product!!");
             }
-     
+
             orderProducts.RemoveAt(Idx);
 
             HttpContext.Session.Set(SessionKeyProducts, orderProducts);
@@ -117,14 +117,14 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyCart()
+        public async Task<IActionResult> CheckOut()
         {
             if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
                 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
             List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
-            
-            
+
+
             double totalPrice = 0;
             foreach (var orderProduct in orderProducts)
             {
@@ -140,6 +140,40 @@ namespace ECommerce.Controllers
             };
             return View(orderVM);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CheckOut(OrderVM orderVM)
+        {
+            Order order = Mapper.Map<Order>(orderVM);
+            order.CustomerId = await GetCurrentUserId();
+            order.TotalPrice = 0m;
+            order.CreatedAt = DateTime.Now;
+
+            bool checkQuantity = true;
+            foreach (var orderProduct in order.OrderProduct)
+            {
+                Product product = Uow.ProductRepo.Get(orderProduct.ProductId);
+                if (orderProduct.Quantity > product.Quantity)
+                    checkQuantity = false;
+                product.Quantity -= orderProduct.Quantity;
+                Uow.ProductRepo.Update(product);
+                order.TotalPrice += orderProduct.Quantity * (decimal)product.Price;
+            }
+
+            if (checkQuantity)
+            {
+                Uow.OrderRepo.Add(order);
+                Uow.SaveChanges();
+                HttpContext.Session.Remove(SessionKeyProducts);
+                return Json("On the way");
+            }
+            else
+                return Json("No enouph quantity!!");
+        }
+
+
+
 
         /*[HttpPost]
         public async Task<IActionResult> MyCartAsync(OrderVM orderVM)
@@ -165,19 +199,19 @@ namespace ECommerce.Controllers
         }*/
 
 
-       /* [HttpGet]
-        public IActionResult ViewMyOrders()
-        {
-            var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
-            //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
-            var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
-            if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-                HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
+        /* [HttpGet]
+		 public IActionResult ViewMyOrders()
+		 {
+			 var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
+			 //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
+			 var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
+			 if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
+				 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
 
-            List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
-            ViewData["OrderProductVM"] = orderProducts;
-            return View(ProductsVM);
+			 List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
+			 ViewData["OrderProductVM"] = orderProducts;
+			 return View(ProductsVM);
 
-        }*/
+		 }*/
     }
 }

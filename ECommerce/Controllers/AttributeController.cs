@@ -2,6 +2,7 @@
 using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ namespace ECommerce.Controllers
 {
     public class AttributeController : BaseController
     {
-        public AttributeController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper)
+        public AttributeController(IUnitOfWork uow, IMapper mapper, UserManager<User> userManager)
+            : base(uow, mapper, userManager)
         {
         }
 

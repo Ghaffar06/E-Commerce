@@ -169,10 +169,10 @@ namespace ECommerce.Controllers
                 Uow.OrderRepo.Add(order);
                 Uow.SaveChanges();
                 HttpContext.Session.Remove(SessionKeyProducts);
-                return Json("On the way");
+                return RedirectToAction("Requested", "Order");
             }
             else
-                return RedirectToAction("Ca");
+                return RedirectToAction("CheckOut");
         }
 
 

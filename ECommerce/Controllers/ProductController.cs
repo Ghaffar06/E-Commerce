@@ -106,7 +106,7 @@ namespace ECommerce.Controllers
             catch (Exception e)
             {
 
-                return Json("no such attribute !");
+                return Json("no such attribute!");
 
             }
         }

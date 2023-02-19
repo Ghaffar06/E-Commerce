@@ -34,7 +34,10 @@ namespace ECommerce.Controllers
         {
             var order = await Uow.OrderRepo.GetAsync(Id);
             var userId = await GetCurrentUserId();
-            if (User.IsInRole("Admin") || order.CustomerId == userId || order.DelivererId == userId)
+            if (User.IsInRole("Admin") ||
+                order.CustomerId == userId ||
+                order.DelivererId == userId ||
+                (order.DelivererId == null && User.IsInRole("Deliverer")))
             {
                 var ordersVM = Mapper.Map<OrderVM>(order);
                 return View(ordersVM);
@@ -82,9 +85,9 @@ namespace ECommerce.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Delivered(int orderId)
+        public async Task<IActionResult> Delivered(int Id)
         {
-            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            Order order = await Uow.OrderRepo.GetAsync(Id);
             var DelivererId = await GetCurrentUserId();
             if (order.DelivererId != DelivererId)
                 return Unauthorized();
@@ -95,16 +98,16 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", orderId);
+            return RedirectToAction("Details", new { Id });
 
         }
 
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> AddStatusNote(int orderId, string note)
+        public async Task<IActionResult> AddStatusNote(int Id, string note)
         {
-            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            Order order = await Uow.OrderRepo.GetAsync(Id);
             var DelivererId = await GetCurrentUserId();
             if (order.DelivererId != DelivererId)
                 return Unauthorized();
@@ -116,7 +119,7 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", orderId);
+            return RedirectToAction("Details", new { Id });
         }
 
 

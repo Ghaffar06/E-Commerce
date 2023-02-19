@@ -13,10 +13,21 @@
 		text-overflow:ellipsis;
 		white-space: nowrap;
 	}
+    #home_bread:after{
+        left:50px!important;
+    }
 </style>
 
 <div class="container">
 	<div class="row">
+		<div class="breadcrumbs" style="margin-bottom: -50px">
+		    <ol class="breadcrumb">
+			    <li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
+			    <li class="active">Edit Attribute</li>
+		    </ol>
+	    </div>
+		<h1>Waiting</h1>
+
 		<section id="cart_items">
 			<div class="container">
 				<div class="table-responsive cart_info">
@@ -26,7 +37,6 @@
 								<td class="id image">Order ID</td>
 								<td class="date">Date</td>
 								<td class="price">Total Price</td>
-								<td class="state">State</td>
 								<td class="address total">Address</td>
 								<td class="register"></td>
 							</tr>
@@ -38,13 +48,10 @@
 									<h4><a href="">@item.Id</a></h4>
 								</td>
 								<td class="order_date">
-									<p>@item.dateTime</p>
+									<p>@item.CreatedAt</p>
 								</td>
 								<td class="order_total">
 									<p class="order_total_price">$@item.TotalPrice</p>
-								</td>
-								<td class="order_state">
-									<p class="order_st">@item.OrderStatus</p>
 								</td>
 								<td class="order_address">
 									<p class="order_ad">@item.Address</p>
@@ -61,52 +68,3 @@
 		</section>
 	</div>
 </div>
-
-
-<h1>Waiting</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

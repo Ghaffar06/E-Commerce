@@ -30,9 +30,9 @@ namespace ECommerce.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Details(int orderId)
+        public async Task<IActionResult> Details(int Id)
         {
-            var order = await Uow.OrderRepo.GetAsync(orderId);
+            var order = await Uow.OrderRepo.GetAsync(Id);
             var userId = await GetCurrentUserId();
             if (User.IsInRole("Admin") ||
                 order.CustomerId == userId ||
@@ -61,9 +61,9 @@ namespace ECommerce.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Accept(int orderId)
+        public async Task<IActionResult> Accept(int Id)
         {
-            Order order = Uow.OrderRepo.Get(orderId);
+            Order order = Uow.OrderRepo.Get(Id);
             if (order.DelivererId == null)
             {
                 order.DelivererId = await GetCurrentUserId();
@@ -85,9 +85,9 @@ namespace ECommerce.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Delivered(int orderId)
+        public async Task<IActionResult> Delivered(int Id)
         {
-            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            Order order = await Uow.OrderRepo.GetAsync(Id);
             var DelivererId = await GetCurrentUserId();
             if (order.DelivererId != DelivererId)
                 return Unauthorized();
@@ -98,16 +98,16 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", new { orderId });
+            return RedirectToAction("Details", new { Id });
 
         }
 
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> AddStatusNote(int orderId, string note)
+        public async Task<IActionResult> AddStatusNote(int Id, string note)
         {
-            Order order = await Uow.OrderRepo.GetAsync(orderId);
+            Order order = await Uow.OrderRepo.GetAsync(Id);
             var DelivererId = await GetCurrentUserId();
             if (order.DelivererId != DelivererId)
                 return Unauthorized();
@@ -119,7 +119,7 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", new { orderId });
+            return RedirectToAction("Details", new { Id });
         }
 
 

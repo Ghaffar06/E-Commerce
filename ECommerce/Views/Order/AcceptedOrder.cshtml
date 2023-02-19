@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ECommerce.Models.OrderVM>
 
 @{
-    ViewData["Title"] = "Waiting";
+    ViewData["Title"] = "Registered";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,7 +13,7 @@
 		text-overflow:ellipsis;
 		white-space: nowrap;
 	}
-    #home_bread:after{
+	#home_bread:after{
         left:50px!important;
     }
 </style>
@@ -23,10 +23,10 @@
 		<div class="breadcrumbs" style="margin-bottom: -50px">
 		    <ol class="breadcrumb">
 			    <li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
-			    <li class="active">on Waiting Order List</li>
+			    <li class="active">Registered List</li>
 		    </ol>
 	    </div>
-		<h1>Waiting Orders</h1>
+		<h1>Registered Orders</h1>
 
 		<section id="cart_items">
 			<div class="container">
@@ -37,8 +37,8 @@
 								<td class="id image">Order ID</td>
 								<td class="date">Date</td>
 								<td class="price">Total Price</td>
+								<td class="state">State</td>
 								<td class="address total">Address</td>
-								<td class="register"></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -53,11 +53,11 @@
 								<td class="order_total">
 									<p class="order_total_price">$@item.TotalPrice</p>
 								</td>
+								<td class="order_state">
+									<p class="order_st">@item.OrderStatus.Last().State</p>
+								</td>
 								<td class="order_address">
 									<p class="order_ad">@item.Address</p>
-								</td>
-								<td class="order_register cart_delete">
-									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
 								</td>
 							</tr>
                             }
@@ -68,3 +68,4 @@
 		</section>
 	</div>
 </div>
+

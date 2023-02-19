@@ -25,6 +25,15 @@ namespace ECommerce.Controllers
         {
             return View(Mapper.Map<List<ProductVM>>(Uow.ProductRepo.GetAll()));
         }
+        [HttpGet]
+        public IActionResult Categoty(int categoryId)
+        {
+            List<Product> products = Uow.ProductRepo.GetAllByCategory(categoryId);
+            List<ProductVM> productsVM = Mapper.Map<List<ProductVM>>(products);
+
+            return View(productsVM);
+        }
+
 
         [HttpGet]
         public IActionResult Index2()

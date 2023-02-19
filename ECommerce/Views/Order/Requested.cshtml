@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ECommerce.Models.OrderVM>
+
+@{
+    ViewData["Title"] = "Requested";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+	.order_ad{
+		width:150px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;
+	}
+    #home_bread:after{
+        left:50px!important;
+    }
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="breadcrumbs" style="margin-bottom: -50px">
+		    <ol class="breadcrumb">
+			    <li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
+			    <li class="active">Requested Order List</li>
+		    </ol>
+	    </div>
+		<h1>All Requested Orders</h1>
+
+		<section id="cart_items">
+			<div class="container">
+				<div class="table-responsive cart_info">
+					<table class="table table-condensed">
+						<thead>
+							<tr class="cart_menu">
+								<td class="id image">Order ID</td>
+								<td class="date">Date</td>
+								<td class="price">Total Price</td>
+								<td class="state">Status</td>
+								<td class="address total">Address</td>
+							</tr>
+						</thead>
+						<tbody>
+                            @foreach (var item in Model) {
+							<tr>
+								<td class="order_id cart_product">
+									<h4><a asp-controller="order" asp-action="Details" asp-route-id="@item.Id">@item.Id</a></h4>
+								</td>
+								<td class="order_date">
+									<p>@item.CreatedAt</p>
+								</td>
+								<td class="order_total">
+									<p class="order_total_price">$@item.TotalPrice</p>
+								</td>
+								<td class="order_state">
+									<p class="order_st">@item.OrderStatus.Last().State</p>
+								</td>
+								<td class="order_address">
+									<p class="order_ad">@item.Address</p>
+								</td>
+							</tr>
+                            }
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>

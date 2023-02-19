@@ -28,6 +28,9 @@ namespace AppDbContext.Repos
         {
             return Orders
                 .Where(c => c.Id == id)
+                .Include(c => c.OrderStatus)
+                .Include(c => c.OrderProduct)
+                .ThenInclude(c => c.Product)
                 .FirstOrDefaultAsync();
         }
 

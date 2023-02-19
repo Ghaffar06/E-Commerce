@@ -53,7 +53,7 @@
 							<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
 
 								<td class="cart_product">
-									<a href=""><img src="@item.ImageUrl" height="200" width="200" alt=""></a>
+									<a href=""><img src="~/@item.ImageUrl" height="200" width="200" alt=""></a>
 								</td>
 
 								<td class="cart_description">
@@ -122,8 +122,8 @@
 											var form = $('#form-'+ id);
 											var obj = form.serializeArray()
 											console.log(obj)
-											e.preventDefault(); 
-											var actionUrl = "Cart/AddToCart";
+											e.preventDefault();
+											var actionUrl = "Cart/ChangeQuantityCart";
 											var delay = $('#totalAmount-' + id).data('delay')
 											if(delay != undefined){
 												clearTimeout(delay);

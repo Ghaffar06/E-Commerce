@@ -2,6 +2,7 @@
 using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,15 @@ namespace ECommerce.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View(Mapper.Map<List<AttributeVM>>(Uow.AttributeRepo.GetAll(predicate: query => query.Include(p => p.ValueType))));
         }
 
         [HttpPost]
+        
         public IActionResult FindOrCreate(AttributeVM attribute)
         {
             var attr = Mapper.Map<Attribute>(attribute);

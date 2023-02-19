@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
@@ -18,12 +19,22 @@ namespace ECommerce.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        [StringLength(10,ErrorMessage = "Name length can't be more than 8.")]
+
+        [StringLength(500,ErrorMessage = "Name length can't be more than 8.")]
         public string Description { get; set; }
+
+        [Range(0.01, 10000.00,
+            ErrorMessage = "Price must be between 0.01 and 10000.00")]
         public double Price { get; set; }
+        [DisplayName("Price is integer")]
         public bool PriceIsInteger { get; set; }
+        [Range(0.01, 100.00,
+            ErrorMessage = "Quantity must be between 0.01 and 100.00")]
         public decimal Quantity { get; set; }
+
+        [DisplayName("Album Art URL")]
         public string ImageUrl { get; set; }
+        [StringLength(30)]
         public string Unit { get; set; }
         //public double Rating { get; set; }
 

@@ -186,14 +186,17 @@
             <div class="controls" id="profs">
                 
                 <div class="row d-flex align-items-baseline">
-                
                     <form asp-action="Edit" method="post" class="input-append col-lg-6 col-sm-12 d-flex" 
                         style="flex-direction:column" id="basic-form" enctype="multipart/form-data">
-                         <input asp-for="ImageUrl" type="text" hidden>
+                        <div asp-validation-summary="All">
+                        </div> 
+                        
+                        @Html.ValidationSummary(true , "", new {@class = "text-danger"})
+                        
+                        <input asp-for="ImageUrl" type="text" hidden>
                         
                         <div id="field11" class="d-flex justify-content-center" style="flex-direction:column">
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             
                             <div hidden class="form-group">
                                 <label asp-for="Id" class="col-form-label mt-4"></label>

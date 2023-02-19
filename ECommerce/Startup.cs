@@ -39,7 +39,7 @@ namespace ECommerce
             services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<EcommerceDbContext>();
             //services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
             services.AddRazorPages();
             services.AddDistributedMemoryCache();
 

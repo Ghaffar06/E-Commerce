@@ -27,16 +27,21 @@
         <div class="control-group" id="fields">
             <div class="title-prod">Add new Product</div>
             <div class="controls" id="profs">
+                   
+
                 <form class="input-append flex-dir-col" method="post" enctype="multipart/form-data">
                     <div class="row d-flex align-items-baseline">
                         <div id="field" class="form-container">
-                        
+                            <div asp-validation-summary="All">
+                                <span>Please correct the following errors</span>
+                            </div>
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Name">Product Name:</label>
                                 <input asp-for="Name" type="text" class="form-control" placeholder="Type something" id="Name">
+                                 <span asp-validation-for="Name" class="text-danger"></span>
+
                             </div>
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 
                             <div class="form-group">
                               <label for="Description" class="form-label mt-4">Product Description:</label>
@@ -49,12 +54,14 @@
                                 <label class="col-form-label mt-4" for="Price">Product Price:</label>
                                 <input asp-for="Price" type="number" class="form-control" min="1"  
                                     placeholder="bigger than 0" id="Price">
+                                    <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Quantity">Product Quantity:</label>
                                 <input  asp-for="Quantity" type="number" class="form-control" min="0"  
                                     placeholder="bigger than 0" id="Quantity">
+                                    <span asp-validation-for="Quantity" class="text-danger"></span>
                             </div>
                              <div class="form-group ">
                                  <label class="col-form-label mt-4 check-container check-label-form">
@@ -66,6 +73,7 @@
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Unit">Product Unit:</label>
                                 <input asp-for="Unit" type="text" class="form-control" placeholder="like item,piece,etc" id="Unit">
+                                <span asp-validation-for="Unit" class="text-danger"></span>
                             </div>
                         
                             <div class="form-group" id="image_input">

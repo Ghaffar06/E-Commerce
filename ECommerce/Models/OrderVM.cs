@@ -21,6 +21,8 @@ namespace ECommerce.Models
         public string? DelivererId { get; set; }
         public string CustomerId { get; set; }
         public double TotalPrice { get; set; }
+        [StringLength(100, ErrorMessage = "Name length can't be more than 8.")]
+
         public string Address { get; set; }
         public decimal? Rate { get; set; }
         public DateTime CreatedAt { get; set; }

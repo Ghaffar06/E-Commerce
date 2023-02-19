@@ -5,6 +5,7 @@ using ECommerce.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -43,11 +44,12 @@ namespace ECommerce.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("error", "Validation Failed");
                 return RedirectToAction("Create");
             }
             var prod = Mapper.Map<Product>(product);
             prod.ImageUrl = await Utilities.SaveFileAsync(uploadFile);
-            
+
             Uow.ProductRepo.Add(prod);
             Uow.SaveChanges();
             return RedirectToAction("Index");
@@ -69,7 +71,8 @@ namespace ECommerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Edit");
+                ModelState.AddModelError("error", "Validation Failed");
+                return RedirectToAction("Edit", product.Id);
             }
             var prod = Mapper.Map<Product>(product);
             if (uploadFile != null)
@@ -83,15 +86,26 @@ namespace ECommerce.Controllers
         [HttpDelete]
         public IActionResult DeleteAttribute(int attr_val_id)
         {
-            Uow.ProductAttributeRepo.Delete(attr_val_id);
-            Uow.SaveChanges();
-            return Json("FUCK IT!");
+            try
+            {
+                Uow.ProductAttributeRepo.Delete(attr_val_id);
+                Uow.SaveChanges();
+                return Json("FUCK IT!");
+            }
+            catch (Exception e)
+            {
+
+                return Json("no such attribute !");
+
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> EditAttribute(int Id)
         {
-            var p = await Uow.ProductRepo.GetAsync(Id);
+            Product p = await Uow.ProductRepo.GetAsync(Id);
+            if (p == null)
+                return RedirectToAction("E404", "Home");
             var prod = Mapper.Map<ProductVM>(p);
             foreach (var v in prod.AttributeValues)
                 v.IsDeletable = Uow.AttributeRepo.IsDeletable(prod.Id, v.Attribute.Id);
@@ -104,14 +118,25 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AssignAttributeValue(int attr_id, int prod_id, string val)
         {
-            Uow.ProductAttributeRepo.Add(new AttributeProductValue
+
+
+            try
             {
-                Attribute = Uow.AttributeRepo.Get(attr_id),
-                Product = Uow.ProductRepo.Get(prod_id),
-                Value = val
-            });
-            Uow.SaveChanges();
-            return Json("Success!!");
+                Uow.ProductAttributeRepo.Add(new AttributeProductValue
+                {
+                    Attribute = Uow.AttributeRepo.Get(attr_id),
+                    Product = Uow.ProductRepo.Get(prod_id),
+                    Value = val
+                });
+                Uow.SaveChanges();
+
+                return Json("Success!!");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("E404", "Home");
+
+            }
         }
 
         [HttpPost]
@@ -170,7 +195,10 @@ namespace ECommerce.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int Id)
         {
+
             var pvv = await Uow.ProductRepo.GetAsync(Id);
+            if (pvv == null)
+                return RedirectToAction("E404", "Home");
             var v = Mapper.Map<ProductVM>(pvv);
 
             return View(v);

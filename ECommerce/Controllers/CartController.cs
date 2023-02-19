@@ -2,6 +2,7 @@
 using AppDbContext.UOW;
 using AutoMapper;
 using ECommerce.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -90,33 +91,6 @@ namespace ECommerce.Controllers
             return Json("Success!!");
         }
 
-        /*[HttpPost]
-        public IActionResult SubmitOrder(OrderVM orderVM)
-        {
-            
-
-            List<OrderProductVM> orderProducts = new List<OrderProductVM>();
-            int Idx = orderProducts.FindIndex(q => q.ProductId == prod_id);
-            if (Idx == -1)
-            {
-                orderProducts.Add(new OrderProductVM
-                {
-                    ProductId = prod_id,
-                    Quantity = quantity
-                });
-                Idx = orderProducts.Count - 1;
-            }
-            else
-                orderProducts[Idx].Quantity = quantity;
-
-            if (orderProducts[Idx].Quantity <= 0)
-                orderProducts.RemoveAt(Idx);
-
-            HttpContext.Session.Set(SessionKeyProducts, orderProducts);
-
-            return Json("Success!!");
-        }
-        */
 
         [HttpPost]
         public IActionResult DeleteFromCart(int prod_id)
@@ -160,8 +134,15 @@ namespace ECommerce.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CheckOut(OrderVM orderVM)
         {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("error", "Validation Failed");
+                return RedirectToAction("Checkout");
+            }
+
             Order order = Mapper.Map<Order>(orderVM);
             order.CustomerId = await GetCurrentUserId();
             order.TotalPrice = 0m;
@@ -191,50 +172,13 @@ namespace ECommerce.Controllers
                 return Json("On the way");
             }
             else
-                return Json("No enouph quantity!!");
+                return RedirectToAction("Ca");
         }
 
 
 
 
-        /*[HttpPost]
-        public async Task<IActionResult> MyCartAsync(OrderVM orderVM)
-        {
-            bool checkQuantity = true;
-            foreach(var orderProduct in orderVM.OrderProduct)
-            {
-                Product product = await Uow.ProductRepo.GetAsync(orderProduct.ProductId);
-                if (orderProduct.Quantity > (double) product.Quantity)
-                    checkQuantity = false;
-            }
-            if (checkQuantity)
-            {
-                Order order = Mapper.Map<Order>(orderVM);
-                Uow.OrderRepo.Add(order);
-                Uow.SaveChanges();
-                int id = HttpContext.Request.QueryString["id"];
-                return View(Mapper.Map<List<OrderVM>>(Uow.OrderRepo.GetAllById()));
-            }
-            
-            return Json("No enouph quantity!!");
-
-        }*/
-
-
-        /* [HttpGet]
-		 public IActionResult ViewMyOrders()
-		 {
-			 var Products = Uow.OrderRepo.GetAllAsync(filter: p => p.Quantity > 0);
-			 //var Products = Uow.ProductRepo.GetAllAsync(filter: p => p.Quantity > 0);
-			 var ProductsVM = Mapper.Map<List<ProductVM>>(Products);
-			 if (HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts) == default)
-				 HttpContext.Session.Set(SessionKeyProducts, new List<OrderProductVM>());
-
-			 List<OrderProductVM> orderProducts = HttpContext.Session.Get<List<OrderProductVM>>(SessionKeyProducts);
-			 ViewData["OrderProductVM"] = orderProducts;
-			 return View(ProductsVM);
-
-		 }*/
+       
 
 
         private List<OrderProductVM> OrderProductSession()

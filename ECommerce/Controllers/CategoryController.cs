@@ -56,13 +56,20 @@ namespace ECommerce.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            return View(Mapper.Map<CategoryVM>(await Uow.CategoryRepo.GetAsync(Id)));
+            var p = await Uow.CategoryRepo.GetAsync(Id);
+            if (p == null)
+                return RedirectToAction("E404", "Home");
+            var pvv = Mapper.Map<CategoryVM>(p); 
+            
+            return View(pvv);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int Id)
         {
             var cvv = await Uow.CategoryRepo.GetAsync(Id);
+            if (cvv == null)
+                return RedirectToAction("E404", "Home");
             var v = Mapper.Map<CategoryVM>(cvv);
 
             return View(v);

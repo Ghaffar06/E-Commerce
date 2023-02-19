@@ -33,6 +33,8 @@ namespace ECommerce.Controllers
         public async Task<IActionResult> Details(int orderId)
         {
             var order = await Uow.OrderRepo.GetAsync(orderId);
+            if (order == null)
+                return RedirectToAction("E404", "Home");
             var userId = await GetCurrentUserId();
             if (User.IsInRole("Admin") || order.CustomerId == userId || order.DelivererId == userId)
             {

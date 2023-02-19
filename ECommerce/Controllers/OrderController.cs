@@ -1,9 +1,11 @@
 ﻿using AppDbContext.Models;
 using AppDbContext.UOW;
 using AutoMapper;
+using ECommerce.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ECommerce.Controllers
@@ -20,7 +22,9 @@ namespace ECommerce.Controllers
         [Authorize(Roles = "Deliverer")]
         public async Task<IActionResult> Waiting()
         {
-            return Json(await Uow.OrderRepo.GetWaiting());
+            var orders = await Uow.OrderRepo.GetWaiting();
+            var ordersVM = Mapper.Map<List<OrderVM>>(orders);
+            return View(ordersVM);
         }
 
         [HttpPost]
@@ -34,6 +38,8 @@ namespace ECommerce.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Requested()
         {
+            var orders = await Uow.OrderRepo.GetRequested(await GetCurrentUserId());
+            var ordersVM = Mapper.Map<List<OrderVM>>(orders);
             return Json(await Uow.OrderRepo.GetRequested(await GetCurrentUserId()));
         }
 

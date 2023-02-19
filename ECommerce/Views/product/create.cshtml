@@ -5,9 +5,24 @@
 <link rel="stylesheet" href="~/css/atter.css" />
 <link rel="stylesheet" href="~/css/add-product.css" />
 
+<style>
+	#home_bread:after {
+		left:50px!important;
+	}
+	#product_bread:after {
+		left:136px!important;
+	}
+</style>
+
 <div class="container">
-    
     <div class="row">
+        <div class="breadcrumbs" style="margin-bottom: -50px">
+		    <ol class="breadcrumb">
+			    <li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
+			    <li><a id="product_bread" asp-controller="product" asp-action="index">Products</a></li>
+			    <li class="active">Create Product</li>
+		    </ol>
+	    </div>
         <input type="hidden" name="count" value="1" />
         <div class="control-group" id="fields">
             <div class="title-prod">Add new Product</div>
@@ -43,7 +58,7 @@
                                     <input asp-for="PriceIsInteger" type="checkbox" id="PriceIsInteger">
                                     <span class="checkmark"></span>
                                  </label>
-                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-form-label mt-4" for="Unit">Product Unit:</label>
                                 <input asp-for="Unit" type="text" class="form-control" placeholder="like item,piece,etc" id="Unit">

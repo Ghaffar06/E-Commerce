@@ -4,14 +4,18 @@
     ViewData["Title"] = "View";
 }
 <style>
-	.breadcrumbs .breadcrumb li a:after {
-		left:68px!important;
+	#home_bread:after {
+		left:50px!important;
+	}
+	#product_bread:after {
+		left:137px!important;
 	}
 </style>
 
 <div class="breadcrumbs" style="margin-bottom: -50px">
 	<ol class="breadcrumb">
-		<li><a asp-controller="product" asp-action="index">Products</a></li>
+		<li><a id="home_bread" asp-controller="home" asp-action="index">Home</a></li>
+		<li><a id="product_bread" asp-controller="product" asp-action="index">Products</a></li>
 		<li class="active">Product Details</li>
 	</ol>
 </div>

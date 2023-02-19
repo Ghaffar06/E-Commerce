@@ -25,17 +25,18 @@
     height: 60px !important;
 }
 
-    .add_file_btn::file-selector-button {
-        font-weight: bold;
-        padding: 0.5em;
-        border: thin solid grey;
-        border-radius: 3px;
-    }
+.add_file_btn::file-selector-button {
+    font-weight: bold;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+}
 
 .atter {
+    width: 30em !important; 
     position: relative;
     margin-top: 35px;
-    border: 1px solid purple;
+    border: 1px solid #FE980F !important;
     border-radius: 25px !important;
     justify-content: center;
     align-items: center;
@@ -79,4 +80,5 @@
 
 .select_css {
     margin: 20px 10px;
+    height: 40px !important;
 }

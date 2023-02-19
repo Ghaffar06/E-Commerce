@@ -49,8 +49,9 @@
 				</thead>
 				<tbody>
 					@foreach (var item in Model) {
-						<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
-							<tr>
+						<tr id="row-@item.Id">
+							<form class="atter atter-temp col-12" id="form-@item.Id" action="" method="post">
+
 								<td class="cart_product">
 									<a href=""><img src="@item.ImageUrl" height="200" width="200" alt=""></a>
 								</td>
@@ -83,100 +84,125 @@
 									<p class="cart_total_price" id="tot-@item.Id"></p>
 								</td>
 								<td class="cart_delete">
-									<div class="btn btn-primary" style="margin:0" id="delete-@item.Id"> <i class="fa fa-times"></i> </div>
-								</td>
-							</tr>
-							<script>
-								$(document).ready(function() {
-									$('#up-@item.Id').click(function(e) { 
-									let id = $(this).attr('id').substr(3)
-									let value = parseFloat($('#totalAmount-'+id).val())
-									value += @(item.PriceIsInteger ? 1 : 0.01)
-									value = Math.min(value,@item.Quantity)
-									value = value.toPrecision(4)
-									$('#totalAmount-'+id).val(value)
-									$('#totalAmount-@item.Id').trigger('change')
-								});
-
-								$('#down-@item.Id').click(function(e) { 
-									let id = $(this).attr('id').substr(5)
-									let value = parseFloat($('#totalAmount-'+id).val())
-									value -= @(item.PriceIsInteger ? 1 : 0.01)
-									value = Math.max(value,0)
-									value = value.toPrecision(4)
-									$('#totalAmount-'+id).val(value)
-									$('#totalAmount-@item.Id').trigger('change')
-								});
-
-								$('#totalAmount-@item.Id').on('change',function(e) {
-									let id = $(this).attr('id').substr(12)
-									let value = parseFloat($(this).val()) * @item.Price
-									value = value.toPrecision(4)
-									$('#tot-' + id).text(value)
-									updateTotal();
-								});
-
-								$('#totalAmount-@item.Id').trigger('change')
-
-								$('#totalAmount-@item.Id').on('change',function (e) {
-									id = $(this).attr('id').substr(12)
-									var form = $('#form-'+ id);
-									var obj = form.serializeArray()
-									console.log(obj)
-									e.preventDefault(); 
-									var actionUrl = "Cart/AddToCart";
-									var delay = $('#totalAmount-' + id).data('delay')
-									if(delay != undefined){
-										clearTimeout(delay);
-									$('#totalAmount-' + id).data('delay', undefined);
-									}
-									delay = setTimeout(function(e){
-										$('#totalAmount-' + id).data('delay', undefined);
-										$.ajax({
-										url: actionUrl,
-										type: "POST",
-										data: {
-											'prod_id': obj[1]['value'],
-											'quantity':obj[0]['value'], 
-										},
-										success: function (result) {
-											console.log("first call:" + result);
-										},
-										error: function (xhr, textStatus, error) {
-											console.log(xhr.statusText);
-											console.log(textStatus);
-											console.log(error);
-										}
-									});
-								}, 300);
-									$('#totalAmount-' + id).data('delay', delay);
-								});
-
-								var actionUrl1 = "Cart/DeleteFromCart";
-								$('#delete-@item.Id').click(function(e) { 
-								let id = $(this).attr('id').substr(7)
-								delay = setTimeout(function(e){
-								$.ajax({
-								url: actionUrl1,
-									type: "POST",
-										data: {
-											'prod_id': id,
-										},
-										success: function (result) {
-											console.log("first call:" + result);
-										},
-										error: function (xhr, textStatus, error) {
-											console.log(xhr.statusText);
-											console.log(textStatus);
-											console.log(error);
-										}
+									<div class="btn btn-primary" style="margin:0" data-toggle="modal" data-target="#exampleModal-@item.Id"> <i class="fa fa-times"></i> </div>
+									<script>
+										$(document).ready(function() {
+											$('#up-@item.Id').click(function(e) { 
+											let id = $(this).attr('id').substr(3)
+											let value = parseFloat($('#totalAmount-'+id).val())
+											value += @(item.PriceIsInteger ? 1 : 0.01)
+											value = Math.min(value,@item.Quantity)
+											value = value.toPrecision(4)
+											$('#totalAmount-'+id).val(value)
+											$('#totalAmount-@item.Id').trigger('change')
 										});
-									});
-								});
-								$('#totalAmount-@item.Id').trigger('change')
-							})
-							</script>
-						</form>
+
+										$('#down-@item.Id').click(function(e) { 
+											let id = $(this).attr('id').substr(5)
+											let value = parseFloat($('#totalAmount-'+id).val())
+											value -= @(item.PriceIsInteger ? 1 : 0.01)
+											value = Math.max(value,0)
+											value = value.toPrecision(4)
+											$('#totalAmount-'+id).val(value)
+											$('#totalAmount-@item.Id').trigger('change')
+										});
+
+										$('#totalAmount-@item.Id').on('change',function(e) {
+											let id = $(this).attr('id').substr(12)
+											let value = parseFloat($(this).val()) * @item.Price
+											value = value.toPrecision(4)
+											$('#tot-' + id).text(value)
+											updateTotal();
+										});
+
+										$('#totalAmount-@item.Id').trigger('change')
+
+										$('#totalAmount-@item.Id').on('change',function (e) {
+											id = $(this).attr('id').substr(12)
+											var form = $('#form-'+ id);
+											var obj = form.serializeArray()
+											console.log(obj)
+											e.preventDefault(); 
+											var actionUrl = "Cart/AddToCart";
+											var delay = $('#totalAmount-' + id).data('delay')
+											if(delay != undefined){
+												clearTimeout(delay);
+											$('#totalAmount-' + id).data('delay', undefined);
+											}
+											delay = setTimeout(function(e){
+												$('#totalAmount-' + id).data('delay', undefined);
+												$.ajax({
+												url: actionUrl,
+												type: "POST",
+												data: {
+													'prod_id': obj[1]['value'],
+													'quantity':obj[0]['value'], 
+												},
+												success: function (result) {
+													console.log("first call:" + result);
+												},
+												error: function (xhr, textStatus, error) {
+													console.log(xhr.statusText);
+													console.log(textStatus);
+													console.log(error);
+												}
+											});
+										}, 300);
+											$('#totalAmount-' + id).data('delay', delay);
+										});
+
+										var actionUrl1 = "Cart/DeleteFromCart";
+										$('#delete-@item.Id').click(function(e) { 
+											var id = $(this).attr('id').substr(7);
+											console.log(id);
+											$.ajax({
+											url: actionUrl1,
+												type: "POST",
+													data: {
+														'prod_id': id,
+													},
+													success: function (result) {
+														console.log("first call:" + result);
+														console.log($('#row-' + id));
+														$('#row-' + id).fadeOut(1000, function(e) {
+															$('#row-' + id).remove();
+														    updateTotal();
+														});
+													},
+													error: function (xhr, textStatus, error) {
+														console.log(xhr.statusText);
+														console.log(textStatus);
+														console.log(error);
+													}
+												});
+											});
+										})
+									</script>
+								</td>
+								
+
+								<!-- Modal -->
+								<div class="modal fade" id="exampleModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Remove Varification</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<div aria-hidden="true" style="margin-top:-20px">&times;</div>
+												</button>
+											</div>
+											<div class="modal-body">
+												Are you sure to delete this Item from Cart
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" style="margin-top:16px" data-dismiss="modal">Close</button>
+												<button type="button" class="btn btn-primary" data-dismiss="modal" id="delete-@item.Id">remove Item</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</tr>
 					}
 				</tbody>
 			</table>

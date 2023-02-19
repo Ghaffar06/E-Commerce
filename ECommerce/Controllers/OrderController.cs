@@ -30,9 +30,9 @@ namespace ECommerce.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Details(int orderId)
+        public async Task<IActionResult> Details(int Id)
         {
-            var order = await Uow.OrderRepo.GetAsync(orderId);
+            var order = await Uow.OrderRepo.GetAsync(Id);
             var userId = await GetCurrentUserId();
             if (User.IsInRole("Admin") || order.CustomerId == userId || order.DelivererId == userId)
             {
@@ -58,9 +58,9 @@ namespace ECommerce.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Accept(int orderId)
+        public async Task<IActionResult> Accept(int Id)
         {
-            Order order = Uow.OrderRepo.Get(orderId);
+            Order order = Uow.OrderRepo.Get(Id);
             if (order.DelivererId == null)
             {
                 order.DelivererId = await GetCurrentUserId();
@@ -126,7 +126,7 @@ namespace ECommerce.Controllers
         {
             var orders = await Uow.OrderRepo.GetRequested(await GetCurrentUserId());
             var ordersVM = Mapper.Map<List<OrderVM>>(orders);
-            return Json(await Uow.OrderRepo.GetRequested(await GetCurrentUserId()));
+            return View(ordersVM);
         }
 
 

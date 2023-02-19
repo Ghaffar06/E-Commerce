@@ -98,7 +98,7 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", orderId);
+            return RedirectToAction("Details", new { orderId });
 
         }
 
@@ -119,7 +119,7 @@ namespace ECommerce.Controllers
             });
             Uow.OrderRepo.Update(order);
             Uow.SaveChanges();
-            return RedirectToAction("Details", orderId);
+            return RedirectToAction("Details", new { orderId });
         }
 
 

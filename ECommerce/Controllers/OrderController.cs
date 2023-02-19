@@ -29,7 +29,7 @@ namespace ECommerce.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Deliverer")]
-        public async Task<IActionResult> Accepted()
+        public async Task<IActionResult> AcceptedOrders()
         {
             var orders = await Uow.OrderRepo.GetWaiting();
             var ordersVM = Mapper.Map<List<OrderVM>>(orders);

@@ -31,7 +31,9 @@ namespace ECommerce.Controllers
         [Authorize(Roles = "Deliverer")]
         public async Task<IActionResult> AcceptedOrders()
         {
-            return Json(await Uow.OrderRepo.GetWaiting());
+            var orders = await Uow.OrderRepo.GetWaiting();
+            var ordersVM = Mapper.Map<List<OrderVM>>(orders);
+            return View(ordersVM);
         }
 
         [HttpPost]

@@ -4,7 +4,7 @@
 
 namespace ECommerce.Models
 {
-    public partial class OrderStateVM
+    public partial class OrderStatusVM
     {
         public long Id { get; set; }
         public long OrderId { get; set; }

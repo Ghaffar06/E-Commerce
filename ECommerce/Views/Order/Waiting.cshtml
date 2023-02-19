@@ -19,7 +19,6 @@
 	<div class="row">
 		<section id="cart_items">
 			<div class="container">
-
 				<div class="table-responsive cart_info">
 					<table class="table table-condensed">
 						<thead>
@@ -33,86 +32,28 @@
 							</tr>
 						</thead>
 						<tbody>
+                            @foreach (var item in Model) {
 							<tr>
 								<td class="order_id cart_product">
-									<h4><a href="">1799472</a></h4>
+									<h4><a href="">@item.Id</a></h4>
 								</td>
 								<td class="order_date">
-									<p>12/6/2022</p>
+									<p>@item.dateTime</p>
 								</td>
 								<td class="order_total">
-									<p class="order_total_price">$59</p>
+									<p class="order_total_price">$@item.TotalPrice</p>
 								</td>
 								<td class="order_state">
-									<p class="order_st">Delivered</p>
+									<p class="order_st">@item.OrderStatus</p>
 								</td>
 								<td class="order_address">
-									<p class="order_ad">fkoasf/fasfas/152</p>
-								</td>
-								<td class="order_register cart_delete">
-									<button disabled class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Taken</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="order_id cart_product">
-									<h4><a href="">1089772</a></h4>
-								</td>
-								<td class="order_date">
-									<p>2/5/2021</p>
-								</td>
-								<td class="order_total">
-									<p class="order_total_price">$9516</p>
-								</td>
-								<td class="order_state">
-									<p class="order_st">On Stock</p>
-								</td>
-								<td class="order_address">
-									<p class="order_ad">r21f2/2ff2fs/sgasdb/2</p>
+									<p class="order_ad">@item.Address</p>
 								</td>
 								<td class="order_register cart_delete">
 									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
 								</td>
 							</tr>
-							<tr>
-								<td class="order_id cart_product">
-									<h4><a href="">6236272</a></h4>
-								</td>
-								<td class="order_date">
-									<p>4/8/2022</p>
-								</td>
-								<td class="order_total">
-									<p class="order_total_price">$659</p>
-								</td>
-								<td class="order_state">
-									<p class="order_st">Delivered</p>
-								</td>
-								<td class="order_address">
-									<p class="order_ad">r21d/22t22/1</p>
-								</td>
-								<td class="order_register cart_delete">
-									<button disabled class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Registered</button>
-								</td>
-							</tr>
-							<tr>
-								<td class="order_id cart_product">
-									<h4><a href="">1525772</a></h4>
-								</td>
-								<td class="order_date">
-									<p>6/7/2022</p>
-								</td>
-								<td class="order_total">
-									<p class="order_total_price">$5869</p>
-								</td>
-								<td class="order_state ">
-									<p class="order_st">On Road</p>
-								</td>
-								<td class="order_address">
-									<p class="order_ad">qwd qwdasdasdssddsd  sdsdsdsdas  sd sdsdasd asdasdsd78wdwasd asd asds/wqdqwasdasdasd asd asdasddqw/242</p>
-								</td>
-								<td class="order_register cart_delete">
-									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
-								</td>
-							</tr>
+                            }
 						</tbody>
 					</table>
 				</div>
@@ -134,12 +75,6 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DeliveryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.TotalPrice)
             </th>
             <th>
@@ -156,12 +91,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeliveryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TotalPrice)

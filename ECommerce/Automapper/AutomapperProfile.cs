@@ -67,6 +67,8 @@ namespace ECommerce.Automapper
 
             CreateMap<OrderVM, Order>()
                 .ReverseMap();
+            CreateMap<OrderStatusVM, OrderStatus>()
+                .ReverseMap();
             CreateMap<OrderProductVM, OrderProduct>()
                 .ReverseMap();
         }

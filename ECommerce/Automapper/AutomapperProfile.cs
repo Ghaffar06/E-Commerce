@@ -62,6 +62,11 @@ namespace ECommerce.Automapper
                 .ForMember(attr => attr.ValueType, opt => opt.MapFrom(vm => vm.ValueType))
                 .ReverseMap();
 
+            CreateMap<OrderStatus, ShortOrderStatusVM>()
+                .ForMember(statusVM => statusVM.Note, opt => opt.MapFrom(status => status.Note))
+                .ForMember(statusVM => statusVM.State, opt => opt.MapFrom(status => status.State));
+                
+
             CreateMap<ValueType, ValueTypeVM>()
                 .ReverseMap();
 

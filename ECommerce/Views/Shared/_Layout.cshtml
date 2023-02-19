@@ -94,7 +94,21 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a asp-controller="order" asp-action="Requested"><i class="fa fa-star"></i> Orders</a></li>
+								@if (User.IsInRole("Customer"))
+								{
+									<li><a asp-controller="order" asp-action="Requested">
+										<i class="fa fa-list"></i> Orders</a>
+									</li>	
+								}
+								@if(User.IsInRole("Deliverer"))
+								{
+									<li><a asp-controller="order" asp-action="Waiting">
+										<i class="fa fa-check"></i> Waiting</a>
+									</li>
+									<li><a asp-controller="order" asp-action="AcceptedOrder">
+										<i class="fa fa-list"></i> Accepted</a>
+									</li>
+								}
 								<li><a asp-controller="cart" asp-action="CheckOut"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a asp-controller="cart" asp-action="index"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 								<partial name="_LoginPartial" />
@@ -121,15 +135,29 @@
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li>@Html.ActionLink("Home","index","home",
 									null,new {@class="active"})</li>
+								@if (User.IsInRole("Customer"))
+								{
+									<li>@Html.ActionLink("Orders","requested","order",null)</li>
+								}
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li>@Html.ActionLink("Categories","index","category",null)</li>
 										<li>@Html.ActionLink("Products","index","product",null)</li>
 										<li>@Html.ActionLink("Checkout","CheckOut","cart",null)</li>
 										<li>@Html.ActionLink("Cart","index","cart",null)</li>
+										
 										@*<partial name="_LoginPartial" />*@
                                     </ul>
                                 </li> 
+								@if(User.IsInRole("Deliverer"))
+								{
+									<li class="dropdown"><a href="#">Order<i class="fa fa-angle-down"></i></a>
+										<ul role="menu" class="sub-menu">
+											<li>@Html.ActionLink("Waiting Orders","waiting","order",null)</li>
+											<li>@Html.ActionLink("Accepted Orders","acceptedOrder","order",null)</li>
+										</ul>
+									</li>
+								}
 								@*<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="blog.html">Blog List</a></li>

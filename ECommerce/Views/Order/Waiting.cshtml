@@ -45,7 +45,7 @@
                             @foreach (var item in Model) {
 							<tr>
 								<td class="order_id cart_product">
-									<h4><a href="">@item.Id</a></h4>
+									<h4><a asp-controller="order" asp-action="Details" asp-route-id="@item.Id">@item.Id</a></h4>
 								</td>
 								<td class="order_date">
 									<p>@item.CreatedAt</p>
@@ -57,7 +57,19 @@
 									<p class="order_ad">@item.Address</p>
 								</td>
 								<td class="order_register cart_delete">
-									<button class="order_rg btn btn-primary rounded" style="margin-bottom:30px">Register</button>
+									<button class="order_rg btn btn-primary rounded" id="register-@item.Id"
+										style="margin-bottom:30px">Register</button>
+									<form asp-controller='order' asp-action='Accept' 
+										method="post" id="acc-@item.Id" style='display:none'>
+										<input type="text" name="Id" value="@item.Id">
+									</form>
+									<script>
+										$('#register-@item.Id').on('click',function(e){
+											var id = $(this).attr('id').substr(9)
+                                            console.log(id);
+                                            $('#acc-' + id).submit();
+										});
+									</script>
 								</td>
 							</tr>
                             }

@@ -23,6 +23,13 @@ namespace ECommerce.Controllers
             return Json(await Uow.OrderRepo.GetWaiting());
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Deliverer")]
+        public async Task<IActionResult> Accepted()
+        {
+            return Json(await Uow.OrderRepo.GetWaiting());
+        }
+
         [HttpPost]
         [Authorize(Roles = "Deliverer")]
         public async Task<IActionResult> Accept(int orderId)

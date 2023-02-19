@@ -152,7 +152,7 @@ namespace ECommerce.Controllers
             order.OrderStatus.Add(new OrderStatus()
             {
                 State = "Waiting",
-                Note = "The order has been submitted"
+                Note = "The order has been accepted by a deliverer"
             });
 
             bool checkQuantity = true;

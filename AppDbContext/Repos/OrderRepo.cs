@@ -16,6 +16,14 @@ namespace AppDbContext.Repos
             Orders = _db.Set<Order>();
         }
 
+        public Task<List<Order>> GetAccepted(string userId)
+        {
+            return Orders
+                .Where(c => c.DelivererId == userId)
+                .Include(c => c.OrderStatus)
+                .ToListAsync();
+        }
+
         public Task<Order> GetAsync(int id)
         {
             return Orders
